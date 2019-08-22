@@ -1,0 +1,148 @@
+input:focus {
+  outline: none;
+}
+
+.hero {
+  background: url(../images/cover.png) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height: 100vh;
+  font-size: 48px;
+  color: white;
+  font-family: "Ropa Sans";
+}
+
+.hero-content {
+  padding-top: 54px;
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 5%;
+}
+
+.content-description {
+  margin: 0 24px;
+  margin-top: 35%;
+  font-size: 36px;
+  text-align: center;
+}
+
+.signup-consumer-text {
+  font-family: "Ropa Sans";
+  color: white;
+  font-size: 24px;
+}
+
+.white-btn {
+  -webkit-border-radius: 4;
+  -moz-border-radius: 4;
+  border: none;
+  border-radius: 4px;
+  font-family: Arial;
+  color: #000000;
+  font-size: 20px;
+  font-family: "Ropa Sans";
+  background: #ffffff;
+  cursor: pointer;
+  padding: 12px 64px 12px 64px;
+  text-decoration: none;
+}
+
+.white-btn:hover {
+  background: #9e9e9e;
+  text-decoration: none;
+}
+
+.green-btn {
+  border: none;
+  -webkit-border-radius: 4;
+  -moz-border-radius: 4;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 16px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  background: #419d78;
+  font-family: "Ropa Sans";
+  padding: 12px 64px 12px 64px;
+  text-decoration: none;
+}
+
+.green-btn:hover {
+  background: #5bba92;
+  text-decoration: none;
+}
+
+.signup-section {
+  display: flex;
+  justify-content: center;
+
+  flex-wrap: wrap;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 12px;
+}
+
+.consumer-btn {
+  background: #419d78;
+  display: flex;
+  max-width: 360px;
+  justify-content: space-around;
+  align-items: center;
+  border: none;
+  -webkit-border-radius: 4;
+  -moz-border-radius: 4;
+  margin: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 12px;
+  flex-grow: 1;
+}
+
+.consumer-btn:hover {
+  background: #5bba92;
+  text-decoration: none;
+}
+
+.rider-btn {
+  background: #ffffff;
+  display: flex;
+  padding: 12px;
+  max-width: 360px;
+  justify-content: space-around;
+  align-items: center;
+  border: none;
+  -webkit-border-radius: 4;
+  -moz-border-radius: 4;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 12px;
+  flex-grow: 1;
+}
+
+.rider-btn:hover {
+  background: #9e9e9e;
+  text-decoration: none;
+}
+
+.signup-rider-text {
+  font-family: "Ropa Sans";
+  color: black;
+  font-size: 24px;
+}
+
+.left-icon {
+  margin-right: 36px;
+}
+
+.right-icon {
+  margin-left: 36px;
+}

@@ -1,12 +1,6 @@
 .App {
   text-align: center;
   max-width: 1140px;
-}
-
-html {
-  background: url(images/cover.png) no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+  display: grid;
+  height: 100vh;
 }
