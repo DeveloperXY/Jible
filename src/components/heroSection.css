@@ -11,7 +11,6 @@ input:focus {
   height: 100vh;
   font-size: 48px;
   color: white;
-  font-family: "Ropa Sans";
 }
 
 .hero-content {
@@ -35,7 +34,6 @@ input:focus {
 }
 
 .signup-consumer-text {
-  font-family: "Ropa Sans";
   color: white;
   font-size: 24px;
 }
@@ -45,13 +43,12 @@ input:focus {
   -moz-border-radius: 4;
   border: none;
   border-radius: 4px;
-  font-family: Arial;
   color: #000000;
   font-size: 20px;
-  font-family: "Ropa Sans";
   background: #ffffff;
   cursor: pointer;
   padding: 12px 64px 12px 64px;
+  font-family: "Ropa Sans";
   text-decoration: none;
 }
 
@@ -64,14 +61,13 @@ input:focus {
   border: none;
   -webkit-border-radius: 4;
   -moz-border-radius: 4;
+  font-family: "Ropa Sans";
   border-radius: 4px;
   cursor: pointer;
   margin-right: 16px;
-  font-family: Arial;
   color: #ffffff;
   font-size: 20px;
   background: #419d78;
-  font-family: "Ropa Sans";
   padding: 12px 64px 12px 64px;
   text-decoration: none;
 }
@@ -134,7 +130,6 @@ input:focus {
 }
 
 .signup-rider-text {
-  font-family: "Ropa Sans";
   color: black;
   font-size: 24px;
 }
@@ -145,4 +140,108 @@ input:focus {
 
 .right-icon {
   margin-left: 36px;
+}
+
+.how-it-works-content {
+  display: grid;
+  row-gap: 150px;
+  grid-template-columns: 33% auto 33%;
+  color: #000000;
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+.how-it-works-header {
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 20%;
+  color: black;
+}
+
+.how-it-works-part2 {
+  grid-column-start: 3;
+  grid-row-start: 2;
+}
+
+.how-it-works-part3 {
+  grid-column-start: 3;
+  grid-row-start: 3;
+  margin-bottom: 100px;
+}
+
+.sub-header {
+  font-size: 24px;
+  margin: 0;
+}
+
+.sub-content {
+  font-size: 18px;
+  margin: 0;
+  margin-top: 10px;
+}
+
+.apps-section {
+  background-color: #419d78;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  column-gap: 100px;
+}
+
+.apps-header {
+  width: 50%;
+  max-width: 300px;
+  font-size: 34px;
+  margin-top: 80px;
+  margin-bottom: 50px;
+}
+
+.app-image {
+  position: relative;
+  margin-top: -35%;
+  justify-self: end;
+  align-self: end;
+}
+
+.store-img {
+  widows: 168px;
+  height: 57px;
+}
+
+.play-store {
+  margin-right: 36px;
+}
+
+.footer-content {
+  color: #000000;
+}
+
+.footer-content {
+  padding: 50px 100px 50px 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 5%;
+}
+
+.apps-right-section {
+  padding-bottom: 80px;
+}
+
+.footer-items {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+}
+
+.policy-item {
+  margin-left: 100px;
+}
+
+.terms-item {
+  margin-left: 100px;
+}
+
+.footer-link {
+  text-decoration: none;
+  color: #000000;
 }
