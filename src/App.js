@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import "./App.css";
-import HomePage from "./components/HomePage";
+import HomePage from "./components/home/HomePage";
 
 function App() {
   return (

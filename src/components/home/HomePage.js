@@ -1,14 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./heroSection.css";
-import homeIcon from "../images/home.svg";
-import rightArrowIcon from "../images/arrowRight.svg";
-import helmetIcon from "../images/helmet.svg";
-import appImage from "../images/app.png";
-import playStoreImage from "../images/google-play-badge.svg";
-import appStoreImage from "../images/download-on-the-app-store-apple.svg";
+import "./homePage.css";
+import homeIcon from "../../images/home.svg";
+import rightArrowIcon from "../../images/arrowRight.svg";
+import helmetIcon from "../../images/helmet.svg";
+import appImage from "../../images/app.png";
+import playStoreImage from "../../images/google-play-badge.svg";
+import appStoreImage from "../../images/download-on-the-app-store-apple.svg";
 
-const HeroSection = props => {
+const HomePage = props => {
   return (
     <div className="hero">
       <div className="hero-content">
@@ -91,4 +91,4 @@ const HeroSection = props => {
   );
 };
 
-export default HeroSection;
+export default HomePage;

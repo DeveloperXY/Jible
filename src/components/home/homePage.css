@@ -3,11 +3,13 @@ input:focus {
 }
 
 .hero {
-  background: url(../images/cover.png) no-repeat center center fixed;
+  background: url(../../images/cover.png) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  margin: 0;
+  padding: 0;
   height: 100vh;
   font-size: 48px;
   color: white;
@@ -22,7 +24,6 @@ input:focus {
 .header-content {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   margin: 0 5%;
 }
 
@@ -184,7 +185,6 @@ input:focus {
   background-color: #419d78;
   display: grid;
   grid-template-columns: 50% 50%;
-  column-gap: 100px;
 }
 
 .apps-header {
@@ -198,12 +198,13 @@ input:focus {
 .app-image {
   position: relative;
   margin-top: -35%;
+  margin-right: 100px;
   justify-self: end;
   align-self: end;
 }
 
 .store-img {
-  widows: 168px;
+  width: 168px;
   height: 57px;
 }
 
