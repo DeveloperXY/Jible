@@ -3,6 +3,9 @@ import Modal from "react-modal";
 import "./authDialog.css";
 
 const customStyles = {
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)"
+  },
   content: {
     top: "50%",
     left: "50%",
@@ -14,7 +17,7 @@ const customStyles = {
   }
 };
 
-const SignupDialog = ({ isModalOpen, closeModal }) => {
+const AuthDialog = ({ contentLabel, action, isModalOpen, closeModal }) => {
   return (
     <Modal
       isOpen={isModalOpen}
@@ -23,13 +26,13 @@ const SignupDialog = ({ isModalOpen, closeModal }) => {
       style={customStyles}
     >
       <button onClick={closeModal}>close</button>
-      <div className="auth-header">Signup</div>
+      <div className="auth-header">{action}</div>
       <h6 className="auth-subheader">Welcome to Jible Services</h6>
       <button className="auth-facebook-btn" onClick={closeModal}>
-        Signup with Facebook
+        {action} with Facebook
       </button>
     </Modal>
   );
 };
 
-export default SignupDialog;
+export default AuthDialog;

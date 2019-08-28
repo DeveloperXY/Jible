@@ -8,7 +8,7 @@ import appImage from "../../images/app.png";
 import playStoreImage from "../../images/google-play-badge.svg";
 import appStoreImage from "../../images/download-on-the-app-store-apple.svg";
 import Modal from "react-modal";
-import SignupDialog from "../dialogs/SignupDialog";
+import AuthDialog from "../dialogs/AuthDialog";
 
 Modal.setAppElement("#root");
 
@@ -44,7 +44,12 @@ function HomePage(props) {
               value="Signup"
               onClick={openSignupDialog}
             />
-            <input type="button" className="white-btn" value="Login" />
+            <input
+              type="button"
+              className="white-btn"
+              value="Login"
+              onClick={openLoginDialog}
+            />
           </div>
         </div>
         <div className="content-description">
@@ -115,9 +120,17 @@ function HomePage(props) {
           </a>
         </div>
       </div>
-      <SignupDialog
+      <AuthDialog
+        contentLabel="Signup dialog"
+        action="Signup"
         isModalOpen={isSignupDialogOpen}
         closeModal={closeSignupDialog}
+      />
+      <AuthDialog
+        contentLabel="Login dialog"
+        action="Login"
+        isModalOpen={isLoginDialogOpen}
+        closeModal={closeLoginDialog}
       />
     </div>
   );
