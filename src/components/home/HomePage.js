@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "./homePage.css";
 import homeIcon from "../../images/home.svg";
@@ -7,15 +7,43 @@ import helmetIcon from "../../images/helmet.svg";
 import appImage from "../../images/app.png";
 import playStoreImage from "../../images/google-play-badge.svg";
 import appStoreImage from "../../images/download-on-the-app-store-apple.svg";
+import Modal from "react-modal";
+import SignupDialog from "../dialogs/SignupDialog";
 
-const HomePage = props => {
+Modal.setAppElement("#root");
+
+function HomePage(props) {
+  const [isSignupDialogOpen, setSignupDialogOpenState] = useState(false);
+  const [isLoginDialogOpen, setLoginDialogOpenState] = useState(false);
+
+  function openSignupDialog() {
+    setSignupDialogOpenState(true);
+  }
+
+  function openLoginDialog() {
+    setLoginDialogOpenState(true);
+  }
+
+  function closeSignupDialog() {
+    setSignupDialogOpenState(false);
+  }
+
+  function closeLoginDialog() {
+    setLoginDialogOpenState(false);
+  }
+
   return (
     <div className="hero">
       <div className="hero-content">
         <div className="header-content">
           <span className="jible-header">Jible</span>
           <div className="buttons-container">
-            <input type="button" className="green-btn" value="Signup" />
+            <input
+              type="button"
+              className="green-btn"
+              value="Signup"
+              onClick={openSignupDialog}
+            />
             <input type="button" className="white-btn" value="Login" />
           </div>
         </div>
@@ -87,8 +115,12 @@ const HomePage = props => {
           </a>
         </div>
       </div>
+      <SignupDialog
+        isModalOpen={isSignupDialogOpen}
+        closeModal={closeSignupDialog}
+      />
     </div>
   );
-};
+}
 
 export default HomePage;
