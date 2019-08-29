@@ -60,14 +60,14 @@ function HomePage(props) {
         </div>
         <div className="signup-section">
           <div className="consumer-btn">
-            <img src={homeIcon} class="left-icon" alt="Home" />
+            <img src={homeIcon} className="left-icon" alt="Home" />
             <span className="signup-consumer-text">Signup as a Consumer</span>
-            <img src={rightArrowIcon} class="right-icon" alt="Go" />
+            <img src={rightArrowIcon} className="right-icon" alt="Go" />
           </div>
           <div className="rider-btn">
-            <img src={helmetIcon} class="left-icon" alt="Home" />
+            <img src={helmetIcon} className="left-icon" alt="Home" />
             <span className="signup-rider-text">Signup as a Rider</span>
-            <img src={rightArrowIcon} class="right-icon" alt="Go" />
+            <img src={rightArrowIcon} className="right-icon" alt="Go" />
           </div>
         </div>
       </div>
