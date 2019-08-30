@@ -10,7 +10,8 @@ db.once("open", () => {
 let userSchema = new mongoose.Schema({
   name: String,
   email: String,
-  image: String
+  image: String,
+  userType: String
 });
 let User = mongoose.model("User", userSchema);
 

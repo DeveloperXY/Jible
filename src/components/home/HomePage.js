@@ -9,7 +9,6 @@ import playStoreImage from "../../images/google-play-badge.svg";
 import appStoreImage from "../../images/download-on-the-app-store-apple.svg";
 import Modal from "react-modal";
 import AuthDialog from "../dialogs/AuthDialog";
-import axios from "axios";
 
 Modal.setAppElement("#root");
 
@@ -57,7 +56,8 @@ function HomePage(props) {
         body: JSON.stringify({
           name,
           email,
-          image: url
+          image: url,
+          userType
         })
       })
         .then(res => res.json())

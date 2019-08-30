@@ -18,6 +18,7 @@ app.post("/signup", (req, res) => {
   let name = req.body.name;
   let email = req.body.email;
   let image = req.body.image;
+  let userType = req.body.userType;
 
   User.findOne({ email }, (error, user) => {
     if (error) res.send({ status: "error", message: console.error(error) });
@@ -29,7 +30,8 @@ app.post("/signup", (req, res) => {
       new User({
         name,
         email,
-        image
+        image,
+        userType
       }).save((err, user) => {
         if (error) res.send({ status: "error", message: console.error(error) });
         res.send({ status: "ok" });
