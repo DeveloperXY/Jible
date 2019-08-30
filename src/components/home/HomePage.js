@@ -17,7 +17,6 @@ function HomePage(props) {
   const [isSignupDialogOpen, setSignupDialogOpenState] = useState(false);
   const [isLoginDialogOpen, setLoginDialogOpenState] = useState(false);
   const [userType, setUserType] = useState(undefined);
-  const [actionType, setActionType] = useState(undefined);
 
   function openSignupDialog(type = "consumer") {
     setUserType(type);
@@ -49,12 +48,9 @@ function HomePage(props) {
       }
     } = response;
 
-    console.log(name);
-
     if (action === "signup") {
       fetch("http://localhost:9000/signup", {
         method: "POST",
-        // mode: "no-cors",
         headers: {
           "Content-Type": "application/json"
         },
@@ -70,9 +66,19 @@ function HomePage(props) {
         })
         .catch(error => console.log(error));
     } else if (action === "login") {
-      axios
-        .post("http://localhost:9000/login")
-        .then(response => console.log(`axios response: ${response}`))
+      fetch("http://localhost:9000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email
+        })
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log(`fetch data: ${data}`);
+        })
         .catch(error => console.log(error));
     }
   }

@@ -1,9 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const mongo = require("./mongo");
 const cors = require("cors");
-
 const app = express();
+
+const mongo = require("./mongo");
+const User = mongo.User;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -18,13 +19,37 @@ app.post("/signup", (req, res) => {
   let email = req.body.email;
   let image = req.body.image;
 
-  new mongo.User({
-    name,
-    email,
-    image
-  }).save((err, user) => {
-    if (err) return console.error(err);
-    res.send({ status: "ok" });
+  User.findOne({ email }, (error, user) => {
+    if (error) res.send({ status: "error", message: console.error(error) });
+    if (user) {
+      res.send({
+        status: "email_already_exists"
+      });
+    } else {
+      new User({
+        name,
+        email,
+        image
+      }).save((err, user) => {
+        if (error) res.send({ status: "error", message: console.error(error) });
+        res.send({ status: "ok" });
+      });
+    }
+  });
+});
+
+app.post("/login", (req, res) => {
+  let email = req.body.email;
+
+  User.findOne({ email }, (error, user) => {
+    if (error) res.send({ status: "error", message: console.error(error) });
+    if (user) {
+      res.send({
+        status: "ok"
+      });
+    } else {
+      res.send({ status: "no_such_user" });
+    }
   });
 });
 
