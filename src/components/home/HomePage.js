@@ -9,14 +9,18 @@ import playStoreImage from "../../images/google-play-badge.svg";
 import appStoreImage from "../../images/download-on-the-app-store-apple.svg";
 import Modal from "react-modal";
 import AuthDialog from "../dialogs/AuthDialog";
+import axios from "axios";
 
 Modal.setAppElement("#root");
 
 function HomePage(props) {
   const [isSignupDialogOpen, setSignupDialogOpenState] = useState(false);
   const [isLoginDialogOpen, setLoginDialogOpenState] = useState(false);
+  const [userType, setUserType] = useState(undefined);
+  const [actionType, setActionType] = useState(undefined);
 
-  function openSignupDialog() {
+  function openSignupDialog(type = "consumer") {
+    setUserType(type);
     setSignupDialogOpenState(true);
   }
 
@@ -25,11 +29,52 @@ function HomePage(props) {
   }
 
   function closeSignupDialog() {
+    setUserType(undefined);
     setSignupDialogOpenState(false);
   }
 
   function closeLoginDialog() {
     setLoginDialogOpenState(false);
+  }
+
+  function onFacebookResponse(response, action) {
+    if (isSignupDialogOpen) closeSignupDialog();
+    if (isLoginDialogOpen) closeLoginDialog();
+
+    const {
+      name,
+      email,
+      picture: {
+        data: { url }
+      }
+    } = response;
+
+    console.log(name);
+
+    if (action === "signup") {
+      fetch("http://localhost:9000/signup", {
+        method: "POST",
+        // mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          image: url
+        })
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log(`fetch data: ${data}`);
+        })
+        .catch(error => console.log(error));
+    } else if (action === "login") {
+      axios
+        .post("http://localhost:9000/login")
+        .then(response => console.log(`axios response: ${response}`))
+        .catch(error => console.log(error));
+    }
   }
 
   return (
@@ -59,12 +104,12 @@ function HomePage(props) {
           </p>
         </div>
         <div className="signup-section">
-          <div className="consumer-btn">
+          <div className="consumer-btn" onClick={() => openSignupDialog()}>
             <img src={homeIcon} className="left-icon" alt="Home" />
             <span className="signup-consumer-text">Signup as a Consumer</span>
             <img src={rightArrowIcon} className="right-icon" alt="Go" />
           </div>
-          <div className="rider-btn">
+          <div className="rider-btn" onClick={() => openSignupDialog("rider")}>
             <img src={helmetIcon} className="left-icon" alt="Home" />
             <span className="signup-rider-text">Signup as a Rider</span>
             <img src={rightArrowIcon} className="right-icon" alt="Go" />
@@ -125,12 +170,18 @@ function HomePage(props) {
         action="Signup"
         isModalOpen={isSignupDialogOpen}
         closeModal={closeSignupDialog}
+        responseFacebook={response => {
+          onFacebookResponse(response, "signup");
+        }}
       />
       <AuthDialog
         contentLabel="Login dialog"
         action="Login"
         isModalOpen={isLoginDialogOpen}
         closeModal={closeLoginDialog}
+        responseFacebook={response => {
+          onFacebookResponse(response, "login");
+        }}
       />
     </div>
   );

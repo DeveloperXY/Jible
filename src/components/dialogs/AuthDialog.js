@@ -18,11 +18,13 @@ const customStyles = {
   }
 };
 
-const AuthDialog = ({ contentLabel, action, isModalOpen, closeModal }) => {
-  const responseFacebook = response => {
-    console.log(response);
-  };
-
+const AuthDialog = ({
+  contentLabel,
+  action,
+  isModalOpen,
+  closeModal,
+  responseFacebook
+}) => {
   return (
     <Modal
       isOpen={isModalOpen}
