@@ -15,7 +15,7 @@ import { connect } from "react-redux";
 
 Modal.setAppElement("#root");
 
-function HomePage({ history }) {
+function HomePage({ history, actions }) {
   const [isSignupDialogOpen, setSignupDialogOpenState] = useState(false);
   const [isLoginDialogOpen, setLoginDialogOpenState] = useState(false);
   const [userType, setUserType] = useState(undefined);
@@ -66,7 +66,7 @@ function HomePage({ history }) {
         .then(res => res.json())
         .then(data => {
           if (data.status === "ok") {
-            userActions.saveUser({ name, email, url });
+            actions.saveUser(data.user);
             history.push("/profile");
           }
           console.log(`fetch data: ${data}`);
@@ -85,7 +85,7 @@ function HomePage({ history }) {
         .then(res => res.json())
         .then(data => {
           if (data.status === "ok") {
-            userActions.saveUser({ name, email, url });
+            actions.saveUser(data.user);
             history.push("/profile");
           }
           console.log(`fetch data: ${data}`);
