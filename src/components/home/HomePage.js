@@ -9,10 +9,13 @@ import playStoreImage from "../../images/google-play-badge.svg";
 import appStoreImage from "../../images/download-on-the-app-store-apple.svg";
 import Modal from "react-modal";
 import AuthDialog from "../dialogs/AuthDialog";
+import { bindActionCreators } from "redux";
+import * as userActions from "../../redux/actions/userActions";
+import { connect } from "react-redux";
 
 Modal.setAppElement("#root");
 
-function HomePage(props) {
+function HomePage({ history }) {
   const [isSignupDialogOpen, setSignupDialogOpenState] = useState(false);
   const [isLoginDialogOpen, setLoginDialogOpenState] = useState(false);
   const [userType, setUserType] = useState(undefined);
@@ -62,6 +65,10 @@ function HomePage(props) {
       })
         .then(res => res.json())
         .then(data => {
+          if (data.status === "ok") {
+            userActions.saveUser({ name, email, url });
+            history.push("/profile");
+          }
           console.log(`fetch data: ${data}`);
         })
         .catch(error => console.log(error));
@@ -77,6 +84,10 @@ function HomePage(props) {
       })
         .then(res => res.json())
         .then(data => {
+          if (data.status === "ok") {
+            userActions.saveUser({ name, email, url });
+            history.push("/profile");
+          }
           console.log(`fetch data: ${data}`);
         })
         .catch(error => console.log(error));
@@ -193,4 +204,13 @@ function HomePage(props) {
   );
 }
 
-export default HomePage;
+const mapDispatchToProps = dispatch => {
+  return {
+    actions: bindActionCreators(userActions, dispatch)
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(HomePage);
