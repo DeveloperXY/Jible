@@ -100,12 +100,7 @@ function HomePage({ history }) {
         <div className="header-content">
           <span className="jible-header">Jible</span>
           <div className="buttons-container">
-            <input
-              type="button"
-              className="green-btn"
-              value="Signup"
-              onClick={openSignupDialog}
-            />
+            <input type="button" className="green-btn" value="Signup" />
             <input
               type="button"
               className="white-btn"

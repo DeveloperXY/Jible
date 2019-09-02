@@ -21,7 +21,10 @@ app.post("/signup", (req, res) => {
   let userType = req.body.userType;
 
   User.findOne({ email }, (error, user) => {
-    if (error) res.send({ status: "error", message: console.error(error) });
+    if (error) {
+      console.log(error);
+      res.send({ status: "error", message: console.error(error) });
+    }
     if (user) {
       res.send({
         status: "email_already_exists"
@@ -33,8 +36,9 @@ app.post("/signup", (req, res) => {
         image,
         userType
       }).save((err, user) => {
+        console.log(err);
         if (error) res.send({ status: "error", message: console.error(error) });
-        res.send({ status: "ok" });
+        else res.send({ status: "ok", user });
       });
     }
   });
@@ -46,8 +50,10 @@ app.post("/login", (req, res) => {
   User.findOne({ email }, (error, user) => {
     if (error) res.send({ status: "error", message: console.error(error) });
     if (user) {
+      console.log(user);
       res.send({
-        status: "ok"
+        status: "ok",
+        user
       });
     } else {
       res.send({ status: "no_such_user" });

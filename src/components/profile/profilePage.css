@@ -1,0 +1,123 @@
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0;
+  font-size: 48px;
+  margin-bottom: 200px;
+}
+
+.main-content {
+  padding-top: 54px;
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+.current-username {
+  font-size: 16px;
+  text-align: center;
+  align-self: center;
+  margin-left: 12px;
+}
+
+.profile-img {
+  border-radius: 50%;
+}
+
+.profile-header-section {
+  display: flex;
+}
+
+.body-content {
+  display: flex;
+}
+
+.options-menu-item {
+  font-size: 16px;
+  padding: 30px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.options-menu-item-selected {
+  color: white;
+  background-color: #419d78;
+}
+
+.phone-number {
+  color: #909090;
+  margin-left: 12px;
+}
+
+.profile-info-header {
+  display: flex;
+  margin-bottom: 50px;
+}
+
+.page-section {
+  flex-grow: 1;
+}
+
+.options-menu {
+  margin-right: 60px;
+}
+
+.profile-info {
+  margin-left: 65px;
+}
+
+.request-skhera {
+  margin-left: 60px;
+  background-color: #419d78;
+}
+
+.edit-icon {
+  margin-bottom: 24px;
+}
+
+.request-shera-text {
+  color: white;
+  font-size: 16px;
+}
+
+.form-label {
+  color: #909090;
+}
+
+.update-btn {
+  border: none;
+  -webkit-border-radius: 4;
+  -moz-border-radius: 4;
+  font-family: "Ropa Sans";
+  border-radius: 4px;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 16px;
+  background: #4a90e2;
+  padding: 12px 64px 12px 64px;
+  text-decoration: none;
+  margin-top: 24px;
+}
+
+.profile-info-form {
+  display: flex;
+  flex-direction: column;
+}
+
+input {
+  padding: 8px;
+}
+
+label {
+  margin-bottom: 4px;
+}
+
+input,
+label {
+  font-family: "Ropa Sans";
+  font-size: 16px;
+}
+
+.email-label,
+.phone-label {
+  margin-top: 16px;
+}
