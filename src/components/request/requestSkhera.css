@@ -1,3 +1,7 @@
 .request-skhera-header {
   font-size: 44px;
 }
+
+.request-content {
+  display: flex;
+}
