@@ -66,7 +66,7 @@ function HomePage({ history, actions }) {
         .then(res => res.json())
         .then(data => {
           if (data.status === "ok") {
-            actions.saveUser(data.user);
+            actions.saveUserLocally(data.user);
             history.push("/profile");
           }
           console.log(`fetch data: ${data}`);
@@ -85,7 +85,7 @@ function HomePage({ history, actions }) {
         .then(res => res.json())
         .then(data => {
           if (data.status === "ok") {
-            actions.saveUser(data.user);
+            actions.saveUserLocally(data.user);
             history.push("/profile");
           }
           console.log(`fetch data: ${data}`);

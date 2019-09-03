@@ -1,11 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "./profilePage.css";
 import icEdit from "../../images/ic_edit.svg";
 import { connect } from "react-redux";
+import ProfileInfoForm from "./ProfileInfoForm";
 
 function HomePage({ currentUser }) {
-  console.log("Image: " + currentUser.image);
+  const [user, setUser] = useState({ currentUser });
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+    setUser(prevUser => ({
+      ...prevUser,
+      [name]: value
+    }));
+  }
+
+  function handleSave(event) {
+    event.preventDefault();
+  }
+
   return (
     <>
       <div className="main-content">
@@ -33,21 +47,11 @@ function HomePage({ currentUser }) {
                 <div className="phone-number"></div>
               </div>
             </div>
-            <form className="profile-info-form">
-              <label className="form-label" htmlFor="fullname">
-                Full name
-              </label>
-              <input type="text" id="fullname" value={currentUser.name} />
-              <label className="form-label email-label" htmlFor="email">
-                Email
-              </label>
-              <input type="text" id="email" value={currentUser.email} />
-              <label className="form-label phone-label" htmlFor="phone">
-                Phone
-              </label>
-              <input type="text" id="phone" />
-              <input type="button" className="update-btn" value="Update" />
-            </form>
+            <ProfileInfoForm
+              user={currentUser}
+              onSave={handleSave}
+              onChange={handleChange}
+            />
           </div>
           <div className="request-skhera page-section">
             <img className="edit-icon" alt="" src={icEdit} />
