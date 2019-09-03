@@ -38,9 +38,27 @@
   border-radius: 4px;
 }
 
+.options-menu-item {
+  margin-bottom: 4px;
+  border-width: 1px;
+}
+
+.options-menu-item:hover {
+  color: black;
+  background-color: white;
+  border-style: solid;
+  border-color: #419d78;
+}
+
 .options-menu-item-selected {
   color: white;
   background-color: #419d78;
+}
+
+.options-menu-item-selected:hover {
+  color: white;
+  background-color: #419d78;
+  border-style: none;
 }
 
 .phone-number {
