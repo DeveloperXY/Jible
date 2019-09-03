@@ -92,6 +92,11 @@
   align-items: flex-start;
   flex-direction: column;
   justify-content: flex-end;
+  cursor: pointer;
+}
+
+.request-skhera:hover {
+  opacity: 0.9;
 }
 
 .edit-icon {
