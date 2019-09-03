@@ -61,4 +61,26 @@ app.post("/login", (req, res) => {
   });
 });
 
+app.put("/user", (req, res) => {
+  let _id = req.body._id;
+  console.log("ID: " + _id);
+
+  User.findByIdAndUpdate(_id, req.body, { new: true }, (error, user) => {
+    if (error) {
+      res.json({ status: "error", message: console.error(error) });
+      return;
+    }
+
+    if (user) {
+      console.log("Phone: " + req.body.phone);
+      res.json({
+        status: "ok",
+        user
+      });
+    } else {
+      res.send({ status: "no_such_user" });
+    }
+  });
+});
+
 app.listen(port, () => console.log(`Example app listening on port ${port}`));

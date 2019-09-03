@@ -4,9 +4,11 @@ import "./profilePage.css";
 import icEdit from "../../images/ic_edit.svg";
 import { connect } from "react-redux";
 import ProfileInfoForm from "./ProfileInfoForm";
+import { saveUserRemotely } from "../../redux/actions/userActions";
+import { toast } from "react-toastify";
 
-function HomePage({ currentUser }) {
-  const [user, setUser] = useState({ currentUser });
+function HomePage({ currentUser, saveUserRemotely }) {
+  const [user, setUser] = useState({ ...currentUser });
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -18,6 +20,9 @@ function HomePage({ currentUser }) {
 
   function handleSave(event) {
     event.preventDefault();
+    saveUserRemotely(user).then(() => {
+      toast.success("Profile info updated.");
+    });
   }
 
   return (
@@ -70,4 +75,11 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(HomePage);
+const mapDispatchToProps = {
+  saveUserRemotely
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HomePage);
