@@ -4,3 +4,27 @@
   flex-grow: 1;
   margin-left: 15px;
 }
+
+.inline-label {
+  width: 65px;
+  color: black;
+  font-size: 16px;
+  padding: 8px 16px 8px 8px;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.input-inline-label {
+  display: flex;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #e5e5e5;
+  margin-bottom: 8px;
+}
+
+#fromAddress,
+#toAddress {
+  flex-grow: 1;
+  border: 0;
+  padding-right: 24px;
+}

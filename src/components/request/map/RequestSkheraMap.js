@@ -4,10 +4,31 @@ import "./requestSkheraMap.css";
 function RequestSkheraMap(props) {
   return (
     <div className="request-map">
-      <label className="form-label" htmlFor="description">
-        Describe your skhera
+      <label className="form-label" htmlFor="address">
+        Address
       </label>
-      <textarea rows="2" />
+      <div className="input-inline-label">
+        <label className="inline-label" htmlFor="fromAddress">
+          From
+        </label>
+        <input
+          type="text"
+          id="fromAddress"
+          name="fromAddress"
+          placeholder="Where to pick the Skhera from"
+        />
+      </div>
+      <div className="input-inline-label">
+        <label className="inline-label" htmlFor="toAddress">
+          To
+        </label>
+        <input
+          type="text"
+          id="toAddress"
+          name="toAddress"
+          placeholder="Where to deliver"
+        />
+      </div>
     </div>
   );
 }
