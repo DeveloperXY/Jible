@@ -1,6 +1,7 @@
 import React from "react";
 import "./requestSkheraMap.css";
 import SimpleMap from "./SimpleMap";
+import AutoCompleteInput from "./AutoCompleteInput";
 
 function RequestSkheraMap(props) {
   return (
@@ -12,8 +13,7 @@ function RequestSkheraMap(props) {
         <label className="inline-label" htmlFor="fromAddress">
           From
         </label>
-        <input
-          type="text"
+        <AutoCompleteInput
           id="fromAddress"
           name="fromAddress"
           placeholder="Where to pick the Skhera from"
@@ -23,8 +23,7 @@ function RequestSkheraMap(props) {
         <label className="inline-label" htmlFor="toAddress">
           To
         </label>
-        <input
-          type="text"
+        <AutoCompleteInput
           id="toAddress"
           name="toAddress"
           placeholder="Where to deliver"
