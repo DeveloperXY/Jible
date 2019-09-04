@@ -1,7 +1,17 @@
+.request-skhera-body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 .request-skhera-header {
   font-size: 44px;
 }
 
 .request-content {
   display: flex;
+}
+
+.request-content-section {
+  flex-grow: 1;
 }

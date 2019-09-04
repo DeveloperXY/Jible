@@ -1,0 +1,61 @@
+.request-details {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin-right: 15px;
+}
+
+.input-with-icon {
+  display: flex;
+  margin-right: 20px;
+}
+
+.itemInput {
+  padding-right: 40px;
+  flex-grow: 1;
+}
+
+.icPlus {
+  margin-left: -30px;
+}
+
+input,
+textarea {
+  font-size: 16px;
+  font-family: "Ropa Sans";
+}
+
+.input-two-icons {
+  padding: 8px 24px 8px 24px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #a9a9a9;
+  font-size: 16px;
+}
+
+.time-layout {
+  display: flex;
+}
+
+.asap-layout {
+  margin-right: 15px;
+}
+
+.schedule-layout {
+  margin-left: 15px;
+}
+
+.order-btn {
+  cursor: pointer;
+  border: none;
+  -webkit-border-radius: 4;
+  -moz-border-radius: 4;
+  font-family: "Ropa Sans";
+  border-radius: 4px;
+  color: #ffffff;
+  font-size: 16px;
+  background: #419d78;
+  padding: 12px 64px 12px 64px;
+  text-decoration: none;
+  margin-top: 24px;
+}
