@@ -59,3 +59,7 @@ textarea {
   text-decoration: none;
   margin-top: 24px;
 }
+
+#price {
+  flex-grow: 0;
+}

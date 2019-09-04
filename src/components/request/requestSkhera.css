@@ -15,3 +15,7 @@
 .request-content-section {
   flex-grow: 1;
 }
+
+.main-content {
+  margin-bottom: 100px;
+}

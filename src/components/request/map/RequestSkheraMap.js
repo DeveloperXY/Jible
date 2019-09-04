@@ -1,5 +1,6 @@
 import React from "react";
 import "./requestSkheraMap.css";
+import SimpleMap from "./SimpleMap";
 
 function RequestSkheraMap(props) {
   return (
@@ -29,6 +30,7 @@ function RequestSkheraMap(props) {
           placeholder="Where to deliver"
         />
       </div>
+      <SimpleMap />
     </div>
   );
 }
