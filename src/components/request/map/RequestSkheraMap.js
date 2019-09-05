@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./requestSkheraMap.css";
 import SimpleMap from "./SimpleMap";
 import AutoCompleteInput from "./AutoCompleteInput";
@@ -7,6 +7,7 @@ import * as placesApi from "../../../api/placesApi";
 function RequestSkheraMap(props) {
   const [fromAddress, setFromAddress] = useState({});
   const [toAddress, setToAddress] = useState({});
+  const [googleMap, setGoogleMap] = useState({});
 
   const getAddressSuggestions = (query, setSuggestions) => {
     const inputValue = query.trim().toLowerCase();
@@ -22,12 +23,28 @@ function RequestSkheraMap(props) {
     });
   };
 
-  const onFromAddressSelected = (event, { address }) => {
-    setFromAddress(address);
+  const onFromAddressSelected = (event, { suggestion: address }) => {
+    placesApi.fetchPlaceGeometry(address.placeId, googleMap).then(geometry => {
+      geometry = {
+        lat: geometry.lat(),
+        lng: geometry.lng()
+      };
+      setFromAddress({ ...address, ...geometry });
+    });
   };
 
-  const onToAddressSelected = (event, { address }) => {
-    setToAddress(address);
+  const onToAddressSelected = (event, { suggestion: address }) => {
+    placesApi.fetchPlaceGeometry(address.placeId, googleMap).then(geometry => {
+      geometry = {
+        lat: geometry.lat(),
+        lng: geometry.lng()
+      };
+      setToAddress({ ...address, ...geometry });
+    });
+  };
+
+  const onGoogleMapReady = (map, maps) => {
+    setGoogleMap(map);
   };
 
   return (
@@ -59,7 +76,7 @@ function RequestSkheraMap(props) {
           onSuggestionSelected={onToAddressSelected}
         />
       </div>
-      <SimpleMap />
+      <SimpleMap onGoogleMapReady={onGoogleMapReady} mapRef={setGoogleMap} />
     </div>
   );
 }

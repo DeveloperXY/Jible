@@ -21,3 +21,23 @@ export function fetchAddressSuggestions(query) {
     );
   });
 }
+
+export function fetchPlaceGeometry(placeId, map) {
+  let service = new window.google.maps.places.PlacesService(map);
+  return new Promise((resolve, reject) => {
+    return service.getDetails(
+      {
+        placeId,
+        fields: ["geometry"]
+      },
+      (place, status) => {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+          resolve(place.geometry.location);
+          return;
+        }
+
+        reject(status);
+      }
+    );
+  });
+}

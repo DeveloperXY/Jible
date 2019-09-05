@@ -12,7 +12,12 @@ class SimpleMap extends Component {
     zoom: 11
   };
 
+  handleApiLoaded = (map, maps) => {
+    this.props.onGoogleMapReady(map);
+  };
+
   render() {
+    const { mapRef } = this.props;
     return (
       // Important! Always set the container height explicitly
       <div style={{ height: "500px", width: "100%" }}>
@@ -20,6 +25,8 @@ class SimpleMap extends Component {
           bootstrapURLKeys={{ key: "AIzaSyDd3dI_tqR6Rx-IMpS9r5mWCP5oAEibiE0" }}
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
+          // onGoogleApiLoaded={({ map, maps }) => this.handleApiLoaded(map, maps)}
+          onGoogleApiLoaded={({ map, maps }) => mapRef(map)}
         >
           <AnyReactComponent lat={59.955413} lng={30.337844} text="My Marker" />
         </GoogleMapReact>
