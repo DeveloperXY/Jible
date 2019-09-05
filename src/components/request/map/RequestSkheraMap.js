@@ -76,7 +76,12 @@ function RequestSkheraMap(props) {
           onSuggestionSelected={onToAddressSelected}
         />
       </div>
-      <SimpleMap onGoogleMapReady={onGoogleMapReady} mapRef={setGoogleMap} />
+      <SimpleMap
+        fromAddress={fromAddress}
+        toAddress={toAddress}
+        onGoogleMapReady={onGoogleMapReady}
+        mapRef={setGoogleMap}
+      />
     </div>
   );
 }
