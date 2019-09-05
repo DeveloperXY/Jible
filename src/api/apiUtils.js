@@ -1,3 +1,5 @@
+export const apiKey = "AIzaSyDd3dI_tqR6Rx-IMpS9r5mWCP5oAEibiE0";
+
 export async function handleResponse(response) {
   if (response.ok) return response.json();
   if (response.status === 400) {
