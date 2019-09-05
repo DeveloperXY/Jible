@@ -17,14 +17,33 @@ function RequestSkheraMap(props) {
     }
 
     placesApi.fetchRouteSegments().then(segments => {
-      segments
-        .map(segment => ({
-          startLat: segment.start_location.lat(),
-          endLat: segment.end_location.lat(),
-          startLng: segment.start_location.lng(),
-          endLng: segment.end_location.lng()
-        }))
-        .forEach(segment => console.log(segment));
+      const steps = segments
+        .map(segment => {
+          const s = {
+            startLat: segment.start_location.lat(),
+            endLat: segment.end_location.lat(),
+            startLng: segment.start_location.lng(),
+            endLng: segment.end_location.lng()
+          };
+          console.log(s);
+          return s;
+        })
+        .reduce(
+          (acc, s) => [
+            ...acc,
+            { lat: s.startLat, lng: s.startLng },
+            { lat: s.endLat, lng: s.endLng }
+          ],
+          []
+        );
+      const path = new window.google.maps.Polyline({
+        path: steps,
+        geodesic: true,
+        strokeColor: "#FF0000",
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+      });
+      path.setMap(googleMap);
     });
   }, [toAddress]);
 
