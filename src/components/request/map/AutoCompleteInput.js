@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import Autosuggest from "react-autosuggest";
 
-function AutoCompleteInput({ id, name, placeholder, getSuggestions }) {
+function AutoCompleteInput({
+  id,
+  name,
+  placeholder,
+  getSuggestions,
+  onSuggestionSelected
+}) {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
@@ -38,6 +44,7 @@ function AutoCompleteInput({ id, name, placeholder, getSuggestions }) {
       suggestions={suggestions}
       onSuggestionsFetchRequested={onSuggestionsFetchRequested}
       onSuggestionsClearRequested={onSuggestionsClearRequested}
+      onSuggestionSelected={onSuggestionSelected}
       getSuggestionValue={getSuggestionValue}
       renderSuggestion={renderSuggestion}
       renderInputComponent={renderInputComponent}

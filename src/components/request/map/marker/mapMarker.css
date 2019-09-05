@@ -1,0 +1,8 @@
+.marker {
+  background-color: white;
+  border-radius: 50%;
+  border-width: 8px;
+  border-style: solid;
+  border-color: #419d78;
+  text-align: center;
+}
