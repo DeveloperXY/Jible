@@ -41,3 +41,31 @@ export function fetchPlaceGeometry(placeId, map) {
     );
   });
 }
+
+export function fetchRouteSegments(fromPlaceId, toPlaceId) {
+  let service = new window.google.maps.DirectionsService();
+  return new Promise((resolve, reject) => {
+    return service.route(
+      {
+        origin: {
+          placeId:
+            "EhxSdWUgQnVjYXJlc3QsIFJhYmF0LCBNb3JvY2NvIi4qLAoUChIJTR5zKmlspw0RiPvqdyunO6oSFAoSCcHFUB-Ha6cNEWsHCHTtRsl6"
+        },
+        destination: {
+          placeId:
+            "EhlSdWUgR2hhbmEsIFJhYmF0LCBNb3JvY2NvIi4qLAoUChIJHbMUfm9spw0ROvf_mFym5OMSFAoSCcHFUB-Ha6cNEWsHCHTtRsl6"
+        },
+        travelMode: "DRIVING"
+      },
+      (response, status) => {
+        if (status === "OK") {
+          const segments = response.routes[0].legs[0].steps;
+          resolve(segments);
+        } else {
+          console.log("Directions request failed: " + status);
+          reject(status);
+        }
+      }
+    );
+  });
+}

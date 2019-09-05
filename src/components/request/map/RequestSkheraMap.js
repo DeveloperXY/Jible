@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./requestSkheraMap.css";
 import SimpleMap from "./SimpleMap";
 import AutoCompleteInput from "./AutoCompleteInput";
@@ -8,6 +8,25 @@ function RequestSkheraMap(props) {
   const [fromAddress, setFromAddress] = useState({});
   const [toAddress, setToAddress] = useState({});
   const [googleMap, setGoogleMap] = useState({});
+  const isFirstRun = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    }
+
+    placesApi.fetchRouteSegments().then(segments => {
+      segments
+        .map(segment => ({
+          startLat: segment.start_location.lat(),
+          endLat: segment.end_location.lat(),
+          startLng: segment.start_location.lng(),
+          endLng: segment.end_location.lng()
+        }))
+        .forEach(segment => console.log(segment));
+    });
+  }, [toAddress]);
 
   const getAddressSuggestions = (query, setSuggestions) => {
     const inputValue = query.trim().toLowerCase();
