@@ -8,7 +8,18 @@ function RequestSkheraMap(props) {
   const [fromAddress, setFromAddress] = useState({});
   const [toAddress, setToAddress] = useState({});
   const [googleMap, setGoogleMap] = useState({});
+  const [polyline, setPolyline] = useState(undefined);
   const isFirstRun = useRef(true);
+  const isFirstRun2 = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRun2.current) {
+      isFirstRun2.current = false;
+      return;
+    }
+
+    polyline.setMap(googleMap);
+  }, [polyline]);
 
   useEffect(() => {
     if (isFirstRun.current) {
@@ -38,14 +49,19 @@ function RequestSkheraMap(props) {
             ],
             []
           );
-        const path = new window.google.maps.Polyline({
-          path: steps,
-          geodesic: true,
-          strokeColor: "#FF0000",
-          strokeOpacity: 1.0,
-          strokeWeight: 2
-        });
-        path.setMap(googleMap);
+
+        // Hide any previously displayed polylines
+        if (polyline !== undefined) polyline.setMap(null);
+
+        setPolyline(
+          new window.google.maps.Polyline({
+            path: steps,
+            geodesic: true,
+            strokeColor: "#FF0000",
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+          })
+        );
       });
   }, [toAddress]);
 
