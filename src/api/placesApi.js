@@ -48,14 +48,12 @@ export function fetchRouteSegments(fromPlaceId, toPlaceId) {
     return service.route(
       {
         origin: {
-          placeId:
-            "EhxSdWUgQnVjYXJlc3QsIFJhYmF0LCBNb3JvY2NvIi4qLAoUChIJTR5zKmlspw0RiPvqdyunO6oSFAoSCcHFUB-Ha6cNEWsHCHTtRsl6"
+          placeId: fromPlaceId
         },
         destination: {
-          placeId:
-            "EhlSdWUgR2hhbmEsIFJhYmF0LCBNb3JvY2NvIi4qLAoUChIJHbMUfm9spw0ROvf_mFym5OMSFAoSCcHFUB-Ha6cNEWsHCHTtRsl6"
+          placeId: toPlaceId
         },
-        travelMode: "DRIVING"
+        travelMode: "WALKING"
       },
       (response, status) => {
         if (status === "OK") {
