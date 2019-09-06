@@ -17,6 +17,11 @@ function RequestSkheraDetails(props) {
     }
   };
 
+  const onRemoveItem = index => {
+    skheraItems.splice(index, 1);
+    setSkheraItems([...skheraItems]);
+  };
+
   return (
     <div className="request-details">
       <label className="form-label" htmlFor="description">
@@ -44,8 +49,10 @@ function RequestSkheraDetails(props) {
         <img className="icPlus" src={icPlus} alt="" onClick={onAddSkheraItem} />
       </div>
       <ul className="skhera-ul">
-        {skheraItems.map(item => (
-          <li>{item}</li>
+        {skheraItems.map((item, index) => (
+          <li key={index} onClick={() => onRemoveItem(index)}>
+            {item}
+          </li>
         ))}
       </ul>
       <div className="time-layout">
