@@ -27,6 +27,8 @@ function RequestSkheraMap(props) {
       return;
     }
 
+    if (fromAddress == {} || toAddress == {}) return;
+
     placesApi
       .fetchRouteSegments(fromAddress.placeId, toAddress.placeId)
       .then(segments => {
@@ -59,11 +61,11 @@ function RequestSkheraMap(props) {
             geodesic: true,
             strokeColor: "#FF0000",
             strokeOpacity: 1.0,
-            strokeWeight: 2
+            strokeWeight: 1
           })
         );
       });
-  }, [toAddress]);
+  }, [toAddress, fromAddress]);
 
   const getAddressSuggestions = (query, setSuggestions) => {
     const inputValue = query.trim().toLowerCase();

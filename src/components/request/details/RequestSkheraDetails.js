@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import "./requestSkheraDetails.css";
 import icPlus from "../../../images/ic_plus.svg";
 
 function RequestSkheraDetails(props) {
+  const [skheraItems, setSkheraItems] = useState([]);
+  const [skheraItem, setSkheraItem] = useState("");
+
+  const handleChange = event => {
+    setSkheraItem(event.target.value);
+  };
+
+  const onAddSkheraItem = () => {
+    if (skheraItem !== "") {
+      setSkheraItems([...skheraItems, skheraItem]);
+      setSkheraItem("");
+    }
+  };
+
   return (
     <div className="request-details">
       <label className="form-label" htmlFor="description">
@@ -24,10 +38,16 @@ function RequestSkheraDetails(props) {
           className="itemInput"
           type="text"
           placeholder="Item"
+          value={skheraItem}
+          onChange={handleChange}
         />
-        <img className="icPlus" src={icPlus} alt="" />
+        <img className="icPlus" src={icPlus} alt="" onClick={onAddSkheraItem} />
       </div>
-      <ul className="skhera-ul"></ul>
+      <ul className="skhera-ul">
+        {skheraItems.map(item => (
+          <li>{item}</li>
+        ))}
+      </ul>
       <div className="time-layout">
         <div className="asap-layout">
           <label className="form-label">Describe your skhera</label>
