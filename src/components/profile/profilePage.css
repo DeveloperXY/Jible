@@ -33,13 +33,23 @@
 
 .options-menu-item {
   font-size: 16px;
-  padding: 30px;
+  padding: 20px;
+  width: 200px;
   cursor: pointer;
   border-radius: 4px;
   margin-bottom: 4px;
   border-width: 1px;
   border-style: solid;
   border-color: transparent;
+}
+
+.body-content > div:nth-child(2) {
+  width: calc(100% - 200px);
+}
+
+.profile-container {
+  display: flex;
+  align-items: flex-start;
 }
 
 .options-menu-item:hover {
@@ -69,7 +79,6 @@
 }
 
 .page-section {
-  flex-grow: 1;
 }
 
 .options-menu {
@@ -78,13 +87,14 @@
 
 .profile-info {
   margin-left: 65px;
+  width: 350px;
 }
 
 .request-skhera {
   display: flex;
   margin-left: 60px;
   background-color: #419d78;
-  height: 150px;
+  width: 200px;
   padding: 16px 24px 16px 24px;
   align-items: flex-start;
   flex-direction: column;

@@ -14,7 +14,7 @@ function EditProfileComponent({
   }
 
   return (
-    <>
+    <div className="profile-container">
       <div className="profile-info page-section">
         <div className="profile-info-header">
           <img className="profile-img" alt="" src={currentUser.image} />
@@ -35,7 +35,7 @@ function EditProfileComponent({
           Request Skhera
         </Link>
       </div>
-    </>
+    </div>
   );
 }
 

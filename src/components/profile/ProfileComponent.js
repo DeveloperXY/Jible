@@ -94,8 +94,9 @@ function ProfileComponent({ currentUser, saveUserRemotely, history }) {
       <Switch>
         <Route path="/profile/faq" component={FaqComponent} />
         <Route
-          component={() => (
+          component={props => (
             <EditProfileComponent
+              {...props}
               currentUser={user}
               onChange={handleChange}
               onSave={handleSave}
