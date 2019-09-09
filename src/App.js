@@ -11,7 +11,7 @@ function App() {
     <>
       <Switch>
         <Route exact path="/" component={HomePage} />
-        <Route exact path="/profile" component={ProfilePage} />
+        <Route path="/profile" component={ProfilePage} />
       </Switch>
       <ToastContainer autoClose={3000} newestOnTop hideProgressBar />
     </>

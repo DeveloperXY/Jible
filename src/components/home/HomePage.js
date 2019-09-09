@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import "./homePage.css";
 import homeIcon from "../../images/home.svg";
 import rightArrowIcon from "../../images/arrowRight.svg";
