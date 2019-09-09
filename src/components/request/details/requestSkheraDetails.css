@@ -69,3 +69,28 @@ textarea {
 #price {
   flex-grow: 0;
 }
+
+.skhera-item {
+  background-color: #4a90e2;
+  color: white;
+  padding: 8px 12px 8px 36px;
+  margin-bottom: 8px;
+  font-size: 16px;
+  border-radius: 4px;
+}
+
+.skhera-ul {
+  list-style: none;
+  padding: 0;
+  list-style-type: none;
+}
+
+ul li::before {
+  content: "\2022";
+  color: white;
+  font-weight: bold;
+  display: inline-block;
+  font-size: 20px;
+  width: 1em;
+  margin-left: -1em;
+}

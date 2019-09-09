@@ -28,6 +28,8 @@ class SimpleMap extends Component {
           bootstrapURLKeys={{ key: "AIzaSyDd3dI_tqR6Rx-IMpS9r5mWCP5oAEibiE0" }}
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
+          center={this.props.center}
+          zoom={this.props.zoom}
           onGoogleApiLoaded={({ map, maps }) => mapRef(map)}
         >
           <MapMarker lat={fromAddress.lat} lng={fromAddress.lng} text="A" />

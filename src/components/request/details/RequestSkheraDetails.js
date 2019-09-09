@@ -50,7 +50,11 @@ function RequestSkheraDetails(props) {
       </div>
       <ul className="skhera-ul">
         {skheraItems.map((item, index) => (
-          <li key={index} onClick={() => onRemoveItem(index)}>
+          <li
+            className="skhera-item"
+            key={index}
+            onClick={() => onRemoveItem(index)}
+          >
             {item}
           </li>
         ))}
