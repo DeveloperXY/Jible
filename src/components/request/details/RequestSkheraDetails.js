@@ -10,16 +10,24 @@ function RequestSkheraDetails(props) {
     setSkheraItem(event.target.value);
   };
 
-  const onAddSkheraItem = () => {
+  const addSkheraItem = () => {
     if (skheraItem !== "") {
       setSkheraItems([...skheraItems, skheraItem]);
       setSkheraItem("");
     }
   };
 
+  const onAddSkheraItem = () => {
+    addSkheraItem();
+  };
+
   const onRemoveItem = index => {
     skheraItems.splice(index, 1);
     setSkheraItems([...skheraItems]);
+  };
+
+  const handleKeyUp = e => {
+    if (e.key === "Enter") addSkheraItem();
   };
 
   return (
@@ -45,6 +53,7 @@ function RequestSkheraDetails(props) {
           placeholder="Item"
           value={skheraItem}
           onChange={handleChange}
+          onKeyUp={handleKeyUp}
         />
         <img className="icPlus" src={icPlus} alt="" onClick={onAddSkheraItem} />
       </div>
