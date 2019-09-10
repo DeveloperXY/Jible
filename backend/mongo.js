@@ -19,7 +19,38 @@ let userSchema = new mongoose.Schema({
 });
 let User = mongoose.model("User", userSchema);
 
+let skheraSchema = new mongoose.Schema({
+  clientId: String,
+  status: {
+    type: String,
+    default: "ORDER_RECEIVED"
+  },
+  date: {
+    type: String,
+    default: new Date().toTimeString()
+  },
+  price: String,
+  fromAddress: {
+    name: String,
+    lat: String,
+    lng: String
+  },
+  toAddress: {
+    name: String,
+    lat: String,
+    lng: String
+  },
+  description: String,
+  items: [
+    {
+      name: String
+    }
+  ]
+});
+let Skhera = mongoose.model("Skhera", skheraSchema);
+
 module.exports = {
   db,
-  User
+  User,
+  Skhera
 };

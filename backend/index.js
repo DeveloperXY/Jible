@@ -5,6 +5,7 @@ const app = express();
 
 const mongo = require("./mongo");
 const User = mongo.User;
+const Skhera = mongo.Skhera;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -79,6 +80,38 @@ app.put("/user", (req, res) => {
       });
     } else {
       res.send({ status: "no_such_user" });
+    }
+  });
+});
+
+app.post("/skhera", (req, res) => {
+  let id = req.body.id;
+  let description = req.body.description;
+  let items = req.body.items.map(item => ({
+    name: item
+  }));
+  let price = req.body.price;
+  let fromAddress = req.body.fromAddress;
+  let toAddress = req.body.toAddress;
+  console.log(typeof items);
+
+  new Skhera({
+    clientId: id,
+    price,
+    fromAddress,
+    toAddress,
+    description,
+    items
+  }).save((err, skhera) => {
+    if (err) res.send({ status: "error", message: console.error(err) });
+    if (skhera) {
+      console.log(skhera);
+      res.send({
+        status: "ok",
+        skhera
+      });
+    } else {
+      res.send({ status: "unknown_error" });
     }
   });
 });

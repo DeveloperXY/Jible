@@ -4,7 +4,7 @@ import SimpleMap from "./SimpleMap";
 import AutoCompleteInput from "./AutoCompleteInput";
 import * as placesApi from "../../../api/placesApi";
 
-function RequestSkheraMap(props) {
+function RequestSkheraMap({ onFromAddrChange, onToAddrChange }) {
   const [mapZoom, setMapZoom] = useState(6);
   const [latelyChangedAddress, setLatelyChangedAddress] = useState(undefined);
   const [fromAddress, setFromAddress] = useState({});
@@ -91,6 +91,7 @@ function RequestSkheraMap(props) {
       };
       const from = { ...address, ...geometry };
       setFromAddress(from);
+      onFromAddrChange(from);
       setLatelyChangedAddress(geometry);
       setMapZoom(15);
     });
@@ -102,7 +103,9 @@ function RequestSkheraMap(props) {
         lat: geometry.lat(),
         lng: geometry.lng()
       };
-      setToAddress({ ...address, ...geometry });
+      const to = { ...address, ...geometry };
+      setToAddress(to);
+      onToAddrChange(to);
       setLatelyChangedAddress(geometry);
       setMapZoom(15);
     });

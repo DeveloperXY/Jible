@@ -2,12 +2,22 @@ import React, { useState } from "react";
 import "./requestSkheraDetails.css";
 import icPlus from "../../../images/ic_plus.svg";
 
-function RequestSkheraDetails(props) {
+function RequestSkheraDetails({ onOrderNow }) {
   const [skheraItems, setSkheraItems] = useState([]);
   const [skheraItem, setSkheraItem] = useState("");
+  const [description, setDescription] = useState(undefined);
+  const [price, setPrice] = useState(undefined);
 
   const handleChange = event => {
     setSkheraItem(event.target.value);
+  };
+
+  const handleDescriptionChange = event => {
+    setDescription(event.target.value);
+  };
+
+  const handlePriceChange = event => {
+    setPrice(event.target.value);
   };
 
   const addSkheraItem = () => {
@@ -30,6 +40,10 @@ function RequestSkheraDetails(props) {
     if (e.key === "Enter") addSkheraItem();
   };
 
+  const orderSkhera = () => {
+    onOrderNow(description, skheraItems, price);
+  };
+
   return (
     <div className="request-details">
       <label className="form-label" htmlFor="description">
@@ -38,6 +52,8 @@ function RequestSkheraDetails(props) {
       <textarea
         id="description"
         name="description"
+        onChange={handleDescriptionChange}
+        value={description}
         rows="2"
         placeholder="Text here"
       />
@@ -91,10 +107,17 @@ function RequestSkheraDetails(props) {
         name="price"
         className="itemInput"
         type="text"
+        onChange={handlePriceChange}
+        value={price}
         placeholder="Price"
       />
 
-      <input type="button" className="order-btn" value="Order Now" />
+      <input
+        type="button"
+        className="order-btn"
+        value="Order Now"
+        onClick={orderSkhera}
+      />
     </div>
   );
 }
