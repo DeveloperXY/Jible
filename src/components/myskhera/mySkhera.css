@@ -6,6 +6,12 @@
   border-style: solid;
   flex-direction: column;
   padding: 16px;
+  margin-bottom: 16px;
+}
+
+.my-skheras-container {
+  display: flex;
+  flex-direction: column;
 }
 
 .my-skheras-header {

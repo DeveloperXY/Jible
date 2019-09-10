@@ -115,4 +115,13 @@ app.post("/skhera", (req, res) => {
   });
 });
 
+app.get("/skhera", (req, res) => {
+  const clientId = req.query.clientId;
+
+  Skhera.find({ clientId }, (err, skheras) => {
+    if (err) res.send({ status: "error", message: console.error(err) });
+    res.send(skheras);
+  });
+});
+
 app.listen(port, () => console.log(`Example app listening on port ${port}`));

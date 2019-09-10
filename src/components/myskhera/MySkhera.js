@@ -1,69 +1,131 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./mySkhera.css";
 import SimpleMap from "../request/map/SimpleMap";
+import { fetchSkheras } from "../../api/skheraApi";
+import { connect } from "react-redux";
 
-function MySkhera() {
+function MySkhera({ currentUser }) {
+  const [skheras, setSkheras] = useState([]);
+  useEffect(() => {
+    fetchSkheras(currentUser._id).then(setSkheras);
+  }, []);
+
   return (
-    <div className="my-skheras">
-      <div className="my-skheras-header">
-        <div className="skhera-count">Skhera #</div>
-        <div className="shared-skhera">Shared shkera</div>
-      </div>
-      <div className="status-tracker">
-        <div className="textual-status">
-          <div className="status-item status-item-selected">
-            Order Received
-            <br />
-            <span className="mini-status mini-status-selected">
-              Message/Call
-            </span>
+    <div className="my-skheras-container">
+      {skheras.map((skhera, index) => (
+        <div className="my-skheras">
+          <div className="my-skheras-header">
+            <div className="skhera-count">Skhera #{index + 1}</div>
+            <div className="shared-skhera">Shared shkera</div>
           </div>
-          <div className="status-item">
-            On the way
-            <br />
-            <span className="mini-status">tracking</span>
-          </div>
-          <div className="status-item">
-            Delivered
-            <br />
-            <span className="mini-status">Rate</span>
+          <div className="status-tracker">
+            <div className="textual-status">
+              <div
+                className={
+                  "status-item " +
+                  (skhera.status === "ORDER_RECEIVED"
+                    ? "status-item-selected"
+                    : "")
+                }
+              >
+                Order Received
+                <br />
+                <span
+                  className={
+                    "mini-status " +
+                    (skhera.status === "ORDER_RECEIVED"
+                      ? "mini-status-selected"
+                      : "")
+                  }
+                >
+                  Message/Call
+                </span>
+              </div>
+              <div
+                className={
+                  "status-item " +
+                  (skhera.status === "ON_THE_WAY" ? "status-item-selected" : "")
+                }
+              >
+                On the way
+                <br />
+                <span
+                  className={
+                    "mini-status " +
+                    (skhera.status === "ON_THE_WAY"
+                      ? "mini-status-selected"
+                      : "")
+                  }
+                >
+                  tracking
+                </span>
+              </div>
+              <div
+                className={
+                  "status-item " +
+                  (skhera.status === "DELIVERED" ? "status-item-selected" : "")
+                }
+              >
+                Delivered
+                <br />
+                <span
+                  className={
+                    "mini-status " +
+                    (skhera.status === "DELIVERED"
+                      ? "mini-status-selected"
+                      : "")
+                  }
+                >
+                  Rate
+                </span>
+              </div>
+            </div>
+            <div className="drawn-status"></div>
+            <SimpleMap className="skhera-tracker-map" zoom={15} />
+            <div className="my-skhera-details">
+              <div className="my-skhera-text-details">
+                <div className="my-skhera-date carved">{skhera.date}</div>
+                <div className="my-skhera-price carved">
+                  Price: {skhera.price}
+                </div>
+                <div className="my-skhera-address carved">
+                  {skhera.toAddress.name}
+                </div>
+                <div className="my-skhera-description">
+                  {skhera.description}
+                </div>
+                <ul>
+                  {skhera.items.map(item => (
+                    <li>{item.name}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="my-skhera-rider-details"></div>
+            </div>
+            <div className="my-skhera-price-est">
+              <div className="estimated-price-labels">
+                <div className="estimated-price">Estimated Price</div>
+                <div className="estimated-time-distance">
+                  Estimated time and distance
+                </div>
+              </div>
+              <div className="estimated-values">
+                <div className="estimated-price-value">N/A</div>
+                <div className="estimated-time-distance-value">Unknown</div>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="drawn-status"></div>
-        <SimpleMap className="skhera-tracker-map" zoom={15} />
-        <div className="my-skhera-details">
-          <div className="my-skhera-text-details">
-            <div className="my-skhera-date carved">02 Mar 2019, 10:30am</div>
-            <div className="my-skhera-price carved">Price: 100dh - 200dh</div>
-            <div className="my-skhera-address carved">
-              3416 Tenmile Road, Waltham, Massachusetts, 3rd floor
-            </div>
-            <div className="my-skhera-description">
-              I need you to go to the super market and bring me this stuff
-              quickly:
-            </div>
-            <ul>
-              <li>2Kg potatoes</li>
-              <li>1L Milk</li>
-            </ul>
-          </div>
-          <div className="my-skhera-rider-details"></div>
-        </div>
-        <div className="my-skhera-price-est">
-          <div className="estimated-price-labels">
-            <div className="estimated-price">Estimated Price</div>
-            <div className="estimated-time-distance">
-              Estimated time and distance
-            </div>
-          </div>
-          <div className="estimated-values">
-            <div className="estimated-price-value">120dh</div>
-            <div className="estimated-time-distance-value">~25min / 5km</div>
-          </div>
-        </div>
-      </div>
+      ))}
     </div>
   );
 }
 
-export default MySkhera;
+const mapStateToProps = state => {
+  const { currentUser } = state;
+  return {
+    currentUser
+  };
+};
+
+export default connect(mapStateToProps)(MySkhera);
