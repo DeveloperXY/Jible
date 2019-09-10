@@ -93,7 +93,6 @@ app.post("/skhera", (req, res) => {
   let price = req.body.price;
   let fromAddress = req.body.fromAddress;
   let toAddress = req.body.toAddress;
-  console.log(typeof items);
 
   new Skhera({
     clientId: id,

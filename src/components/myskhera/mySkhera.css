@@ -1,0 +1,118 @@
+.my-skheras {
+  display: flex;
+  border-color: #e6e6e6;
+  border-width: 1px;
+  border-radius: 4px;
+  border-style: solid;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.my-skheras-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+}
+
+.skhera-count {
+  font-size: 24px;
+  color: #419d78;
+}
+
+.shared-skhera {
+  color: white;
+  background-color: #4a90e2;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.status-item {
+  color: black;
+}
+
+.status-item-selected {
+  color: #419d78;
+}
+
+.mini-status {
+  color: #909090;
+  font-size: 12px;
+}
+
+.mini-status-selected {
+  color: #419d78;
+}
+
+.textual-status {
+  display: flex;
+  text-align: center;
+  justify-content: space-between;
+  margin-left: 60px;
+  margin-right: 60px;
+}
+
+.status-tracker {
+  margin-top: 54px;
+}
+
+.skhera-tracker-map {
+  margin-top: 48px;
+}
+
+.my-skhera-details {
+  display: flex;
+  margin-top: 36px;
+}
+
+.my-skhera-text-details {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 300px);
+  margin: 8px;
+}
+
+.carved {
+  color: #909090;
+}
+
+.my-skhera-address {
+  margin-top: 24px;
+}
+
+.my-skhera-description {
+  margin-top: 36px;
+}
+
+.my-skhera-rider-details {
+  width: 300px;
+}
+
+.estimated-price-labels {
+  display: flex;
+  flex-direction: column;
+}
+
+.estimated-price {
+  font-size: 24px;
+}
+
+.estimated-price-value {
+  font-size: 24px;
+  color: #419d78;
+  text-align: end;
+}
+
+.estimated-time-distance {
+  font-size: 14px;
+}
+
+.estimated-time-distance-value {
+  font-size: 14px;
+  color: #909090;
+}
+
+.my-skhera-price-est {
+  display: flex;
+  justify-content: space-between;
+  margin: 24px 36px 24px 36px;
+}
