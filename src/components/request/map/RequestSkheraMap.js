@@ -5,6 +5,8 @@ import AutoCompleteInput from "./AutoCompleteInput";
 import * as placesApi from "../../../api/placesApi";
 
 function RequestSkheraMap({ onFromAddrChange, onToAddrChange }) {
+  const [fromAddressText, setFromAddressText] = useState("");
+  const [toAddressText, setToAddressText] = useState("");
   const [mapZoom, setMapZoom] = useState(6);
   const [latelyChangedAddress, setLatelyChangedAddress] = useState(undefined);
   const [fromAddress, setFromAddress] = useState({});
@@ -13,6 +15,24 @@ function RequestSkheraMap({ onFromAddrChange, onToAddrChange }) {
   const [polyline, setPolyline] = useState(undefined);
   const isFirstRun = useRef(true);
   const isFirstRun2 = useRef(true);
+
+  const onFromChange = (event, { newValue }) => {
+    setFromAddressText(newValue);
+  };
+
+  const onToChange = (event, { newValue }) => {
+    setToAddressText(newValue);
+  };
+
+  const fromInputProps = {
+    value: fromAddressText,
+    onChange: onFromChange
+  };
+
+  const toInputProps = {
+    value: toAddressText,
+    onChange: onToChange
+  };
 
   useEffect(() => {
     if (isFirstRun2.current) {
@@ -130,6 +150,7 @@ function RequestSkheraMap({ onFromAddrChange, onToAddrChange }) {
           placeholder="Where to pick the Skhera from"
           getSuggestions={getAddressSuggestions}
           onSuggestionSelected={onFromAddressSelected}
+          inputProps={fromInputProps}
         />
       </div>
       <div className="input-inline-label">
@@ -142,6 +163,7 @@ function RequestSkheraMap({ onFromAddrChange, onToAddrChange }) {
           placeholder="Where to deliver"
           getSuggestions={getAddressSuggestions}
           onSuggestionSelected={onToAddressSelected}
+          inputProps={toInputProps}
         />
       </div>
       <SimpleMap

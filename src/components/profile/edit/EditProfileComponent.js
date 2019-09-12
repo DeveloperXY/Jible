@@ -1,7 +1,6 @@
 import React from "react";
 import ProfileInfoForm from "../ProfileInfoForm";
-import icEdit from "../../../images/ic_edit.svg";
-import { Link } from "react-router-dom";
+import RequestSkheraButton from "../../RequestSkheraButton";
 
 function EditProfileComponent({
   currentUser,
@@ -9,10 +8,6 @@ function EditProfileComponent({
   handleSave,
   history
 }) {
-  function onRequestSkhera() {
-    history.push("/profile/request");
-  }
-
   return (
     <div className="profile-container">
       <div className="profile-info page-section">
@@ -29,12 +24,7 @@ function EditProfileComponent({
           onChange={handleChange}
         />
       </div>
-      <div className="request-skhera page-section" onClick={onRequestSkhera}>
-        <img className="edit-icon" alt="" src={icEdit} />
-        <Link to="/profile/request" className="request-shera-text">
-          Request Skhera
-        </Link>
-      </div>
+      <RequestSkheraButton history={history} />
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { Route, Switch } from "react-router-dom";
 import EditProfileComponent from "./edit/EditProfileComponent";
 import FaqComponent from "../faq/FaqComponent";
 import MySkhera from "../myskhera/MySkhera";
+import MyAddresses from "../myaddress/MyAddresses";
 
 function ProfileComponent({ currentUser, saveUserRemotely, history }) {
   const [user, setUser] = useState({ ...currentUser });
@@ -53,6 +54,14 @@ function ProfileComponent({ currentUser, saveUserRemotely, history }) {
     setIsMyAddressSelected(false);
   }
 
+  function goToMyAddresses() {
+    history.push("/profile/myaddress");
+    setIsFaqSelected(false);
+    setIsMyProfileSelected(false);
+    setIsMySkheraSelected(false);
+    setIsMyAddressSelected(true);
+  }
+
   return (
     <>
       <div className="options-menu page-section">
@@ -79,6 +88,7 @@ function ProfileComponent({ currentUser, saveUserRemotely, history }) {
             "options-menu-item " +
             (isMyAddressSelected ? "options-menu-item-selected" : "")
           }
+          onClick={goToMyAddresses}
         >
           My Address
         </div>
@@ -95,6 +105,7 @@ function ProfileComponent({ currentUser, saveUserRemotely, history }) {
       <Switch>
         <Route path="/profile/faq" component={FaqComponent} />
         <Route path="/profile/myskhera" component={MySkhera} />
+        <Route path="/profile/myaddress" component={MyAddresses} />
         <Route
           component={props => (
             <EditProfileComponent

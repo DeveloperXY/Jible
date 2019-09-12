@@ -1,0 +1,62 @@
+.new-address {
+  display: flex;
+  flex-direction: column;
+}
+
+.addresses-view {
+  width: calc(100% - 200px);
+}
+
+.add-address-btn {
+  align-self: flex-end;
+  border: none;
+  -webkit-border-radius: 4;
+  -moz-border-radius: 4;
+  font-family: "Ropa Sans";
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 8px;
+  color: #ffffff;
+  font-size: 20px;
+  background: #419d78;
+  padding: 8px 40px 8px 40px;
+  text-decoration: none;
+}
+
+.user-address {
+  display: flex;
+  flex-direction: column;
+}
+
+.delete-icon {
+  cursor: pointer;
+}
+
+.user-address-text {
+  border: 0;
+  width: 100%;
+  padding: 0;
+}
+
+.user-address-view {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #909090;
+  padding: 12px 12px 12px 12px;
+}
+
+.user-address-map {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.form-label {
+  margin-bottom: 4px;
+}
+
+.location-icon {
+  margin-right: 8px;
+}

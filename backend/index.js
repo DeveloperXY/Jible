@@ -6,6 +6,7 @@ const app = express();
 const mongo = require("./mongo");
 const User = mongo.User;
 const Skhera = mongo.Skhera;
+const Address = mongo.Address;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -121,6 +122,33 @@ app.get("/skhera", (req, res) => {
   Skhera.find({ clientId }, (err, skheras) => {
     if (err) res.send({ status: "error", message: console.error(err) });
     res.send(skheras);
+  });
+});
+
+app.post("/address", (req, res) => {
+  let id = req.body.id;
+  let placeId = req.body.placeId;
+  let name = req.body.name;
+  let lat = req.body.lat;
+  let lng = req.body.lng;
+
+  new Address({
+    id,
+    placeId,
+    name,
+    lat,
+    lng
+  }).save((err, address) => {
+    if (err) res.send({ status: "error", message: console.error(err) });
+    if (address) {
+      console.log(address);
+      res.send({
+        status: "ok",
+        address
+      });
+    } else {
+      res.send({ status: "unknown_error" });
+    }
   });
 });
 

@@ -49,8 +49,18 @@ let skheraSchema = new mongoose.Schema({
 });
 let Skhera = mongoose.model("Skhera", skheraSchema);
 
+let addressSchema = new mongoose.Schema({
+  id: String,
+  placeId: String,
+  name: String,
+  lat: String,
+  lng: String
+});
+let Address = mongoose.model("Address", addressSchema);
+
 module.exports = {
   db,
   User,
-  Skhera
+  Skhera,
+  Address
 };

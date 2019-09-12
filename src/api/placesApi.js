@@ -5,7 +5,6 @@ export function fetchAddressSuggestions(query) {
       { input: query },
       (predictions, status) => {
         if (status !== window.google.maps.places.PlacesServiceStatus.OK) {
-          alert(status);
           reject(status);
           return;
         }
@@ -43,6 +42,8 @@ export function fetchPlaceGeometry(placeId, map) {
 }
 
 export function fetchRouteSegments(fromPlaceId, toPlaceId) {
+  console.log("from place id: " + fromPlaceId);
+  console.log("to place id: " + toPlaceId);
   let service = new window.google.maps.DirectionsService();
   return new Promise((resolve, reject) => {
     return service.route(

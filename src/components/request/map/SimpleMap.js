@@ -9,7 +9,8 @@ class SimpleMap extends Component {
   };
 
   static defaultProps = {
-    showMarkers: true,
+    height: "500px",
+    width: "500px",
     center: {
       lat: 33.589886,
       lng: -7.603869
@@ -22,12 +23,16 @@ class SimpleMap extends Component {
   };
 
   render() {
-    const { mapRef, fromAddress, toAddress } = this.props;
+    const {
+      mapRef,
+      fromAddress,
+      toAddress,
+      height,
+      width,
+      centerMarker
+    } = this.props;
     return (
-      <div
-        className={this.props.className}
-        style={{ height: "500px", width: "100%" }}
-      >
+      <div className={this.props.className} style={{ height, width }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: "AIzaSyDd3dI_tqR6Rx-IMpS9r5mWCP5oAEibiE0" }}
           defaultCenter={this.props.center}
@@ -38,6 +43,7 @@ class SimpleMap extends Component {
             if (mapRef !== undefined) mapRef(map);
           }}
         >
+          {centerMarker}
           {fromAddress !== undefined && (
             <MapMarker lat={fromAddress.lat} lng={fromAddress.lng} text="A" />
           )}
