@@ -126,15 +126,15 @@ app.get("/skhera", (req, res) => {
 });
 
 app.post("/address", (req, res) => {
-  let id = req.body.id;
   let placeId = req.body.placeId;
+  let userId = req.body.userId;
   let name = req.body.name;
   let lat = req.body.lat;
   let lng = req.body.lng;
 
   new Address({
-    id,
     placeId,
+    userId,
     name,
     lat,
     lng
@@ -149,6 +149,15 @@ app.post("/address", (req, res) => {
     } else {
       res.send({ status: "unknown_error" });
     }
+  });
+});
+
+app.get("/address", (req, res) => {
+  const userId = req.query.userId;
+
+  Address.find({ userId }, (err, addresses) => {
+    if (err) res.send({ status: "error", message: console.error(err) });
+    res.send(addresses);
   });
 });
 

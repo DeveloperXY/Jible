@@ -10,3 +10,11 @@ export function saveAddress(address) {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export function fetchAddressesByUserId(userId) {
+  return fetch(`${baseUrl}?userId=${userId}`, {
+    method: "GET"
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}

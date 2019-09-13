@@ -50,8 +50,8 @@ let skheraSchema = new mongoose.Schema({
 let Skhera = mongoose.model("Skhera", skheraSchema);
 
 let addressSchema = new mongoose.Schema({
-  id: String,
   placeId: String,
+  userId: String,
   name: String,
   lat: String,
   lng: String

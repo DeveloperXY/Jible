@@ -1,8 +1,10 @@
 import { combineReducers } from "redux";
 import currentUser from "./userReducer";
+import addresses from "./addressReducer";
 
 const rootReducer = combineReducers({
-  currentUser
+  currentUser,
+  addresses
 });
 
 export default rootReducer;

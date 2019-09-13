@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import RequestSkheraButton from "../RequestSkheraButton";
 import "./myAddresses.css";
 import AutoCompleteInput from "../request/map/AutoCompleteInput";
@@ -8,12 +8,19 @@ import SimpleMap from "../request/map/SimpleMap";
 import deleteIcon from "../../images/ic_delete.svg";
 import MapPin from "../request/map/marker/MapPin";
 import mapPin from "../../images/map_pin.svg";
+import { connect } from "react-redux";
+import { loadAddressesByUserId } from "../../redux/actions/addressActions";
 
-function MyAddresses({ history }) {
+function MyAddresses({ currentUser, addresses, history, loadAddresses }) {
   const [googleMap, setGoogleMap] = useState({});
   const [value, setValue] = useState("");
   const [selectedAddress, setSelectedAddress] = useState(undefined);
-  const [addresses, setAddresses] = useState([]);
+
+  useEffect(() => {
+    loadAddresses(currentUser._id).catch(error => {
+      alert("Loading addresses failed" + error);
+    });
+  }, []);
 
   const onChange = (event, { newValue }) => {
     setValue(newValue);
@@ -55,10 +62,11 @@ function MyAddresses({ history }) {
   const saveAddress = () => {
     console.log(selectedAddress);
     if (selectedAddress !== undefined) {
+      selectedAddress.userId = currentUser._id;
       addressApi.saveAddress(selectedAddress).then(data => {
         if (data.status === "ok") {
           clearAddress();
-          setAddresses([...addresses, selectedAddress]);
+          loadAddresses(currentUser._id);
         } else console.log("not ok");
       });
     }
@@ -81,28 +89,30 @@ function MyAddresses({ history }) {
             onClick={saveAddress}
           />
           <SimpleMap width="0px" height="0px" mapRef={setGoogleMap} />
-          {addresses.map((a, index) => (
-            <div className="user-address">
-              <div className="user-address-label form-label">
-                Address #{index + 1}
-              </div>
-              <div className="user-address-wrapper">
-                <div className="user-address-view">
-                  <img className="location-icon" src={mapPin} alt="" />
-                  <div className="user-address-text">{a.name}</div>
-                  <img className="delete-icon" src={deleteIcon} alt="" />
+          {addresses.map((a, index) => {
+            return (
+              <div className="user-address" key={a._id}>
+                <div className="user-address-label form-label">
+                  Address #{index + 1}
                 </div>
+                <div className="user-address-wrapper">
+                  <div className="user-address-view">
+                    <img className="location-icon" src={mapPin} alt="" />
+                    <div className="user-address-text">{a.name}</div>
+                    <img className="delete-icon" src={deleteIcon} alt="" />
+                  </div>
+                </div>
+                <SimpleMap
+                  className="user-address-map"
+                  width="100%"
+                  height="150px"
+                  center={{ lat: parseFloat(a.lat), lng: parseFloat(a.lng) }}
+                  zoom={15}
+                  centerMarker={<MapPin lat={a.lat} lng={a.lng} />}
+                />
               </div>
-              <SimpleMap
-                className="user-address-map"
-                width="100%"
-                height="150px"
-                center={{ lat: a.lat, lng: a.lng }}
-                zoom={15}
-                centerMarker={<MapPin lat={a.lat} lng={a.lng} />}
-              />
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
       <RequestSkheraButton history={history} />
@@ -110,4 +120,19 @@ function MyAddresses({ history }) {
   );
 }
 
-export default MyAddresses;
+const mapStateToProps = state => {
+  const { currentUser, addresses } = state;
+  return {
+    currentUser,
+    addresses
+  };
+};
+
+const mapDispatchToProps = {
+  loadAddresses: loadAddressesByUserId
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MyAddresses);
