@@ -4,8 +4,9 @@ import RequestSkheraDetails from "./details/RequestSkheraDetails";
 import RequestSkheraMap from "./map/RequestSkheraMap";
 import * as skheraApi from "../../api/skheraApi";
 import { connect } from "react-redux";
+import backArrow from "../../images/arrow_back.svg";
 
-function RequestSkhera({ currentUser }) {
+function RequestSkhera({ currentUser, history }) {
   const [fromAddress, setFromAddress] = useState({});
   const [toAddress, setToAddress] = useState({});
 
@@ -26,9 +27,16 @@ function RequestSkhera({ currentUser }) {
     setToAddress(toAddr);
   };
 
+  const goBack = () => {
+    history.goBack();
+  };
+
   return (
     <div className="request-skhera-body">
-      <h1 className="request-skhera-header">Request a Skhera</h1>
+      <div className="request-skhera-header">
+        <img src={backArrow} alt="" className="back-arrow" onClick={goBack} />
+        <h1 className="request-skhera-header-text">Request a Skhera</h1>
+      </div>
       <div className="request-content">
         <RequestSkheraDetails onOrderNow={handleSkheraOrder} />
         <RequestSkheraMap

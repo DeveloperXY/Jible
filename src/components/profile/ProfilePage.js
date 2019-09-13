@@ -3,13 +3,15 @@ import "./profilePage.css";
 import RequestSkhera from "../request/RequestSkhera";
 import ProfileComponent from "./ProfileComponent";
 import { connect } from "react-redux";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Link } from "react-router-dom";
 
 function ProfilePage({ currentUser }) {
   return (
     <div className="main-content">
       <div className="header-content">
-        <span className="jible-header">Jible</span>
+        <Link to="/" className="jible-link">
+          <span className="jible-header">Jible</span>
+        </Link>
         <div className="profile-header-section">
           <img className="profile-img" alt="" src={currentUser.image} />
           <div className="current-username">{currentUser.name}</div>

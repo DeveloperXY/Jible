@@ -157,3 +157,11 @@ label {
 .phone-label {
   margin-top: 16px;
 }
+
+.jible-link {
+  text-decoration: none;
+}
+
+.back-arrow {
+  cursor: pointer;
+}
