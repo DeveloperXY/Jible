@@ -161,4 +161,25 @@ app.get("/address", (req, res) => {
   });
 });
 
+app.delete("/address", (req, res) => {
+  let _id = req.body._id;
+  console.log("ID: " + _id);
+
+  Address.findOneAndDelete(_id, (error, address) => {
+    if (error) {
+      res.json({ status: "error", message: console.error(error) });
+      return;
+    }
+
+    if (address) {
+      res.json({
+        status: "ok",
+        address
+      });
+    } else {
+      res.send({ status: "no_such_address" });
+    }
+  });
+});
+
 app.listen(port, () => console.log(`Example app listening on port ${port}`));

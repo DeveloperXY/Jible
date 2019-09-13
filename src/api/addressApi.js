@@ -18,3 +18,14 @@ export function fetchAddressesByUserId(userId) {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export function deleteAddressById(id) {
+  return fetch(baseUrl, {
+    method: "DELETE",
+    body: {
+      _id: id
+    }
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}

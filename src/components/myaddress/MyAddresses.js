@@ -9,9 +9,19 @@ import deleteIcon from "../../images/ic_delete.svg";
 import MapPin from "../request/map/marker/MapPin";
 import mapPin from "../../images/map_pin.svg";
 import { connect } from "react-redux";
-import { loadAddressesByUserId } from "../../redux/actions/addressActions";
+import {
+  loadAddressesByUserId,
+  deleteAddress,
+  deleteAddressSuccess
+} from "../../redux/actions/addressActions";
 
-function MyAddresses({ currentUser, addresses, history, loadAddresses }) {
+function MyAddresses({
+  currentUser,
+  addresses,
+  history,
+  loadAddresses,
+  deleteAddress
+}) {
   const [googleMap, setGoogleMap] = useState({});
   const [value, setValue] = useState("");
   const [selectedAddress, setSelectedAddress] = useState(undefined);
@@ -72,6 +82,10 @@ function MyAddresses({ currentUser, addresses, history, loadAddresses }) {
     }
   };
 
+  const removeAddress = addressId => {
+    deleteAddress(addressId);
+  };
+
   return (
     <div className="profile-container">
       <div className="addresses-view page-section">
@@ -99,7 +113,12 @@ function MyAddresses({ currentUser, addresses, history, loadAddresses }) {
                   <div className="user-address-view">
                     <img className="location-icon" src={mapPin} alt="" />
                     <div className="user-address-text">{a.name}</div>
-                    <img className="delete-icon" src={deleteIcon} alt="" />
+                    <img
+                      className="delete-icon"
+                      src={deleteIcon}
+                      alt=""
+                      onClick={() => removeAddress(a._id)}
+                    />
                   </div>
                 </div>
                 <SimpleMap
@@ -129,7 +148,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  loadAddresses: loadAddressesByUserId
+  loadAddresses: loadAddressesByUserId,
+  deleteAddress
 };
 
 export default connect(
