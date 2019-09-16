@@ -3,11 +3,6 @@ input:focus {
 }
 
 .hero {
-  background: url(../../images/cover.png) no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
   margin: 0;
   padding: 0;
   height: 100vh;
@@ -16,9 +11,17 @@ input:focus {
 }
 
 .hero-content {
-  padding-top: 54px;
   max-width: 1140px;
   margin: 0 auto;
+}
+
+.hero-content-wrapper {
+  padding: 54px 0;
+  background: url(../../images/cover.png) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 .header-content {
@@ -29,7 +32,7 @@ input:focus {
 
 .content-description {
   margin: 0 24px;
-  margin-top: 35%;
+  margin-top: 40%;
   font-size: 36px;
   text-align: center;
 }
@@ -144,35 +147,55 @@ input:focus {
 }
 
 .how-it-works-content {
-  display: grid;
-  row-gap: 150px;
-  grid-template-columns: 33% auto 33%;
+  display: flex;
+  padding: 0 400px;
+  flex-direction: column;
   color: #000000;
-  max-width: 1140px;
-  margin: 0 auto;
 }
 
 .how-it-works-header {
   margin: 0 auto;
   text-align: center;
-  margin-top: 20%;
+  margin-top: 5%;
   color: black;
 }
 
+.how-it-works-part1-wrapper {
+  margin-top: 100px;
+  display: flex;
+}
+
+.how-it-works-part2-wrapper {
+  margin-top: 50px;
+  padding-left: 100px;
+}
+
+.how-it-works-part3-wrapper {
+  margin-top: 100px;
+  margin-bottom: 100px;
+  padding-left: 100px;
+}
+
+.how-it-works-part1 {
+  display: flex;
+  flex-direction: column;
+}
+
 .how-it-works-part2 {
-  grid-column-start: 3;
-  grid-row-start: 2;
+  display: flex;
+  flex-direction: column;
 }
 
 .how-it-works-part3 {
-  grid-column-start: 3;
-  grid-row-start: 3;
+  display: flex;
+  flex-direction: column;
   margin-bottom: 100px;
 }
 
 .sub-header {
   font-size: 24px;
   margin: 0;
+  font-weight: bold;
 }
 
 .sub-content {
@@ -245,4 +268,150 @@ input:focus {
 .footer-link {
   text-decoration: none;
   color: #000000;
+}
+
+.part-wrapper {
+  display: flex;
+}
+
+.how-it-works-part {
+  flex: 1;
+}
+
+@media only screen and (max-width: 450px) {
+  .footer-items {
+    flex-direction: column;
+    justify-content: center;
+    order: 1;
+  }
+
+  .footer-content {
+    flex-direction: column;
+  }
+
+  .policy-item {
+    margin: 0;
+  }
+
+  .terms-item {
+    margin: 0;
+  }
+
+  .jible-footer-header {
+    order: 2;
+  }
+
+  .play-store {
+    margin-right: 0;
+  }
+
+  .apps-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .app-image {
+    max-width: 100%;
+    width: auto;
+    margin-right: 0;
+  }
+
+  .hero-content {
+    max-height: 100vh;
+    flex-direction: column;
+  }
+
+  .hero-content-wrapper {
+    padding: 24px 0;
+  }
+
+  .content-description {
+    font-size: 24px;
+  }
+
+  .green-btn,
+  .white-btn {
+    display: none;
+  }
+
+  .header-content {
+    padding: 0 24px;
+  }
+
+  .signup-consumer-text,
+  .signup-rider-text {
+    font-size: 18px;
+  }
+
+  .how-it-works-header {
+    margin-top: 15%;
+  }
+
+  .how-it-works-part {
+    flex: unset;
+  }
+
+  .how-it-works-part2-wrapper {
+    padding-left: 0;
+    margin-top: 100px;
+  }
+
+  .how-it-works-part3-wrapper {
+    padding-left: 0;
+    margin-bottom: 0;
+  }
+
+  .how-it-works-content {
+    padding: 0 0px;
+  }
+
+  .part-wrapper {
+    justify-content: center;
+  }
+
+  .how-it-works-part > * {
+    text-align: center;
+    padding: 0 84px;
+  }
+
+  .app-image {
+    order: 1;
+    margin-top: 0;
+    margin-right: 0;
+    justify-self: unset;
+    align-self: unset;
+  }
+
+  .apps-header {
+    padding: 0 72px;
+    text-align: center;
+    width: unset;
+    max-width: unset;
+    margin-bottom: 50px;
+    font-size: 30px;
+  }
+
+  .store-logos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .apps-right-section {
+    padding-bottom: 48px;
+  }
+
+  .footer-items {
+    font-size: 24px;
+    text-align: center;
+  }
+
+  .footer-items > * {
+    margin-top: 24px;
+  }
+
+  .jible-footer-header {
+    font-size: 60px;
+    margin-top: 48px;
+  }
 }
