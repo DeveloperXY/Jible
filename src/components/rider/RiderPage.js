@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import menuIcon from "./images/ic_menu.svg";
 import notificationIcon from "./images/ic_notifications.svg";
 import { saveUserRemotely } from "../../redux/actions/userActions";
-import "./profilePage.css";
+import "./riderPage.css";
 import { connect } from "react-redux";
 import ProfileInfoForm from "../profile/ProfileInfoForm";
 import { toast } from "react-toastify";
 
-function RiderProfilePage({ currentUser, saveUserRemotely }) {
+function RiderPage({ currentUser, saveUserRemotely }) {
   const [user, setUser] = useState({ ...currentUser });
+  const [isNotificationVisible, setNotificationVisibility] = useState(false);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -25,16 +26,28 @@ function RiderProfilePage({ currentUser, saveUserRemotely }) {
     });
   }
 
+  function toggleNotificationsVisibility() {
+    setNotificationVisibility(!isNotificationVisible);
+  }
+
   return (
     <div className="profile-wrapper">
       <div className="app-header">
         <div className="app-header-text">Jible</div>
         <div className="header-icons">
-          <img src={notificationIcon} alt="" className="notification-icon" />
+          <img
+            src={notificationIcon}
+            alt=""
+            className="notification-icon"
+            onClick={toggleNotificationsVisibility}
+          />
           <img src={menuIcon} alt="" />
         </div>
       </div>
-      <div className="notification-body">
+      <div
+        className="notification-body"
+        style={{ display: isNotificationVisible ? "flex" : "none" }}
+      >
         <div className="notification-header">
           <div>New assignment</div>
           <div>2:45 min</div>
@@ -67,4 +80,4 @@ const mapDispatchToProps = {
 export default connect(
   null,
   mapDispatchToProps
-)(RiderProfilePage);
+)(RiderPage);

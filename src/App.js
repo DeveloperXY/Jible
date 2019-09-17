@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import "./App.css";
 import HomePage from "./components/home/HomePage";
 import ConsumerProfilePage from "./components/profile/ProfilePage";
-import RiderProfilePage from "./components/rider/ProfilePage";
+import RiderPage from "./components/rider/RiderPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { connect } from "react-redux";
@@ -19,7 +19,7 @@ function App({ currentUser }) {
             currentUser.userType === "consumer" ? (
               <ConsumerProfilePage />
             ) : currentUser.userType === "rider" ? (
-              <RiderProfilePage currentUser={currentUser} />
+              <RiderPage currentUser={currentUser} />
             ) : (
               <h1>saf rak tlefti</h1>
             )
