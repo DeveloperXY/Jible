@@ -7,6 +7,7 @@ import RiderPage from "./components/rider/RiderPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { connect } from "react-redux";
+import { DrawerLayout } from "./components/rider/drawer/DrawerLayout";
 
 function App({ currentUser }) {
   return (
@@ -19,7 +20,8 @@ function App({ currentUser }) {
             currentUser.userType === "consumer" ? (
               <ConsumerProfilePage />
             ) : currentUser.userType === "rider" ? (
-              <RiderPage currentUser={currentUser} />
+              // <RiderPage currentUser={currentUser} />
+              <DrawerLayout />
             ) : (
               <h1>saf rak tlefti</h1>
             )

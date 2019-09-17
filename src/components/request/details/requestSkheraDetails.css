@@ -85,7 +85,7 @@ textarea {
   list-style-type: none;
 }
 
-ul li::before {
+.skhera-ul li::before {
   content: "\2022";
   color: white;
   font-weight: bold;
