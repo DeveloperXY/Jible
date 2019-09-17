@@ -100,10 +100,14 @@ function HomePage({ history, actions }) {
           <div className="header-content">
             <span className="jible-header">Jible</span>
             <div className="buttons-container">
-              <input type="button" className="green-btn" value="Signup" />
               <input
                 type="button"
-                className="white-btn"
+                className="green-btn signup-btn"
+                value="Signup"
+              />
+              <input
+                type="button"
+                className="white-btn login-btn"
                 value="Login"
                 onClick={openLoginDialog}
               />
@@ -128,6 +132,9 @@ function HomePage({ history, actions }) {
               <img src={helmetIcon} className="left-icon" alt="Home" />
               <span className="signup-rider-text">Signup as a Rider</span>
               <img src={rightArrowIcon} className="right-icon" alt="Go" />
+            </div>
+            <div className="rider-btn" onClick={openLoginDialog}>
+              <span className="signup-rider-text">Log in</span>
             </div>
           </div>
         </div>

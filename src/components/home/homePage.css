@@ -329,8 +329,8 @@ input:focus {
     font-size: 24px;
   }
 
-  .green-btn,
-  .white-btn {
+  .signup-btn,
+  .login-btn {
     display: none;
   }
 

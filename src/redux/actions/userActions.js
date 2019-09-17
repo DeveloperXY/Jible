@@ -1,8 +1,8 @@
 import * as types from "./actionTypes";
 import * as userApi from "../../api/userApi";
 
-export function saveUserSuccess(course) {
-  return { type: types.SAVE_USER_SUCCESS, course };
+export function saveUserSuccess(user) {
+  return { type: types.SAVE_USER_SUCCESS, user };
 }
 
 export function saveUserLocally(user) {

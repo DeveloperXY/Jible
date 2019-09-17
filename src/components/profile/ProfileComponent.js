@@ -107,10 +107,10 @@ function ProfileComponent({ currentUser, saveUserRemotely, history }) {
         <Route path="/profile/myskhera" component={MySkhera} />
         <Route path="/profile/myaddress" component={MyAddresses} />
         <Route
-          component={props => (
+          render={props => (
             <EditProfileComponent
               {...props}
-              currentUser={user}
+              currentUser={currentUser}
               onChange={handleChange}
               onSave={handleSave}
             />
