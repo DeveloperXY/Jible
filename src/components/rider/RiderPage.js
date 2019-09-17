@@ -4,12 +4,14 @@ import notificationIcon from "./images/ic_notifications.svg";
 import { saveUserRemotely } from "../../redux/actions/userActions";
 import "./riderPage.css";
 import { connect } from "react-redux";
-import ProfileInfoForm from "../profile/ProfileInfoForm";
 import { toast } from "react-toastify";
+import RiderProfileInfo from "./RiderProfileInfo";
+import DrawerLayout from "./drawer/DrawerLayout";
 
 function RiderPage({ currentUser, saveUserRemotely }) {
   const [user, setUser] = useState({ ...currentUser });
   const [isNotificationVisible, setNotificationVisibility] = useState(false);
+  const [isDrawerOpen, setDrawerOpenState] = useState(false);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -30,6 +32,14 @@ function RiderPage({ currentUser, saveUserRemotely }) {
     setNotificationVisibility(!isNotificationVisible);
   }
 
+  function toggleDrawerOpenState() {
+    setDrawerOpenState(!isDrawerOpen);
+  }
+
+  function closeDrawer() {
+    setDrawerOpenState(false);
+  }
+
   return (
     <div className="profile-wrapper">
       <div className="app-header">
@@ -41,7 +51,7 @@ function RiderPage({ currentUser, saveUserRemotely }) {
             className="notification-icon"
             onClick={toggleNotificationsVisibility}
           />
-          <img src={menuIcon} alt="" />
+          <img src={menuIcon} alt="" onClick={toggleDrawerOpenState} />
         </div>
       </div>
       <div
@@ -55,20 +65,15 @@ function RiderPage({ currentUser, saveUserRemotely }) {
         <input type="button" className="green-btn accept-btn" value="Accept" />
         <input type="button" className="green-btn grey-btn" value="Decline" />
       </div>
-      <div className="rider-profile-info">
-        <img className="rider-profile-img" alt="" src={user.image} />
-        <div className="rider-profile-info-sub-header">
-          <div className="current-rider-username">{user.name}</div>
-          <div className="phone-number">{user.phone}</div>
-        </div>
-      </div>
-      <div className="profile-info-form-wrapper">
-        <ProfileInfoForm
-          user={user}
-          onSave={handleSave}
-          onChange={handleChange}
+      <div className="main-fragment">
+        <RiderProfileInfo
+          user={currentUser}
+          handleChange={handleChange}
+          handleSave={handleSave}
         />
       </div>
+
+      <DrawerLayout isOpen={isDrawerOpen} closeDrawer={closeDrawer} />
     </div>
   );
 }

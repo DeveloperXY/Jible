@@ -54,7 +54,7 @@
 
 .rider-profile-info {
   display: flex;
-  margin: 48px 36px 0 36px;
+  margin: 0 36px 0 36px;
 }
 
 .rider-profile-info-sub-header {
@@ -73,4 +73,8 @@
 
 .current-rider-username {
   margin-left: 12px;
+}
+
+.rider-info-container{
+  margin: 48px 0;
 }

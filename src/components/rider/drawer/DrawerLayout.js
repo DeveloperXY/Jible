@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import "./drawerLayout.css";
 import closeIcon from "../images/ic_close.svg";
 import ToggleButton from "react-toggle-button";
+import { connect } from "react-redux";
 
-export const DrawerLayout = props => {
+const DrawerLayout = ({ currentUser, isOpen, closeDrawer }) => {
   const [availability, setAvailability] = useState(false);
   const [isSkheratTodoSelected, setIsSkheratTodoSelected] = useState(false);
   const [isMyProfileSelected, setIsMyProfileSelected] = useState(true);
@@ -39,11 +40,16 @@ export const DrawerLayout = props => {
   }
 
   return (
-    <div className="drawer-container">
-      <img src={closeIcon} alt="" className="close-icon" />
+    <div className={"drawer-container" + (isOpen ? " drawer-open" : "")}>
+      <img
+        src={closeIcon}
+        alt=""
+        className="close-icon"
+        onClick={closeDrawer}
+      />
       <div className="drawer-header">
-        <img className="drawer-profile-img" alt="" />
-        <div className="drawer-username">Mohammed Aouf Zouag</div>
+        <img className="drawer-profile-img" alt="" src={currentUser.image} />
+        <div className="drawer-username">{currentUser.name}</div>
       </div>
       <div className="drawer-menu-items">
         <ul className="menu-items-list">
@@ -97,3 +103,12 @@ export const DrawerLayout = props => {
     </div>
   );
 };
+
+const mapStateToProps = state => {
+  const { currentUser } = state;
+  return {
+    currentUser
+  };
+};
+
+export default connect(mapStateToProps)(DrawerLayout);
