@@ -4,8 +4,17 @@ import closeIcon from "../images/ic_close.svg";
 import ToggleButton from "react-toggle-button";
 import { connect } from "react-redux";
 
-const DrawerLayout = ({ currentUser, isOpen, closeDrawer }) => {
-  const [availability, setAvailability] = useState(false);
+const DrawerLayout = ({
+  currentUser,
+  isOpen,
+  closeDrawer,
+  navigateToSkherasTodo,
+  navigateToMyProfile,
+  navigateToStatistics,
+  navigateToFaq,
+  availability,
+  setAvailability
+}) => {
   const [isSkheratTodoSelected, setIsSkheratTodoSelected] = useState(false);
   const [isMyProfileSelected, setIsMyProfileSelected] = useState(true);
   const [isStatisticsSelected, setIsStatisticsSelected] = useState(false);
@@ -16,6 +25,7 @@ const DrawerLayout = ({ currentUser, isOpen, closeDrawer }) => {
     setIsMyProfileSelected(false);
     setIsStatisticsSelected(false);
     setIsFaqSelected(false);
+    navigateToSkherasTodo();
   }
 
   function goToMyProfile() {
@@ -23,6 +33,7 @@ const DrawerLayout = ({ currentUser, isOpen, closeDrawer }) => {
     setIsMyProfileSelected(true);
     setIsStatisticsSelected(false);
     setIsFaqSelected(false);
+    navigateToMyProfile();
   }
 
   function goToFaq() {
@@ -30,6 +41,7 @@ const DrawerLayout = ({ currentUser, isOpen, closeDrawer }) => {
     setIsMyProfileSelected(false);
     setIsStatisticsSelected(false);
     setIsFaqSelected(true);
+    navigateToFaq();
   }
 
   function goToStatistics() {
@@ -37,6 +49,7 @@ const DrawerLayout = ({ currentUser, isOpen, closeDrawer }) => {
     setIsMyProfileSelected(false);
     setIsStatisticsSelected(true);
     setIsFaqSelected(false);
+    navigateToStatistics();
   }
 
   return (

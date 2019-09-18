@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
+const io = require("socket.io")();
 
 const mongo = require("./mongo");
 const User = mongo.User;
@@ -13,6 +14,32 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const port = 9000;
+
+io.on("connection", client => {
+  var userId = client.request._query["userId"];
+  console.log("A client connected: " + userId);
+  client.on("toggleAvailability", data => {
+    console.log("toggle availability request: " + data.availability);
+    User.findByIdAndUpdate(
+      userId,
+      { isAvailable: data.availability },
+      { new: true },
+      (error, user) => {
+        if (error) {
+          client.emit("toggleAvailabilityError");
+          return;
+        }
+
+        if (user) {
+          client.emit("toggleAvailabilitySuccess");
+        } else {
+          client.emit("toggleAvailabilityError");
+        }
+      }
+    );
+  });
+});
+io.listen(5000);
 
 app.get("/", (req, res) => res.send("Hello World"));
 

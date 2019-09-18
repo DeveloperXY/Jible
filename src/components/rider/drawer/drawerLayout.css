@@ -3,13 +3,14 @@
   flex-direction: column;
   padding: 0px 24px 72px 24px;
   background-color: #419d78;
-  height: 100vh;
+  height: 100%;
+  min-height: 100%;
   width: 200px;
   position: absolute;
   right: 0;
   box-shadow: 16px 16px 16px 16px grey;
   transform: translateX(264px);
-  transition: all 0.4s ease-in-out;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .drawer-open.drawer-container {

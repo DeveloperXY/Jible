@@ -1,17 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import menuIcon from "./images/ic_menu.svg";
 import notificationIcon from "./images/ic_notifications.svg";
 import { saveUserRemotely } from "../../redux/actions/userActions";
 import "./riderPage.css";
 import { connect } from "react-redux";
 import { toast } from "react-toastify";
+import { Route, Switch } from "react-router-dom";
 import RiderProfileInfo from "./RiderProfileInfo";
 import DrawerLayout from "./drawer/DrawerLayout";
+import FaqComponent from "../faq/FaqComponent";
 
-function RiderPage({ currentUser, saveUserRemotely }) {
+function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
   const [user, setUser] = useState({ ...currentUser });
   const [isNotificationVisible, setNotificationVisibility] = useState(false);
   const [isDrawerOpen, setDrawerOpenState] = useState(false);
+  const [availability, setAvailability] = useState(false);
+  const isFirstSocketCheck = useRef(true);
+  const isFirstAvailabilityCheck = useRef(true);
+
+  useEffect(() => {
+    if (isFirstSocketCheck.current && socket !== undefined) {
+      isFirstSocketCheck.current = false;
+      socket.on("toggleAvailabilitySuccess", () => {
+        toast.success("Availability updated.");
+      });
+
+      socket.on("toggleAvailabilityError", () => {
+        toast.success("Availability update error.");
+      });
+    }
+  }, [socket]);
+
+  useEffect(() => {
+    if (isFirstAvailabilityCheck.current)
+      isFirstAvailabilityCheck.current = false;
+    else {
+      if (socket !== undefined)
+        socket.emit("toggleAvailability", { availability });
+    }
+  }, [availability]);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -40,6 +67,22 @@ function RiderPage({ currentUser, saveUserRemotely }) {
     setDrawerOpenState(false);
   }
 
+  function navigateToSkherasTodo() {
+    history.push("/skheras/todo");
+  }
+
+  function navigateToMyProfile() {
+    history.push("/profile/details");
+  }
+
+  function navigateToStatistics() {
+    history.push("/statistics");
+  }
+
+  function navigateToFaq() {
+    history.push("/profile/faq");
+  }
+
   return (
     <div className="profile-wrapper">
       <div className="app-header">
@@ -66,14 +109,31 @@ function RiderPage({ currentUser, saveUserRemotely }) {
         <input type="button" className="green-btn grey-btn" value="Decline" />
       </div>
       <div className="main-fragment">
-        <RiderProfileInfo
-          user={currentUser}
-          handleChange={handleChange}
-          handleSave={handleSave}
-        />
+        <Switch>
+          <Route path="/profile/faq" component={FaqComponent} />
+          <Route
+            render={props => (
+              <RiderProfileInfo
+                {...props}
+                user={currentUser}
+                handleChange={handleChange}
+                handleSave={handleSave}
+              />
+            )}
+          />
+        </Switch>
       </div>
 
-      <DrawerLayout isOpen={isDrawerOpen} closeDrawer={closeDrawer} />
+      <DrawerLayout
+        isOpen={isDrawerOpen}
+        closeDrawer={closeDrawer}
+        navigateToFaq={navigateToFaq}
+        navigateToStatistics={navigateToStatistics}
+        navigateToMyProfile={navigateToMyProfile}
+        navigateToSkherasTodo={navigateToSkherasTodo}
+        availability={availability}
+        setAvailability={setAvailability}
+      />
     </div>
   );
 }

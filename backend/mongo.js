@@ -15,6 +15,10 @@ let userSchema = new mongoose.Schema({
   email: String,
   image: String,
   userType: String,
+  isAvailable: {
+    type: Boolean,
+    default: true
+  },
   phone: String
 });
 let User = mongoose.model("User", userSchema);
