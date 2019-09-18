@@ -14,7 +14,7 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
   const [user, setUser] = useState({ ...currentUser });
   const [isNotificationVisible, setNotificationVisibility] = useState(false);
   const [isDrawerOpen, setDrawerOpenState] = useState(false);
-  const [availability, setAvailability] = useState(false);
+  const [availability, setAvailability] = useState(user.isAvailable);
   const isFirstSocketCheck = useRef(true);
   const isFirstAvailabilityCheck = useRef(true);
 
@@ -22,11 +22,11 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
     if (isFirstSocketCheck.current && socket !== undefined) {
       isFirstSocketCheck.current = false;
       socket.on("toggleAvailabilitySuccess", () => {
-        toast.success("Availability updated.");
+        console.log("Availability updated.");
       });
 
       socket.on("toggleAvailabilityError", () => {
-        toast.success("Availability update error.");
+        console.log("Availability update error.");
       });
     }
   }, [socket]);
@@ -35,6 +35,7 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
     if (isFirstAvailabilityCheck.current)
       isFirstAvailabilityCheck.current = false;
     else {
+      setUser({ ...user, isAvailable: availability });
       if (socket !== undefined)
         socket.emit("toggleAvailability", { availability });
     }
