@@ -9,6 +9,7 @@ import { Route, Switch } from "react-router-dom";
 import RiderProfileInfo from "./RiderProfileInfo";
 import DrawerLayout from "./drawer/DrawerLayout";
 import FaqComponent from "../faq/FaqComponent";
+import RiderSkheras from "./skheras/RiderSkheras";
 
 function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
   const [user, setUser] = useState({ ...currentUser });
@@ -69,7 +70,7 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
   }
 
   function navigateToSkherasTodo() {
-    history.push("/skheras/todo");
+    history.push("/profile/todo");
   }
 
   function navigateToMyProfile() {
@@ -112,6 +113,7 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
       <div className="main-fragment">
         <Switch>
           <Route path="/profile/faq" component={FaqComponent} />
+          <Route path="/profile/todo" component={RiderSkheras} />
           <Route
             render={props => (
               <RiderProfileInfo

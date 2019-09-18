@@ -1,0 +1,14 @@
+.current-location-indicator {
+  width: 18px;
+  height: 18px;
+}
+
+.location-marker {
+  display: flex;
+  flex-direction: column;
+}
+
+.location-label {
+  background: white;
+  padding: 24px;
+}

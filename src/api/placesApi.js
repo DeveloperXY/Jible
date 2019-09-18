@@ -68,3 +68,21 @@ export function fetchRouteSegments(fromPlaceId, toPlaceId) {
     );
   });
 }
+
+export function fetchCurrentLocation(navigator) {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      function(position) {
+        resolve({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        });
+      },
+      function() {
+        reject({
+          browserHasGeolocation: true
+        });
+      }
+    );
+  });
+}
