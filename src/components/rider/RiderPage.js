@@ -24,14 +24,14 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
     if (isFirstSocketCheck.current && socket !== undefined) {
       isFirstSocketCheck.current = false;
 
-      socket.on("requestCurrentLocation", () => {
+      setInterval(() => {
         placesApi
           .fetchCurrentLocation(window.navigator)
           .then(location => {
             socket.emit("currentLocationUpdate", location);
           })
           .catch(error => console.log(error));
-      });
+      }, 5000);
 
       socket.on("toggleAvailabilitySuccess", () => {
         console.log("Availability updated.");

@@ -169,10 +169,9 @@ app.post("/skhera", (req, res) => {
     if (err) res.send({ status: "error", message: console.error(err) });
     if (skhera) {
       console.log(skhera);
-      riderSockets.forEach(element => {
-        const socket = element.socket;
-        socket.emit("requestCurrentLocation");
-      });
+      setTimeout(() => {
+        assignSkheraToRider(skhera);
+      }, 5000);
       res.send({
         status: "ok",
         skhera
@@ -182,6 +181,8 @@ app.post("/skhera", (req, res) => {
     }
   });
 });
+
+function assignSkheraToRider(skhera) {}
 
 app.get("/skhera", (req, res) => {
   const clientId = req.query.clientId;
