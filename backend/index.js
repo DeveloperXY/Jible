@@ -8,8 +8,8 @@ const User = mongo.User;
 const Skhera = mongo.Skhera;
 const Address = mongo.Address;
 
-const consumerSockets = {};
-const riderSockets = {};
+var consumerSockets = [];
+var riderSockets = [];
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -23,7 +23,10 @@ io.on("connection", client => {
 
   if (userType === "rider") {
     console.log("A rider has connected: " + userId);
-    riderSockets[userId] = client;
+    riderSockets.push({
+      userId,
+      socket: client
+    });
     client.on("toggleAvailability", data => {
       console.log("toggle availability request: " + data.availability);
       User.findByIdAndUpdate(
@@ -45,7 +48,7 @@ io.on("connection", client => {
       );
     });
     client.on("disconnect", () => {
-      delete riderSockets[userId];
+      riderSockets = riderSockets.filter(s => s.socket == client);
       console.log("A rider has disconnected: " + userId);
     });
   } else if (userType === "consumer") {
@@ -146,6 +149,10 @@ app.post("/skhera", (req, res) => {
     if (err) res.send({ status: "error", message: console.error(err) });
     if (skhera) {
       console.log(skhera);
+      riderSockets.forEach(element => {
+        const socket = element.socket;
+        socket.emit("requestCurrentLocation");
+      });
       res.send({
         status: "ok",
         skhera
@@ -181,7 +188,6 @@ app.post("/address", (req, res) => {
   }).save((err, address) => {
     if (err) res.send({ status: "error", message: console.error(err) });
     if (address) {
-      console.log(address);
       res.send({
         status: "ok",
         address

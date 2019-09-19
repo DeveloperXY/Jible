@@ -12,6 +12,14 @@ import openSocket from "socket.io-client";
 function App({ currentUser }) {
   const [riderSocket, setRiderSocket] = useState(undefined);
 
+  function openNewSocket() {
+    setRiderSocket(
+      openSocket("http://localhost:5000", {
+        query: `userId=${currentUser._id}&userType=${currentUser.userType}`
+      })
+    );
+  }
+
   return (
     <>
       <Switch>
@@ -19,25 +27,20 @@ function App({ currentUser }) {
         <Route
           path="/profile"
           render={props => {
-            if (riderSocket === undefined) {
-              setRiderSocket(
-                openSocket("http://localhost:5000", {
-                  query: `userId=${currentUser._id}&userType=${currentUser.userType}`
-                })
+            if (currentUser.userType === "consumer") {
+              return <ConsumerProfilePage />;
+            } else if (currentUser.userType === "rider") {
+              if (riderSocket === undefined) openNewSocket();
+              return (
+                <RiderPage
+                  {...props}
+                  socket={riderSocket}
+                  currentUser={currentUser}
+                />
               );
+            } else {
+              return <h1>saf rak tlefti</h1>;
             }
-
-            return currentUser.userType === "consumer" ? (
-              <ConsumerProfilePage />
-            ) : currentUser.userType === "rider" ? (
-              <RiderPage
-                {...props}
-                socket={riderSocket}
-                currentUser={currentUser}
-              />
-            ) : (
-              <h1>saf rak tlefti</h1>
-            );
           }}
         />
       </Switch>

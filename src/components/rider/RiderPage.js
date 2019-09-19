@@ -22,6 +22,11 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
   useEffect(() => {
     if (isFirstSocketCheck.current && socket !== undefined) {
       isFirstSocketCheck.current = false;
+
+      socket.on("requestCurrentLocation", () => {
+        alert("Requesting location !");
+      });
+
       socket.on("toggleAvailabilitySuccess", () => {
         console.log("Availability updated.");
       });
