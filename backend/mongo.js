@@ -62,9 +62,17 @@ let addressSchema = new mongoose.Schema({
 });
 let Address = mongoose.model("Address", addressSchema);
 
+let locationSchema = new mongoose.Schema({
+  riderId: String,
+  lat: Number,
+  lng: Number
+});
+let RiderLocation = mongoose.model("RiderLocation", locationSchema);
+
 module.exports = {
   db,
   User,
   Skhera,
-  Address
+  Address,
+  RiderLocation
 };

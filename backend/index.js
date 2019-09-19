@@ -7,6 +7,7 @@ const mongo = require("./mongo");
 const User = mongo.User;
 const Skhera = mongo.Skhera;
 const Address = mongo.Address;
+const RiderLocation = mongo.RiderLocation;
 
 var consumerSockets = [];
 var riderSockets = [];
@@ -48,6 +49,22 @@ io.on("connection", client => {
       );
     });
     client.on("currentLocationUpdate", location => {
+      new RiderLocation({
+        riderId: userId,
+        lat: location.lat,
+        lng: location.lng
+      }).save((err, location) => {
+        if (err) {
+          console.log("Failed to save rider location: " + err);
+          return;
+        }
+
+        if (location) {
+          console.log("Rider location saved");
+        } else {
+          console.log("Unknown error while trying to save rider location");
+        }
+      });
       console.log(`Rider ${userId} is at (${location.lat}, ${location.lng})`);
     });
     client.on("disconnect", () => {
