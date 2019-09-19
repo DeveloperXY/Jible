@@ -17,6 +17,8 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
   const [isNotificationVisible, setNotificationVisibility] = useState(false);
   const [isDrawerOpen, setDrawerOpenState] = useState(false);
   const [availability, setAvailability] = useState(user.isAvailable);
+  const [currentLocation, setRiderLocation] = useState(undefined);
+  const [lastEmittedLocation, setEmittedLocation] = useState(currentLocation);
   const isFirstSocketCheck = useRef(true);
   const isFirstAvailabilityCheck = useRef(true);
 
@@ -28,7 +30,7 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
         placesApi
           .fetchCurrentLocation(window.navigator)
           .then(location => {
-            socket.emit("currentLocationUpdate", location);
+            setRiderLocation(location);
           })
           .catch(error => console.log(error));
       }, 5000);
@@ -42,6 +44,19 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
       });
     }
   }, [socket]);
+
+  useEffect(() => {
+    if (currentLocation !== undefined) {
+      if (
+        lastEmittedLocation === undefined ||
+        (currentLocation.lat !== lastEmittedLocation.lat &&
+          currentLocation.lng !== lastEmittedLocation.lng)
+      ) {
+        setEmittedLocation(currentLocation);
+        socket.emit("currentLocationUpdate", currentLocation);
+      }
+    }
+  }, [currentLocation]);
 
   useEffect(() => {
     if (isFirstAvailabilityCheck.current)
