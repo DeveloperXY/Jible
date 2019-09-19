@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import openSocket from "socket.io-client";
 
 function App({ currentUser }) {
-  const [socket, setSocket] = useState(undefined);
+  const [riderSocket, setRiderSocket] = useState(undefined);
 
   return (
     <>
@@ -19,17 +19,22 @@ function App({ currentUser }) {
         <Route
           path="/profile"
           render={props => {
-            if (socket === undefined)
-              setSocket(
+            if (riderSocket === undefined) {
+              setRiderSocket(
                 openSocket("http://localhost:5000", {
-                  query: `userId=${currentUser._id}`
+                  query: `userId=${currentUser._id}&userType=${currentUser.userType}`
                 })
               );
+            }
 
             return currentUser.userType === "consumer" ? (
-              <ConsumerProfilePage socket={socket} />
+              <ConsumerProfilePage />
             ) : currentUser.userType === "rider" ? (
-              <RiderPage {...props} socket={socket} currentUser={currentUser} />
+              <RiderPage
+                {...props}
+                socket={riderSocket}
+                currentUser={currentUser}
+              />
             ) : (
               <h1>saf rak tlefti</h1>
             );
