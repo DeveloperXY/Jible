@@ -47,6 +47,9 @@ io.on("connection", client => {
         }
       );
     });
+    client.on("currentLocationUpdate", location => {
+      console.log(`Rider ${userId} is at (${location.lat}, ${location.lng})`);
+    });
     client.on("disconnect", () => {
       riderSockets = riderSockets.filter(s => s.socket == client);
       console.log("A rider has disconnected: " + userId);

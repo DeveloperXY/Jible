@@ -10,6 +10,7 @@ import RiderProfileInfo from "./RiderProfileInfo";
 import DrawerLayout from "./drawer/DrawerLayout";
 import FaqComponent from "../faq/FaqComponent";
 import RiderSkheras from "./skheras/RiderSkheras";
+import * as placesApi from "../../api/placesApi";
 
 function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
   const [user, setUser] = useState({ ...currentUser });
@@ -24,7 +25,12 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
       isFirstSocketCheck.current = false;
 
       socket.on("requestCurrentLocation", () => {
-        alert("Requesting location !");
+        placesApi
+          .fetchCurrentLocation(window.navigator)
+          .then(location => {
+            socket.emit("currentLocationUpdate", location);
+          })
+          .catch(error => console.log(error));
       });
 
       socket.on("toggleAvailabilitySuccess", () => {
