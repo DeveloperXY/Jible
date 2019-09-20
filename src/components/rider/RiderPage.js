@@ -14,6 +14,7 @@ import * as placesApi from "../../api/placesApi";
 
 function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
   const [user, setUser] = useState({ ...currentUser });
+  const [notificationData, setNotificationData] = useState(undefined);
   const [isNotificationVisible, setNotificationVisibility] = useState(false);
   const [isNotificationDotVisible, setNotificationDotVisibility] = useState(
     false
@@ -24,6 +25,10 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
   const [lastEmittedLocation, setEmittedLocation] = useState(currentLocation);
   const isFirstSocketCheck = useRef(true);
   const isFirstAvailabilityCheck = useRef(true);
+
+  useEffect(() => {
+    if (notificationData !== undefined) setNotificationData(undefined);
+  }, []);
 
   useEffect(() => {
     if (isNotificationVisible) setNotificationDotVisibility(false);
@@ -50,8 +55,10 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
         console.log("Availability update error.");
       });
 
-      socket.on("incomingRequest", data => {
+      socket.on("newAssignment", data => {
         setNotificationDotVisibility(true);
+        console.log(data);
+        setNotificationData(data);
       });
     }
   }, [socket]);
@@ -95,6 +102,7 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
   }
 
   function toggleNotificationsVisibility() {
+    if (isNotificationVisible) setNotificationData(undefined);
     setNotificationVisibility(!isNotificationVisible);
   }
 
@@ -146,12 +154,43 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
         className="notification-body"
         style={{ display: isNotificationVisible ? "flex" : "none" }}
       >
-        <div className="notification-header">
-          <div>New assignment</div>
-          <div>2:45 min</div>
-        </div>
-        <input type="button" className="green-btn accept-btn" value="Accept" />
-        <input type="button" className="green-btn grey-btn" value="Decline" />
+        {notificationData === undefined && <div>No new assignments.</div>}
+        {notificationData !== undefined &&
+          notificationData.type === "NEW_ASSIGNMENT" && (
+            <>
+              <div className="notification-header">
+                <div>New assignment from {notificationData.fromUserName}</div>
+              </div>
+              <input
+                type="button"
+                className="green-btn accept-btn"
+                value="More details"
+                onClick={() => {
+                  setNotificationVisibility(false);
+                  navigateToSkherasTodo();
+                }}
+              />
+            </>
+          )}
+        {notificationData !== undefined &&
+          notificationData.type === "ADDITIONAL_ASSIGNMENT" && (
+            <>
+              <div className="notification-header">
+                <div>New assignment</div>
+                <div>2:45 min</div>
+              </div>
+              <input
+                type="button"
+                className="green-btn accept-btn"
+                value="Accept"
+              />
+              <input
+                type="button"
+                className="green-btn grey-btn"
+                value="Decline"
+              />
+            </>
+          )}
       </div>
       <div className="main-fragment">
         <Switch>

@@ -248,8 +248,19 @@ function assignSkheraToRider(skhera) {
         console.log("The closest rider is: " + bestResult.riderId);
         const rs = riderSockets.find(rs => rs.userId === bestResult.riderId);
         console.log("rs: " + rs);
-        rs.socket.emit("incomingRequest", {
-          skheraId: skhera._id
+
+        Skhera.findById(skhera._id, (err, skhera) => {
+          if (err) console.log(console.error(err));
+
+          User.findById(skhera.clientId, (err, user) => {
+            if (err) console.log(console.error(err));
+
+            rs.socket.emit("newAssignment", {
+              type: "NEW_ASSIGNMENT",
+              skheraId: skhera._id,
+              fromUserName: user.name
+            });
+          });
         });
       }
     );
