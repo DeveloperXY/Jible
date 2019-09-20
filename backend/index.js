@@ -247,7 +247,7 @@ function assignSkheraToRider(skhera) {
         );
         console.log("The closest rider is: " + bestResult.riderId);
         const rs = riderSockets.find(rs => rs.userId === bestResult.riderId);
-        console.log("rs: " + rs);
+        console.log("rs: " + riderSockets[0].userId);
 
         Skhera.findById(skhera._id, (err, skhera) => {
           if (err) console.log(console.error(err));

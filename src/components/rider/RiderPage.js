@@ -11,6 +11,7 @@ import DrawerLayout from "./drawer/DrawerLayout";
 import FaqComponent from "../faq/FaqComponent";
 import RiderSkheras from "./skheras/RiderSkheras";
 import * as placesApi from "../../api/placesApi";
+import ToggleButton from "react-toggle-button";
 
 function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
   const [user, setUser] = useState({ ...currentUser });
@@ -25,6 +26,7 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
   const [lastEmittedLocation, setEmittedLocation] = useState(currentLocation);
   const isFirstSocketCheck = useRef(true);
   const isFirstAvailabilityCheck = useRef(true);
+  const [currentPage, setCurrentPage] = useState("details");
 
   useEffect(() => {
     if (notificationData !== undefined) setNotificationData(undefined);
@@ -115,18 +117,22 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
   }
 
   function navigateToSkherasTodo() {
+    setCurrentPage("todo");
     history.push("/profile/todo");
   }
 
   function navigateToMyProfile() {
+    setCurrentPage("details");
     history.push("/profile/details");
   }
 
   function navigateToStatistics() {
+    setCurrentPage("statistics");
     history.push("/statistics");
   }
 
   function navigateToFaq() {
+    setCurrentPage("faq");
     history.push("/profile/faq");
   }
 
@@ -210,7 +216,26 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
       </div>
 
       <DrawerLayout
+        currentPage={currentPage}
         isOpen={isDrawerOpen}
+        routes={[
+          {
+            value: "todo",
+            name: "Skheras TODO",
+            action: navigateToSkherasTodo
+          },
+          {
+            value: "details",
+            name: "My profile",
+            action: navigateToMyProfile
+          },
+          {
+            value: "statistics",
+            name: "Statistics",
+            action: navigateToStatistics
+          },
+          { value: "faq", name: "FAQ", action: navigateToFaq }
+        ]}
         closeDrawer={closeDrawer}
         navigateToFaq={navigateToFaq}
         navigateToStatistics={navigateToStatistics}
@@ -218,7 +243,17 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
         navigateToSkherasTodo={navigateToSkherasTodo}
         availability={availability}
         setAvailability={setAvailability}
-      />
+      >
+        <div className="availability-container">
+          <div className="availability-label">Availability</div>
+          <ToggleButton
+            value={availability}
+            onToggle={value => {
+              setAvailability(!value);
+            }}
+          />
+        </div>
+      </DrawerLayout>
     </div>
   );
 }
