@@ -15,6 +15,9 @@ import * as placesApi from "../../api/placesApi";
 function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
   const [user, setUser] = useState({ ...currentUser });
   const [isNotificationVisible, setNotificationVisibility] = useState(false);
+  const [isNotificationDotVisible, setNotificationDotVisibility] = useState(
+    false
+  );
   const [isDrawerOpen, setDrawerOpenState] = useState(false);
   const [availability, setAvailability] = useState(user.isAvailable);
   const [currentLocation, setRiderLocation] = useState(undefined);
@@ -41,6 +44,10 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
 
       socket.on("toggleAvailabilityError", () => {
         console.log("Availability update error.");
+      });
+
+      socket.on("incomingRequest", data => {
+        setNotificationDotVisibility(true);
       });
     }
   }, [socket]);
@@ -116,12 +123,18 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
       <div className="app-header">
         <div className="app-header-text">Jible</div>
         <div className="header-icons">
-          <img
-            src={notificationIcon}
-            alt=""
-            className="notification-icon"
-            onClick={toggleNotificationsVisibility}
-          />
+          <div className="notification-wrapper">
+            <img
+              src={notificationIcon}
+              alt=""
+              className="notification-icon"
+              onClick={toggleNotificationsVisibility}
+            />
+            <div
+              className="dot"
+              style={{ display: isNotificationDotVisible ? "unset" : "none" }}
+            ></div>
+          </div>
           <img src={menuIcon} alt="" onClick={toggleDrawerOpenState} />
         </div>
       </div>

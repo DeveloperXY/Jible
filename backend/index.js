@@ -27,10 +27,18 @@ io.on("connection", client => {
 
   if (userType === "rider") {
     console.log("A rider has connected: " + userId);
-    riderSockets.push({
-      userId,
-      socket: client
-    });
+    const index = riderSockets.findIndex(rs => rs.userId === userId);
+    if (index !== -1) {
+      riderSockets[index] = {
+        userId,
+        socket: client
+      };
+    } else {
+      riderSockets.push({
+        userId,
+        socket: client
+      });
+    }
     client.on("toggleAvailability", data => {
       console.log("toggle availability request: " + data.availability);
       User.findByIdAndUpdate(
@@ -81,7 +89,7 @@ io.on("connection", client => {
       );
     });
     client.on("disconnect", () => {
-      riderSockets = riderSockets.filter(s => s.socket == client);
+      riderSockets = riderSockets.filter(s => s.userId !== userId);
       console.log("A rider has disconnected: " + userId);
     });
   } else if (userType === "consumer") {
@@ -196,7 +204,6 @@ app.post("/skhera", (req, res) => {
 });
 
 function assignSkheraToRider(skhera) {
-  // 1. get the list of rider locations
   RiderLocation.find({}, (err, riderLocations) => {
     if (err) console.log(console.error(err));
     const locations = riderLocations.map(l => {
@@ -220,7 +227,8 @@ function assignSkheraToRider(skhera) {
           console.log(console.error(err));
           return;
         }
-        console.log(JSON.stringify(data, null, 4));
+        // console.log(JSON.stringify(data, null, 4));
+        console.log("RiderSockets count: " + riderSockets.length);
         const results = data.json.rows.map((row, index) => {
           const distance = row.elements[0].distance;
           const duration = row.elements[0].duration;
@@ -238,6 +246,11 @@ function assignSkheraToRider(skhera) {
           (r1, r2) => r1.distanceValue - r2.distanceValue
         );
         console.log("The closest rider is: " + bestResult.riderId);
+        const rs = riderSockets.find(rs => rs.userId === bestResult.riderId);
+        console.log("rs: " + rs);
+        rs.socket.emit("incomingRequest", {
+          skheraId: skhera._id
+        });
       }
     );
   });
