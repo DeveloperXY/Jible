@@ -8,6 +8,9 @@ const User = mongo.User;
 const Skhera = mongo.Skhera;
 const Address = mongo.Address;
 const RiderLocation = mongo.RiderLocation;
+const googleMapsClient = require("@google/maps").createClient({
+  key: "AIzaSyDd3dI_tqR6Rx-IMpS9r5mWCP5oAEibiE0"
+});
 
 var consumerSockets = [];
 var riderSockets = [];
@@ -49,23 +52,33 @@ io.on("connection", client => {
       );
     });
     client.on("currentLocationUpdate", location => {
-      new RiderLocation({
-        riderId: userId,
-        lat: location.lat,
-        lng: location.lng
-      }).save((err, location) => {
-        if (err) {
-          console.log("Failed to save rider location: " + err);
-          return;
-        }
-
-        if (location) {
-          console.log("Rider location saved");
-        } else {
-          console.log("Unknown error while trying to save rider location");
-        }
-      });
       console.log(`Rider ${userId} is at (${location.lat}, ${location.lng})`);
+      RiderLocation.updateOne(
+        { riderId: userId },
+        {
+          $set: {
+            riderId: userId,
+            lat: location.lat,
+            lng: location.lng
+          }
+        },
+        {
+          upsert: true,
+          setDefaultsOnInsert: true
+        },
+        (err, location) => {
+          if (err) {
+            console.log("Failed to save rider location: " + err);
+            return;
+          }
+
+          if (location) {
+            console.log("Rider location saved");
+          } else {
+            console.log("Unknown error while trying to save rider location");
+          }
+        }
+      );
     });
     client.on("disconnect", () => {
       riderSockets = riderSockets.filter(s => s.socket == client);
@@ -182,7 +195,53 @@ app.post("/skhera", (req, res) => {
   });
 });
 
-function assignSkheraToRider(skhera) {}
+function assignSkheraToRider(skhera) {
+  // 1. get the list of rider locations
+  RiderLocation.find({}, (err, riderLocations) => {
+    if (err) console.log(console.error(err));
+    const locations = riderLocations.map(l => {
+      return {
+        lat: l.lat,
+        lng: l.lng
+      };
+    });
+
+    console.log(locations);
+
+    googleMapsClient.distanceMatrix(
+      {
+        origins: locations,
+        destinations: [
+          { lat: skhera.fromAddress.lat, lng: skhera.fromAddress.lng }
+        ]
+      },
+      (err, data) => {
+        if (err) {
+          console.log(console.error(err));
+          return;
+        }
+        console.log(JSON.stringify(data, null, 4));
+        const results = data.json.rows.map((row, index) => {
+          const distance = row.elements[0].distance;
+          const duration = row.elements[0].duration;
+
+          return {
+            riderId: riderLocations[index].riderId,
+            distanceText: distance.text,
+            distanceValue: distance.value,
+            durationText: duration.text,
+            durationValue: duration.value
+          };
+        });
+
+        const [bestResult] = results.sort(
+          (r1, r2) => r1.distanceValue - r2.distanceValue
+        );
+        console.log("The closest rider is: " + bestResult.riderId);
+      }
+    );
+  });
+}
 
 app.get("/skhera", (req, res) => {
   const clientId = req.query.clientId;
