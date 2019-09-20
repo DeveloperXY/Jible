@@ -26,6 +26,10 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
   const isFirstAvailabilityCheck = useRef(true);
 
   useEffect(() => {
+    if (isNotificationVisible) setNotificationDotVisibility(false);
+  }, [isNotificationVisible]);
+
+  useEffect(() => {
     if (isFirstSocketCheck.current && socket !== undefined) {
       isFirstSocketCheck.current = false;
 
