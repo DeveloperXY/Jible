@@ -1,9 +1,11 @@
 const express = require("express");
+const fetch = require("node-fetch");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 const io = require("socket.io")();
 const mongo = require("./mongo");
+const jwt = require("jsonwebtoken");
 const User = mongo.User;
 const Skhera = mongo.Skhera;
 const Address = mongo.Address;
@@ -11,6 +13,9 @@ const RiderLocation = mongo.RiderLocation;
 const googleMapsClient = require("@google/maps").createClient({
   key: "AIzaSyDd3dI_tqR6Rx-IMpS9r5mWCP5oAEibiE0"
 });
+
+const facebookAppSecret = "a28bb3ecd8bf1b13c337f91c31cd9d26";
+const facebookAppId = "2375768049184396";
 
 var consumerSockets = [];
 var riderSockets = [];
@@ -100,51 +105,77 @@ io.listen(5000);
 
 app.get("/", (req, res) => res.send("Hello World"));
 
-app.post("/signup", (req, res) => {
-  let name = req.body.name;
-  let email = req.body.email;
-  let image = req.body.image;
+app.post("/signup", async (req, res) => {
   let userType = req.body.userType;
+  let code = req.body.code;
+  let redirectUri = req.body.redirectUri;
+  let query = `https://graph.facebook.com/v4.0/oauth/access_token?client_id=${facebookAppId}&redirect_uri=${redirectUri}&client_secret=${facebookAppSecret}&code=${code}`;
 
-  User.findOne({ email }, (error, user) => {
-    if (error) {
-      console.log(error);
-      res.send({ status: "error", message: console.error(error) });
-    }
-    if (user) {
-      res.send({
-        status: "email_already_exists"
-      });
-    } else {
-      new User({
-        name,
-        email,
-        image,
+  try {
+    const data = await fetch(query);
+    const body = await data.json();
+    const response = await fetch(
+      `https://graph.facebook.com/me?fields=id,name,email,picture&access_token=${body.access_token}`
+    );
+    const profile = await response.json();
+    const user = await User.findOne({ facebookId: profile.id });
+
+    if (user) return res.send({ status: "email_already_exists" });
+    else {
+      const newUser = await new User({
+        facebookId: profile.id,
+        name: profile.name,
+        email: profile.email,
+        image: profile.picture.data.url,
         userType
-      }).save((err, user) => {
-        console.log(err);
-        if (error) res.send({ status: "error", message: console.error(error) });
-        else res.send({ status: "ok", user });
-      });
+      }).save();
+      return res.send({ status: "ok", user: newUser });
     }
-  });
+  } catch (e) {
+    return res.send(e);
+  }
 });
 
-app.post("/login", (req, res) => {
-  let email = req.body.email;
+function auth(req, res, next) {
+  const token = req.header("auth-token");
+  if (!token) {
+    next();
+  }
 
-  User.findOne({ email }, (error, user) => {
-    if (error) res.send({ status: "error", message: console.error(error) });
+  try {
+    const verified = jwt.verify(token, "fezgrejgoiregore");
+    req.user = verified;
+    next();
+  } catch (err) {
+    next();
+  }
+}
+
+app.post("/login", async (req, res) => {
+  let code = req.body.code;
+  let redirectUri = req.body.redirectUri;
+  let query = `https://graph.facebook.com/v4.0/oauth/access_token?client_id=${facebookAppId}&redirect_uri=${redirectUri}&client_secret=${facebookAppSecret}&code=${code}`;
+
+  try {
+    const data = await fetch(query);
+    const body = await data.json();
+    const response = await fetch(
+      `https://graph.facebook.com/me?fields=id,name,email,picture&access_token=${body.access_token}`
+    );
+    const profile = await response.json();
+    const user = await User.findOne({ facebookId: profile.id });
+
     if (user) {
-      console.log(user);
-      res.send({
-        status: "ok",
-        user
-      });
+      const token = jwt.sign({ ...user }, "fezgrejgoiregore");
+      return res
+        .header("auth-token", token)
+        .send({ status: "ok", token, user });
     } else {
-      res.send({ status: "no_such_user" });
+      return res.send({ status: "no_such_user" });
     }
-  });
+  } catch (e) {
+    return res.send(e);
+  }
 });
 
 app.put("/user", (req, res) => {
@@ -153,18 +184,17 @@ app.put("/user", (req, res) => {
 
   User.findByIdAndUpdate(_id, req.body, { new: true }, (error, user) => {
     if (error) {
-      res.json({ status: "error", message: console.error(error) });
-      return;
+      return res.json({ status: "error", message: console.error(error) });
     }
 
     if (user) {
       console.log("Phone: " + req.body.phone);
-      res.json({
+      return res.json({
         status: "ok",
         user
       });
     } else {
-      res.send({ status: "no_such_user" });
+      return res.send({ status: "no_such_user" });
     }
   });
 });
@@ -187,18 +217,18 @@ app.post("/skhera", (req, res) => {
     description,
     items
   }).save((err, skhera) => {
-    if (err) res.send({ status: "error", message: console.error(err) });
+    if (err) return res.send({ status: "error", message: console.error(err) });
     if (skhera) {
       console.log(skhera);
       setTimeout(() => {
         assignSkheraToRider(skhera);
       }, 5000);
-      res.send({
+      return res.send({
         status: "ok",
         skhera
       });
     } else {
-      res.send({ status: "unknown_error" });
+      return res.send({ status: "unknown_error" });
     }
   });
 });
@@ -271,8 +301,8 @@ app.get("/skhera", (req, res) => {
   const clientId = req.query.clientId;
 
   Skhera.find({ clientId }, (err, skheras) => {
-    if (err) res.send({ status: "error", message: console.error(err) });
-    res.send(skheras);
+    if (err) return res.send({ status: "error", message: console.error(err) });
+    return res.send(skheras);
   });
 });
 
@@ -290,14 +320,14 @@ app.post("/address", (req, res) => {
     lat,
     lng
   }).save((err, address) => {
-    if (err) res.send({ status: "error", message: console.error(err) });
+    if (err) return res.send({ status: "error", message: console.error(err) });
     if (address) {
-      res.send({
+      return res.send({
         status: "ok",
         address
       });
     } else {
-      res.send({ status: "unknown_error" });
+      return res.send({ status: "unknown_error" });
     }
   });
 });
@@ -306,8 +336,8 @@ app.get("/address", (req, res) => {
   const userId = req.query.userId;
 
   Address.find({ userId }, (err, addresses) => {
-    if (err) res.send({ status: "error", message: console.error(err) });
-    res.send(addresses);
+    if (err) return res.send({ status: "error", message: console.error(err) });
+    return res.send(addresses);
   });
 });
 
@@ -317,17 +347,17 @@ app.delete("/address", (req, res) => {
 
   Address.findOneAndDelete(_id, (error, address) => {
     if (error) {
-      res.json({ status: "error", message: console.error(error) });
+      return res.json({ status: "error", message: console.error(error) });
       return;
     }
 
     if (address) {
-      res.json({
+      return res.json({
         status: "ok",
         address
       });
     } else {
-      res.send({ status: "no_such_address" });
+      return res.send({ status: "no_such_address" });
     }
   });
 });

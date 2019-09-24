@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { connect } from "react-redux";
 import openSocket from "socket.io-client";
+import AuthPage from "./components/home/AuthPage";
 
 function App({ currentUser }) {
   const [riderSocket, setRiderSocket] = useState(undefined);
@@ -25,8 +26,19 @@ function App({ currentUser }) {
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route
+          path="/auth/signup/:userType"
+          render={props => <AuthPage action="signup" {...props} />}
+        />
+        <Route
+          path="/auth/login"
+          render={props => <AuthPage action="login" {...props} />}
+        />
+
+        <Route
           path="/profile"
           render={props => {
+            const jwtToken = localStorage.getItem("jwt");
+
             if (currentUser.userType === "consumer") {
               return <ConsumerProfilePage />;
             } else if (currentUser.userType === "rider") {

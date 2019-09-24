@@ -1,7 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
 import "./authDialog.css";
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 
 const customStyles = {
   overlay: {
@@ -19,11 +18,10 @@ const customStyles = {
 };
 
 const AuthDialog = ({
-  contentLabel,
   action,
   isModalOpen,
   closeModal,
-  responseFacebook
+  handleFacebookAuth
 }) => {
   return (
     <Modal
@@ -36,17 +34,9 @@ const AuthDialog = ({
       <div className="auth-header">{action}</div>
       <h6 className="auth-subheader">Welcome to Jible Services</h6>
 
-      <FacebookLogin
-        appId="2375768049184396"
-        autoload
-        fields="name,email,picture"
-        callback={responseFacebook}
-        render={renderProps => (
-          <button className="auth-facebook-btn" onClick={renderProps.onClick}>
-            {action} with Facebook
-          </button>
-        )}
-      />
+      <button className="auth-facebook-btn" onClick={handleFacebookAuth}>
+        {action} with Facebook
+      </button>
     </Modal>
   );
 };

@@ -11,6 +11,8 @@ import AuthDialog from "../dialogs/AuthDialog";
 import { bindActionCreators } from "redux";
 import * as userActions from "../../redux/actions/userActions";
 import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import jwt from "jsonwebtoken";
 
 Modal.setAppElement("#root");
 
@@ -18,6 +20,20 @@ function HomePage({ history, actions }) {
   const [isSignupDialogOpen, setSignupDialogOpenState] = useState(false);
   const [isLoginDialogOpen, setLoginDialogOpenState] = useState(false);
   const [userType, setUserType] = useState(undefined);
+  const signUpRedirecUri = "https://bc13a39a.ngrok.io/auth/signup";
+  const loginRedirecUri = "https://bc13a39a.ngrok.io/auth/login";
+
+  function signUserUp() {
+    window.location.replace(
+      `https://www.facebook.com/v4.0/dialog/oauth?client_id=2375768049184396&redirect_uri=${signUpRedirecUri}/${userType}&state=state-param`
+    );
+  }
+
+  function logUserIn() {
+    window.location.replace(
+      `https://www.facebook.com/v4.0/dialog/oauth?client_id=2375768049184396&redirect_uri=${loginRedirecUri}&state=state-param`
+    );
+  }
 
   function openSignupDialog(type = "consumer") {
     setUserType(type);
@@ -198,22 +214,16 @@ function HomePage({ history, actions }) {
         </div>
       </div>
       <AuthDialog
-        contentLabel="Signup dialog"
         action="Signup"
         isModalOpen={isSignupDialogOpen}
         closeModal={closeSignupDialog}
-        responseFacebook={response => {
-          onFacebookResponse(response, "signup");
-        }}
+        handleFacebookAuth={signUserUp}
       />
       <AuthDialog
-        contentLabel="Login dialog"
         action="Login"
         isModalOpen={isLoginDialogOpen}
         closeModal={closeLoginDialog}
-        responseFacebook={response => {
-          onFacebookResponse(response, "login");
-        }}
+        handleFacebookAuth={logUserIn}
       />
     </div>
   );
@@ -228,4 +238,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   null,
   mapDispatchToProps
-)(HomePage);
+)(withRouter(HomePage));

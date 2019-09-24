@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./requestSkhera.css";
 import RequestSkheraDetails from "./details/RequestSkheraDetails";
 import RequestSkheraMap from "./map/RequestSkheraMap";
@@ -9,6 +9,13 @@ import backArrow from "../../images/arrow_back.svg";
 function RequestSkhera({ currentUser, history }) {
   const [fromAddress, setFromAddress] = useState({});
   const [toAddress, setToAddress] = useState({});
+
+  useEffect(() => {
+    window.fbq("track", "viewContent", {
+      content_name: "Really Fast Running Shoes",
+      content_category: "Apparel & Accessories > Shoes"
+    });
+  });
 
   const handleSkheraOrder = (description, skheraItems, price) => {
     skheraApi.orderSkhera({

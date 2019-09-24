@@ -15,6 +15,7 @@ let userSchema = new mongoose.Schema({
   email: String,
   image: String,
   userType: String,
+  facebookId: String,
   isAvailable: {
     type: Boolean,
     default: true
