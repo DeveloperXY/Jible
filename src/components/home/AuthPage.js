@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import queryString from "query-string";
 import * as authApi from "../../api/authApi";
 import { connect } from "react-redux";
@@ -13,47 +13,51 @@ function AuthPage({
   history,
   saveUser
 }) {
-  const values = queryString.parse(search);
-  const code = values.code;
-  const redirectUri = "https://bc13a39a.ngrok.io/auth";
+  useEffect(() => {
+    const values = queryString.parse(search);
+    const code = values.code;
+    const redirectUri = "https://0db4f3be.ngrok.io/auth";
 
-  if (action === "login") {
-    authApi.login({ code, redirectUri: `${redirectUri}/login` }).then(data => {
-      if (data.status === "no_such_user") {
-        history.push("/");
-        return;
-      }
+    if (action === "login") {
+      authApi
+        .login({ code, redirectUri: `${redirectUri}/login` })
+        .then(data => {
+          if (data.status === "no_such_user") {
+            history.push("/");
+            return;
+          }
 
-      if (data.status === "ok") {
-        const token = data.token;
-        const user = data.user;
-        localStorage.setItem("jwt", token);
-        saveUser(user);
-        history.push("/profile");
-      }
-    });
-  } else if (action === "signup") {
-    authApi
-      .signUp({
-        code,
-        userType,
-        redirectUri: `${redirectUri}/signup/${userType}`
-      })
-      .then(data => {
-        if (data.status === "email_already_exists") {
-          history.push("/");
-          return;
-        }
+          if (data.status === "ok") {
+            const token = data.token;
+            const user = data.user;
+            localStorage.setItem("jwt", token);
+            saveUser(user);
+            history.push("/profile");
+          }
+        });
+    } else if (action === "signup") {
+      authApi
+        .signUp({
+          code,
+          userType,
+          redirectUri: `${redirectUri}/signup/${userType}`
+        })
+        .then(data => {
+          if (data.status === "email_already_exists") {
+            history.push("/");
+            return;
+          }
 
-        if (data.status === "ok") {
-          const token = data.token;
-          const user = data.user;
-          localStorage.setItem("jwt", token);
-          saveUser(user);
-          history.push("/profile");
-        }
-      });
-  }
+          if (data.status === "ok") {
+            const token = data.token;
+            const user = data.user;
+            localStorage.setItem("jwt", token);
+            saveUser(user);
+            history.push("/profile");
+          }
+        });
+    }
+  }, []);
 
   return (
     <>

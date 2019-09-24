@@ -12,16 +12,16 @@ import { bindActionCreators } from "redux";
 import * as userActions from "../../redux/actions/userActions";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import jwt from "jsonwebtoken";
 
 Modal.setAppElement("#root");
 
-function HomePage({ history, actions }) {
+function HomePage(props) {
   const [isSignupDialogOpen, setSignupDialogOpenState] = useState(false);
   const [isLoginDialogOpen, setLoginDialogOpenState] = useState(false);
   const [userType, setUserType] = useState(undefined);
-  const signUpRedirecUri = "https://bc13a39a.ngrok.io/auth/signup";
-  const loginRedirecUri = "https://bc13a39a.ngrok.io/auth/login";
+  const baseRedirecUri = "https://0db4f3be.ngrok.io/auth";
+  const signUpRedirecUri = `${baseRedirecUri}/signup`;
+  const loginRedirecUri = `${baseRedirecUri}/login`;
 
   function signUserUp() {
     window.location.replace(
@@ -51,62 +51,6 @@ function HomePage({ history, actions }) {
 
   function closeLoginDialog() {
     setLoginDialogOpenState(false);
-  }
-
-  function onFacebookResponse(response, action) {
-    if (isSignupDialogOpen) closeSignupDialog();
-    if (isLoginDialogOpen) closeLoginDialog();
-
-    const {
-      name,
-      email,
-      picture: {
-        data: { url }
-      }
-    } = response;
-
-    if (action === "signup") {
-      fetch("http://localhost:9000/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          image: url,
-          userType
-        })
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (data.status === "ok") {
-            actions.saveUserLocally(data.user);
-            history.push("/profile");
-          }
-          console.log(`fetch data: ${data}`);
-        })
-        .catch(error => console.log(error));
-    } else if (action === "login") {
-      fetch("http://localhost:9000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          email
-        })
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (data.status === "ok") {
-            actions.saveUserLocally(data.user);
-            history.push("/profile");
-          }
-          console.log(`fetch data: ${data}`);
-        })
-        .catch(error => console.log(error));
-    }
   }
 
   return (
