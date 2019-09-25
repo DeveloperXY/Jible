@@ -44,9 +44,13 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
         placesApi
           .fetchCurrentLocation(window.navigator)
           .then(location => {
+            console.log("Riderpage update");
             setRiderLocation(location);
           })
-          .catch(error => console.log(error));
+          .catch(error => {
+            console.log(error);
+            console.log("got error");
+          });
       }, 5000);
 
       socket.on("toggleAvailabilitySuccess", () => {
@@ -201,7 +205,10 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
       <div className="main-fragment">
         <Switch>
           <Route path="/profile/faq" component={FaqComponent} />
-          <Route path="/profile/todo" component={RiderSkheras} />
+          <Route
+            path="/profile/todo"
+            render={() => <RiderSkheras location={currentLocation} />}
+          />
           <Route
             render={props => (
               <RiderProfileInfo

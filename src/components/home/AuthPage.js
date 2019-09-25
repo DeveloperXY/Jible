@@ -3,6 +3,7 @@ import queryString from "query-string";
 import * as authApi from "../../api/authApi";
 import { connect } from "react-redux";
 import * as userActions from "../../redux/actions/userActions";
+import { frontBaseUrl } from "../../api/apiUtils";
 
 function AuthPage({
   action,
@@ -16,7 +17,7 @@ function AuthPage({
   useEffect(() => {
     const values = queryString.parse(search);
     const code = values.code;
-    const redirectUri = "https://0db4f3be.ngrok.io/auth";
+    const redirectUri = `${frontBaseUrl}/auth`;
 
     if (action === "login") {
       authApi

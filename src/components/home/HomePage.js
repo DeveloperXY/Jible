@@ -12,6 +12,7 @@ import { bindActionCreators } from "redux";
 import * as userActions from "../../redux/actions/userActions";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
+import { frontBaseUrl } from "../../api/apiUtils";
 
 Modal.setAppElement("#root");
 
@@ -19,7 +20,7 @@ function HomePage(props) {
   const [isSignupDialogOpen, setSignupDialogOpenState] = useState(false);
   const [isLoginDialogOpen, setLoginDialogOpenState] = useState(false);
   const [userType, setUserType] = useState(undefined);
-  const baseRedirecUri = "https://0db4f3be.ngrok.io/auth";
+  const baseRedirecUri = `${frontBaseUrl}/auth`;
   const signUpRedirecUri = `${baseRedirecUri}/signup`;
   const loginRedirecUri = `${baseRedirecUri}/login`;
 

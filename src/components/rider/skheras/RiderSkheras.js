@@ -6,19 +6,7 @@ import "./riderSkheras.css";
 
 function RiderSkheras(props) {
   const [googleMap, setGoogleMap] = useState(undefined);
-  const [currentLocation, setCurrentLocation] = useState(undefined);
-  const { height, width } = props;
-
-  useEffect(() => {
-    if (googleMap !== undefined) {
-      placesApi
-        .fetchCurrentLocation(window.navigator)
-        .then(position => {
-          setCurrentLocation(position);
-        })
-        .catch(error => console.log(error));
-    }
-  }, [googleMap]);
+  const { height, width, location } = props;
 
   return (
     <div className="skheras-container">
@@ -34,10 +22,10 @@ function RiderSkheras(props) {
             setGoogleMap(map);
           }}
         >
-          {currentLocation !== undefined && (
+          {location !== undefined && (
             <img
-              lat={currentLocation.lat}
-              lng={currentLocation.lng}
+              lat={location.lat}
+              lng={location.lng}
               className="current-location-indicator"
               src={currentLocationIndicator}
               alt=""

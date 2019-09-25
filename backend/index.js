@@ -2,7 +2,9 @@ const express = require("express");
 const fetch = require("node-fetch");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const http = require("http");
 const app = express();
+const server = http.createServer(app);
 const io = require("socket.io")();
 const mongo = require("./mongo");
 const jwt = require("jsonwebtoken");
@@ -129,24 +131,29 @@ app.post("/signup", async (req, res) => {
         image: profile.picture.data.url,
         userType
       }).save();
-      return res.send({ status: "ok", user: newUser });
+      const token = jwt.sign({ id: newUser._id }, "fezgrejgoiregore");
+      return res.send({ status: "ok", token, user: newUser });
     }
   } catch (e) {
     return res.send(e);
   }
 });
 
-function auth(req, res, next) {
+async function auth(req, res, next) {
   const token = req.header("auth-token");
   if (!token) {
-    next();
+    return res.send({ status: "jwt_token_required" });
   }
 
   try {
-    const verified = jwt.verify(token, "fezgrejgoiregore");
-    req.user = verified;
+    console.log(token);
+    const data = jwt.verify(token, "fezgrejgoiregore");
+    if (data.id) req.user = await User.findById(data.id);
+    else return res.send({ status: "invalid_jwt_token" });
+
     next();
   } catch (err) {
+    console.log(err);
     next();
   }
 }
@@ -166,7 +173,7 @@ app.post("/login", async (req, res) => {
     const user = await User.findOne({ facebookId: profile.id });
 
     if (user) {
-      const token = jwt.sign({ ...user }, "fezgrejgoiregore");
+      const token = jwt.sign({ id: user._id }, "fezgrejgoiregore");
       return res
         .header("auth-token", token)
         .send({ status: "ok", token, user });
@@ -176,6 +183,11 @@ app.post("/login", async (req, res) => {
   } catch (e) {
     return res.send(e);
   }
+});
+
+app.post("/verify", auth, async (req, res) => {
+  if (req.user) return res.send({ status: "valid_token", user: req.user });
+  return res.send({ status: "invalid_token" });
 });
 
 app.put("/user", (req, res) => {

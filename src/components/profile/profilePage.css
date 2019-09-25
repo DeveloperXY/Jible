@@ -6,6 +6,11 @@
   margin-bottom: 200px;
 }
 
+.jible-header {
+  text-decoration: none;
+  color: black;
+}
+
 .main-content {
   padding-top: 54px;
   max-width: 1140px;
