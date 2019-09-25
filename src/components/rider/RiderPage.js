@@ -140,6 +140,12 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
     history.push("/profile/faq");
   }
 
+  function acceptSkhera() {
+    
+  }
+
+  function declineSkhera() {}
+
   return (
     <div className="profile-wrapper">
       <div className="app-header">
@@ -174,10 +180,20 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
               <input
                 type="button"
                 className="green-btn accept-btn"
-                value="More details"
+                value="Accept"
                 onClick={() => {
                   setNotificationVisibility(false);
                   navigateToSkherasTodo();
+                  acceptSkhera();
+                }}
+              />
+              <input
+                type="button"
+                className="white-btn decline-btn"
+                value="Decline"
+                onClick={() => {
+                  setNotificationVisibility(false);
+                  declineSkhera();
                 }}
               />
             </>

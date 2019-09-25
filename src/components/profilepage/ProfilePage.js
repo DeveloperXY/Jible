@@ -33,7 +33,7 @@ function ProfilePage({ currentUser, saveUser, history }) {
 
   function openNewSocket() {
     setRiderSocket(
-      openSocket(`${baseUrl}`, {
+      openSocket(baseUrl, {
         query: `userId=${currentUser._id}&userType=${currentUser.userType}`,
         secure: true
       })

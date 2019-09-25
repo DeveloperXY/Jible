@@ -46,6 +46,13 @@
   font-size: 16px;
 }
 
+.decline-btn {
+  display: unset;
+  margin-top: 12px;
+  font-size: 16px;
+  background-color: #f6f6f6;
+}
+
 .grey-btn {
   color: black;
   background-color: #e5e5e5;

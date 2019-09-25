@@ -5,7 +5,7 @@ const cors = require("cors");
 const http = require("http");
 const app = express();
 const server = http.createServer(app);
-const io = require("socket.io")();
+const io = require("socket.io")(server);
 const mongo = require("./mongo");
 const jwt = require("jsonwebtoken");
 const User = mongo.User;
@@ -103,7 +103,6 @@ io.on("connection", client => {
     console.log("A consumer has connected: " + userId);
   }
 });
-io.listen(5000);
 
 app.get("/", (req, res) => res.send("Hello World"));
 
@@ -277,6 +276,9 @@ function assignSkheraToRider(skhera) {
 
           return {
             riderId: riderLocations[index].riderId,
+            socket: riderSockets.find(
+              rs => rs.userId === riderLocations[index].riderId
+            ).socket,
             distanceText: distance.text,
             distanceValue: distance.value,
             durationText: duration.text,
@@ -284,28 +286,39 @@ function assignSkheraToRider(skhera) {
           };
         });
 
-        const [bestResult] = results.sort(
+        const sortedResults = results.sort(
           (r1, r2) => r1.distanceValue - r2.distanceValue
         );
-        console.log("The closest rider is: " + bestResult.riderId);
-        const rs = riderSockets.find(rs => rs.userId === bestResult.riderId);
-        console.log("rs: " + riderSockets[0].userId);
 
-        Skhera.findById(skhera._id, (err, skhera) => {
+        User.findById(skhera.clientId, (err, user) => {
           if (err) console.log(console.error(err));
-
-          User.findById(skhera.clientId, (err, user) => {
-            if (err) console.log(console.error(err));
-
-            rs.socket.emit("newAssignment", {
-              type: "NEW_ASSIGNMENT",
-              skheraId: skhera._id,
-              fromUserName: user.name
-            });
-          });
+          emitSkheraToRiders(sortedResults, skhera._id, user);
         });
       }
     );
+  });
+}
+
+function emitSkheraToRiders(sortedResults, skheraId, fromUser) {
+  Skhera.findById(skheraId, (err, skhera) => {
+    if (err) {
+      console.log(console.error(err));
+      return;
+    }
+
+    if (skhera.status !== "ON_THE_WAY") {
+      const socket = sortedResults.shift().socket;
+      socket.emit("newAssignment", {
+        type: "NEW_ASSIGNMENT",
+        skheraId: skhera._id,
+        fromUserName: fromUser.name
+      });
+      setTimeout(() => {
+        // If there are still riders to notify, proceed
+        if (sortedResults.length > 0)
+          emitSkheraToRiders(sortedResults, skhera, fromUser);
+      }, 5000);
+    }
   });
 }
 
@@ -374,4 +387,4 @@ app.delete("/address", (req, res) => {
   });
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}`));
+server.listen(port, () => console.log(`Example app listening on port ${port}`));
