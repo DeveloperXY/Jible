@@ -66,6 +66,15 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
         console.log(data);
         setNotificationData(data);
       });
+
+      socket.on("acceptSkheraResponse", data => {
+        const status = data.status;
+        if (status === "ok") {
+          toast.success("You got the job.");
+        } else {
+          toast.success("Too late");
+        }
+      });
     }
   }, [socket]);
 
@@ -141,10 +150,19 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
   }
 
   function acceptSkhera() {
-    
+    socket.emit("acceptNewAssignment", {
+      skheraId: notificationData.skheraId,
+      riderId: currentUser._id
+    });
   }
 
-  function declineSkhera() {}
+  function declineSkhera() {
+    // TODO: possible optimization here - emit next new assignment event to the next rider immediately
+    socket.emit("declineNewAssignment", {
+      skheraId: notificationData.skheraId,
+      riderId: currentUser._id
+    });
+  }
 
   return (
     <div className="profile-wrapper">

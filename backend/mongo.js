@@ -46,6 +46,7 @@ let skheraSchema = new mongoose.Schema({
     lng: String
   },
   description: String,
+  riderId: String,
   items: [
     {
       name: String

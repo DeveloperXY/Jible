@@ -95,6 +95,11 @@ io.on("connection", client => {
         }
       );
     });
+    client.on("acceptNewAssignment", data => {
+      const skheraId = data.skheraId;
+      const riderId = data.riderId;
+      acceptSkhera(skheraId, riderId, client);
+    });
     client.on("disconnect", () => {
       riderSockets = riderSockets.filter(s => s.userId !== userId);
       console.log("A rider has disconnected: " + userId);
@@ -103,6 +108,43 @@ io.on("connection", client => {
     console.log("A consumer has connected: " + userId);
   }
 });
+
+function acceptSkhera(skheraId, riderId, socket) {
+  Skhera.findById(skheraId, (err, skhera) => {
+    if (err) {
+      console.log(console.error(err));
+      return;
+    }
+
+    if (skhera.status !== "ON_THE_WAY") {
+      Skhera.updateOne(
+        { _id: skheraId },
+        {
+          $set: {
+            riderId: riderId,
+            status: "ON_THE_WAY"
+          }
+        },
+        (err, newSkhera) => {
+          if (err) {
+            console.log("Failed to save skhera info: " + err);
+            return;
+          }
+
+          if (newSkhera) {
+            console.log("Skhera assigned.");
+          } else {
+            console.log("Unknown error while trying to assign skhera to rider");
+          }
+        }
+      );
+      socket.emit("acceptSkheraResponse", { status: "ok" });
+    } else {
+      // Skhera was already assigned to someone else
+      socket.emit("acceptSkheraResponse", { status: "already_assigned" });
+    }
+  });
+}
 
 app.get("/", (req, res) => res.send("Hello World"));
 
