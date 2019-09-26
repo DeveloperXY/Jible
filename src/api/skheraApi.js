@@ -19,3 +19,12 @@ export function fetchSkheras(clientId) {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export function fetchSkherasItinerary(riderId) {
+  return fetch(`${baseUrl}/itinerary?riderId=${riderId}`, {
+    method: "GET",
+    headers: { "content-type": "application/json" }
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}

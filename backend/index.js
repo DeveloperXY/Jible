@@ -28,6 +28,18 @@ app.use(cors());
 
 const port = 9000;
 
+Object.defineProperty(Array.prototype, "flat", {
+  value: function(depth = 1) {
+    return this.reduce(function(flat, toFlatten) {
+      return flat.concat(
+        Array.isArray(toFlatten) && depth > 1
+          ? toFlatten.flat(depth - 1)
+          : toFlatten
+      );
+    }, []);
+  }
+});
+
 io.on("connection", client => {
   var userId = client.request._query["userId"];
   var userType = client.request._query["userType"];
@@ -187,7 +199,6 @@ async function auth(req, res, next) {
   }
 
   try {
-    console.log(token);
     const data = jwt.verify(token, "fezgrejgoiregore");
     if (data.id) req.user = await User.findById(data.id);
     else return res.send({ status: "invalid_jwt_token" });
@@ -296,8 +307,6 @@ function assignSkheraToRider(skhera) {
       };
     });
 
-    console.log(locations);
-
     googleMapsClient.distanceMatrix(
       {
         origins: locations,
@@ -310,17 +319,14 @@ function assignSkheraToRider(skhera) {
           console.log(console.error(err));
           return;
         }
-        // console.log(JSON.stringify(data, null, 4));
-        console.log("RiderSockets count: " + riderSockets.length);
-        const results = data.json.rows.map((row, index) => {
+
+        const rows = [...data.json.rows];
+        const results = rows.map((row, index) => {
           const distance = row.elements[0].distance;
           const duration = row.elements[0].duration;
 
           return {
             riderId: riderLocations[index].riderId,
-            socket: riderSockets.find(
-              rs => rs.userId === riderLocations[index].riderId
-            ).socket,
             distanceText: distance.text,
             distanceValue: distance.value,
             durationText: duration.text,
@@ -341,6 +347,12 @@ function assignSkheraToRider(skhera) {
   });
 }
 
+function getSocketByRiderId(riderId) {
+  const socket = riderSockets.find(rs => rs.userId === riderId);
+  if (socket) return socket.socket;
+  return undefined;
+}
+
 function emitSkheraToRiders(sortedResults, skheraId, fromUser) {
   Skhera.findById(skheraId, (err, skhera) => {
     if (err) {
@@ -349,17 +361,24 @@ function emitSkheraToRiders(sortedResults, skheraId, fromUser) {
     }
 
     if (skhera.status !== "ON_THE_WAY") {
-      const socket = sortedResults.shift().socket;
-      socket.emit("newAssignment", {
-        type: "NEW_ASSIGNMENT",
-        skheraId: skhera._id,
-        fromUserName: fromUser.name
-      });
-      setTimeout(() => {
-        // If there are still riders to notify, proceed
+      const riderId = sortedResults.shift().riderId;
+      const socket = getSocketByRiderId(riderId);
+      if (socket) {
+        socket.emit("newAssignment", {
+          type: "NEW_ASSIGNMENT",
+          skheraId: skhera._id,
+          fromUserName: fromUser.name
+        });
+        setTimeout(() => {
+          // If there are still riders to notify, proceed
+          if (sortedResults.length > 0)
+            emitSkheraToRiders(sortedResults, skhera, fromUser);
+        }, 5000);
+      } else {
+        // If there are still riders to notify, proceed without a timeout
         if (sortedResults.length > 0)
           emitSkheraToRiders(sortedResults, skhera, fromUser);
-      }, 5000);
+      }
     }
   });
 }
@@ -426,6 +445,31 @@ app.delete("/address", (req, res) => {
     } else {
       return res.send({ status: "no_such_address" });
     }
+  });
+});
+
+app.get("/skhera/itinerary", (req, res) => {
+  const riderId = req.query.riderId;
+
+  Skhera.find({ riderId }, (err, skheras) => {
+    if (err) return res.send({ status: "error", message: console.error(err) });
+    if (skheras) {
+      return res.send({
+        points: [].concat.apply(
+          [],
+          skheras.map(skhera => [
+            {
+              type: "pick-up",
+              name: skhera.fromAddress.name
+            },
+            {
+              type: "drop-off",
+              name: skhera.toAddress.name
+            }
+          ])
+        )
+      });
+    } else return res.send([]);
   });
 });
 

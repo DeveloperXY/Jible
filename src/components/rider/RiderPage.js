@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import menuIcon from "./images/ic_menu.svg";
 import notificationIcon from "./images/ic_notifications.svg";
 import { saveUserRemotely } from "../../redux/actions/userActions";
+import { loadRiderItinerary } from "../../redux/actions/skheraActions";
 import "./riderPage.css";
 import { connect } from "react-redux";
 import { toast } from "react-toastify";
@@ -11,9 +12,16 @@ import DrawerLayout from "./drawer/DrawerLayout";
 import FaqComponent from "../faq/FaqComponent";
 import RiderSkheras from "./skheras/RiderSkheras";
 import * as placesApi from "../../api/placesApi";
+import * as skheraApi from "../../api/skheraApi";
 import ToggleButton from "react-toggle-button";
 
-function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
+function RiderPage({
+  currentUser,
+  saveUserRemotely,
+  loadRiderItinerary,
+  history,
+  socket
+}) {
   const [user, setUser] = useState({ ...currentUser });
   const [notificationData, setNotificationData] = useState(undefined);
   const [isNotificationVisible, setNotificationVisibility] = useState(false);
@@ -30,6 +38,7 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
 
   useEffect(() => {
     if (notificationData !== undefined) setNotificationData(undefined);
+    loadRiderItinerary(currentUser._id);
   }, []);
 
   useEffect(() => {
@@ -300,7 +309,8 @@ function RiderPage({ currentUser, saveUserRemotely, history, socket }) {
 }
 
 const mapDispatchToProps = {
-  saveUserRemotely
+  saveUserRemotely,
+  loadRiderItinerary
 };
 
 export default connect(

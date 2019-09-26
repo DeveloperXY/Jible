@@ -12,3 +12,122 @@
   background: white;
   padding: 24px;
 }
+
+.skheras-itinerary {
+  display: flex;
+  flex-direction: column;
+  margin: 0 8px;
+}
+
+.stop-address {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.pickup-address-shape-1 {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #419d78;
+}
+
+.pickup-address-shape-1.current-skhera {
+  width: 16px;
+  height: 16px;
+}
+
+.pickup-address-shape-2 {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+
+  border-top: 6px solid #419d78;
+}
+
+.pickup-address-shape-2.current-skhera {
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+
+  border-top: 12px solid #419d78;
+}
+
+.pickup-address-text {
+  color: #909090;
+  background-color: transparent;
+  flex-grow: 1;
+  padding: 4px;
+  border-radius: unset;
+  font-size: 12px;
+}
+
+.pickup-address-text.current-skhera {
+  color: white;
+  background-color: #419d78;
+  padding: 12px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.drop-off-address-text {
+  color: #909090;
+  background-color: transparent;
+  font-size: 12px;
+  padding: 4px;
+  flex-grow: 1;
+  border-radius: unset;
+}
+
+.drop-off-address-text.current-skhera {
+  color: white;
+  background-color: #4a90e2;
+  font-size: 14px;
+  padding: 12px;
+  border-radius: 4px;
+}
+
+.stop-address-shape-wrapper {
+  display: flex;
+  width: 24px;
+  height: 24px;
+  justify-content: center;
+  align-items: center;
+}
+
+.drop-off-address-shape-1 {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #4a90e2;
+}
+
+.drop-off-address-shape-1.current-skhera {
+  width: 16px;
+  height: 16px;
+}
+
+.drop-off-address-shape-2 {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+
+  border-top: 6px solid #4a90e2;
+}
+
+.drop-off-address-shape-2.current-skhera {
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+
+  border-top: 12px solid #4a90e2;
+}
+
+.shapes-line-connector {
+  position: absolute;
+  width: 2px;
+  background-color: #d8d8d8;
+  height: 100%;
+  margin-left: 11px;
+  z-index: -1;
+}
