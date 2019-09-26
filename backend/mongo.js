@@ -16,11 +16,17 @@ let userSchema = new mongoose.Schema({
   image: String,
   userType: String,
   facebookId: String,
+  phone: String,
+
+  // for riders only
+  currentSkheraId: {
+    type: String,
+    default: null
+  },
   isAvailable: {
     type: Boolean,
     default: true
-  },
-  phone: String
+  }
 });
 let User = mongoose.model("User", userSchema);
 
@@ -29,6 +35,10 @@ let skheraSchema = new mongoose.Schema({
   status: {
     type: String,
     default: "ORDER_RECEIVED"
+  },
+  deliveryStatus: {
+    type: String,
+    default: "NOT_PICKED_UP_YET"
   },
   date: {
     type: String,
@@ -42,6 +52,14 @@ let skheraSchema = new mongoose.Schema({
   },
   toAddress: {
     name: String,
+    lat: String,
+    lng: String
+  },
+  initialRiderLocation: {
+    lat: String,
+    lng: String
+  },
+  currentRiderLocation: {
     lat: String,
     lng: String
   },

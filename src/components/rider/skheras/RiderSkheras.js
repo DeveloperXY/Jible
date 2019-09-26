@@ -13,19 +13,30 @@ function RiderSkheras(props) {
       <div className="skheras-itinerary">
         <div
           className="shapes-line-connector"
-          style={{ display: riderItinerary.length > 0 ? "block" : "none" }}
+          style={{
+            display: riderItinerary.points.length > 0 ? "block" : "none"
+          }}
         ></div>
-        {riderItinerary.map((point, index) => {
+        {riderItinerary.points.map((point, index) => {
           const shapeNumber = index < 2 ? 1 : 2;
           const pointType = point.type === "pick-up" ? "pickup" : "drop-off";
+          const isActive = point.isActive;
           return (
             <div className="stop-address">
               <div className="stop-address-shape-wrapper">
                 <div
-                  className={`${pointType}-address-shape-${shapeNumber}`}
+                  className={`${pointType}-address-shape-${shapeNumber} ${
+                    isActive ? "current-skhera" : ""
+                  }`}
                 ></div>
               </div>
-              <div className={`${pointType}-address-text`}>{point.name}</div>
+              <div
+                className={`${pointType}-address-text ${
+                  isActive ? "current-skhera" : ""
+                }`}
+              >
+                {point.name}
+              </div>
             </div>
           );
         })}

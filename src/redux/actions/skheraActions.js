@@ -10,7 +10,7 @@ export function loadRiderItinerary(riderId) {
     return skheraApi
       .fetchSkherasItinerary(riderId)
       .then(itinerary => {
-        dispatch(loadRiderItinerarySuccess(itinerary.points));
+        dispatch(loadRiderItinerarySuccess(itinerary));
       })
       .catch(error => {
         throw error;

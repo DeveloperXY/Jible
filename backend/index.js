@@ -28,18 +28,6 @@ app.use(cors());
 
 const port = 9000;
 
-Object.defineProperty(Array.prototype, "flat", {
-  value: function(depth = 1) {
-    return this.reduce(function(flat, toFlatten) {
-      return flat.concat(
-        Array.isArray(toFlatten) && depth > 1
-          ? toFlatten.flat(depth - 1)
-          : toFlatten
-      );
-    }, []);
-  }
-});
-
 io.on("connection", client => {
   var userId = client.request._query["userId"];
   var userType = client.request._query["userType"];
@@ -129,28 +117,60 @@ function acceptSkhera(skheraId, riderId, socket) {
     }
 
     if (skhera.status !== "ON_THE_WAY") {
-      Skhera.updateOne(
-        { _id: skheraId },
-        {
-          $set: {
-            riderId: riderId,
-            status: "ON_THE_WAY"
-          }
-        },
-        (err, newSkhera) => {
-          if (err) {
-            console.log("Failed to save skhera info: " + err);
-            return;
-          }
+      RiderLocation.findOne({ riderId }, (err, riderLocation) => {
+        Skhera.updateOne(
+          { _id: skheraId },
+          {
+            $set: {
+              riderId: riderId,
+              status: "ON_THE_WAY",
+              initialRiderLocation: {
+                lat: riderLocation.lat,
+                lng: riderLocation.lng
+              },
+              currentRiderLocation: {
+                lat: riderLocation.lat,
+                lng: riderLocation.lng
+              }
+            }
+          },
+          (err, newSkhera) => {
+            if (err) {
+              console.log("Failed to save skhera info: " + err);
+              return;
+            }
 
-          if (newSkhera) {
-            console.log("Skhera assigned.");
-          } else {
-            console.log("Unknown error while trying to assign skhera to rider");
+            if (newSkhera) {
+              User.findOne({ _id: riderId }, (err, rider) => {
+                if (rider.currentSkheraId == null) {
+                  User.updateOne(
+                    { _id: riderId },
+                    {
+                      $set: {
+                        riderId: riderId,
+                        currentSkheraId: skheraId
+                      }
+                    },
+                    (err, newRider) => {
+                      if (err) {
+                        console.log("Failed to set rider's current skhera");
+                        return;
+                      }
+
+                      console.log("Skhera assigned.");
+                    }
+                  );
+                }
+              });
+            } else {
+              console.log(
+                "Unknown error while trying to assign skhera to rider"
+              );
+            }
           }
-        }
-      );
-      socket.emit("acceptSkheraResponse", { status: "ok" });
+        );
+        socket.emit("acceptSkheraResponse", { status: "ok" });
+      });
     } else {
       // Skhera was already assigned to someone else
       socket.emit("acceptSkheraResponse", { status: "already_assigned" });
@@ -434,7 +454,6 @@ app.delete("/address", (req, res) => {
   Address.findOneAndDelete(_id, (error, address) => {
     if (error) {
       return res.json({ status: "error", message: console.error(error) });
-      return;
     }
 
     if (address) {
@@ -451,26 +470,71 @@ app.delete("/address", (req, res) => {
 app.get("/skhera/itinerary", (req, res) => {
   const riderId = req.query.riderId;
 
-  Skhera.find({ riderId }, (err, skheras) => {
-    if (err) return res.send({ status: "error", message: console.error(err) });
-    if (skheras) {
-      return res.send({
-        points: [].concat.apply(
-          [],
-          skheras.map(skhera => [
-            {
-              type: "pick-up",
-              name: skhera.fromAddress.name
-            },
-            {
-              type: "drop-off",
-              name: skhera.toAddress.name
-            }
-          ])
-        )
-      });
-    } else return res.send([]);
-  });
+  // Get the skheras assigned to this rider & that are yet to be delivered or picked up
+  Skhera.find(
+    { riderId, deliveryStatus: { $ne: "DELIVERED" } },
+    (err, skheras) => {
+      if (err)
+        return res.send({ status: "error", message: console.error(err) });
+      if (skheras) {
+        User.findOne({ _id: riderId }, (err, rider) => {
+          if (err)
+            return res.send({ status: "error", message: console.error(err) });
+          return res.send({
+            points: [].concat.apply(
+              [],
+              skheras.map(skhera => {
+                console.log(rider);
+                console.log(skhera);
+                return [
+                  {
+                    type: "pick-up",
+                    name: skhera.fromAddress.name,
+                    isActive:
+                      skhera.deliveryStatus === "NOT_PICKED_UP_YET" &&
+                      rider.currentSkheraId === skhera._id.toString()
+                  },
+                  {
+                    type: "drop-off",
+                    name: skhera.toAddress.name,
+                    isActive:
+                      skhera.deliveryStatus === "PICKED_UP" &&
+                      rider.currentSkheraId === skhera._id.toString()
+                  }
+                ];
+              })
+            ),
+            mapData: (skheras.length > 0
+              ? [
+                  {
+                    type: "STARTING_POINT",
+                    lat: skheras[0].initialRiderLocation.lat,
+                    lng: skheras[0].initialRiderLocation.lng
+                  }
+                ]
+              : []
+            ).concat(
+              [].concat.apply(
+                [],
+                skheras.map(skhera => [
+                  {
+                    type: "PICK_UP_POINT",
+                    lat: skhera.fromAddress.lat,
+                    lng: skhera.fromAddress.lng
+                  },
+                  {
+                    type: "DROP_OFF_POINT",
+                    lat: skhera.toAddress.lat,
+                    lng: skhera.toAddress.lng
+                  }
+                ])
+              )
+            )
+          });
+        });
+      } else return res.send([]);
+    }
+  );
 });
 
 server.listen(port, () => console.log(`Example app listening on port ${port}`));
