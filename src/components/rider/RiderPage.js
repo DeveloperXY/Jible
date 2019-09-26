@@ -79,7 +79,7 @@ function RiderPage({
       socket.on("acceptSkheraResponse", data => {
         const status = data.status;
         if (status === "ok") {
-          toast.success("You got the job.");
+          loadRiderItinerary(currentUser._id);
         } else {
           toast.success("Too late");
         }
