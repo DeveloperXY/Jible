@@ -6,7 +6,11 @@ import { connect } from "react-redux";
 
 function RiderSkheras(props) {
   const [googleMap, setGoogleMap] = useState(undefined);
-  const { height, width, location, riderItinerary } = props;
+  const { height, width, history, location, riderItinerary } = props;
+
+  function onSkheraSelected(skheraId) {
+    history.push(`/profile/skhera/${skheraId}`);
+  }
 
   return (
     <div className="skheras-container">
@@ -18,7 +22,8 @@ function RiderSkheras(props) {
           }}
         ></div>
         {riderItinerary.points.map((point, index) => {
-          const shapeNumber = index < 2 ? 1 : 2;
+          const skheraId = point.skheraId;
+          const shapeNumber = point.type === "pick-up" ? 1 : 2;
           const pointType = point.type === "pick-up" ? "pickup" : "drop-off";
           const isActive = point.isActive;
           return (
@@ -34,6 +39,7 @@ function RiderSkheras(props) {
                 className={`${pointType}-address-text ${
                   isActive ? "current-skhera" : ""
                 }`}
+                onClick={() => onSkheraSelected(skheraId)}
               >
                 {point.name}
               </div>

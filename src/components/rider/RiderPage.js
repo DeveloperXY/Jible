@@ -14,6 +14,7 @@ import RiderSkheras from "./skheras/RiderSkheras";
 import * as placesApi from "../../api/placesApi";
 import * as skheraApi from "../../api/skheraApi";
 import ToggleButton from "react-toggle-button";
+import SkheraDetails from "./skheraDetails/SkheraDetails";
 
 function RiderPage({
   currentUser,
@@ -247,10 +248,13 @@ function RiderPage({
       </div>
       <div className="main-fragment">
         <Switch>
+          <Route path="/profile/skhera/:skheraId" component={SkheraDetails} />
           <Route path="/profile/faq" component={FaqComponent} />
           <Route
             path="/profile/todo"
-            render={() => <RiderSkheras location={currentLocation} />}
+            render={() => (
+              <RiderSkheras history={history} location={currentLocation} />
+            )}
           />
           <Route
             render={props => (

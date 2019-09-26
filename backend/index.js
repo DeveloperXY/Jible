@@ -484,10 +484,9 @@ app.get("/skhera/itinerary", (req, res) => {
             points: [].concat.apply(
               [],
               skheras.map(skhera => {
-                console.log(rider);
-                console.log(skhera);
                 return [
                   {
+                    skheraId: skhera._id.toString(),
                     type: "pick-up",
                     name: skhera.fromAddress.name,
                     isActive:
@@ -495,6 +494,7 @@ app.get("/skhera/itinerary", (req, res) => {
                       rider.currentSkheraId === skhera._id.toString()
                   },
                   {
+                    skheraId: skhera._id.toString(),
                     type: "drop-off",
                     name: skhera.toAddress.name,
                     isActive:
