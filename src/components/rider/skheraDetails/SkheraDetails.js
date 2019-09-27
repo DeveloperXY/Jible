@@ -50,7 +50,6 @@ function SkheraDetails({
         {skhera.items &&
           skhera.items.map((item, index) => (
             <div className="skhera-items-checklist-item" key={index}>
-              <div className="list-item-name">{item.name}</div>
               <ListItemCheckBox
                 item={item}
                 onItemReadinessChanged={handleItemReadinessChange}

@@ -124,3 +124,7 @@
 .delivered-btn:disabled {
   background-color: #909090;
 }
+
+.list-item-name-checked {
+  text-decoration: line-through;
+}

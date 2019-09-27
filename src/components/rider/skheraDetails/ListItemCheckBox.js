@@ -11,18 +11,31 @@ class ListItemCheckBox extends React.Component {
   }
 
   handleChecked() {
-    const newState = !this.state.isChecked;
-    this.setState({ isChecked: newState });
-    this.props.onItemReadinessChanged(this.state.item._id, newState);
+    this.setState({ isChecked: !this.state.isChecked }, () => {
+      this.props.onItemReadinessChanged(
+        this.state.item._id,
+        this.state.isChecked
+      );
+    });
   }
 
   render() {
     return (
-      <input
-        type="checkbox"
-        checked={this.state.isChecked}
-        onChange={this.handleChecked}
-      />
+      <>
+        <div
+          className={
+            "list-item-name " +
+            (this.state.isChecked ? "list-item-name-checked" : "")
+          }
+        >
+          {this.state.item.name}
+        </div>
+        <input
+          type="checkbox"
+          checked={this.state.isChecked}
+          onChange={this.handleChecked}
+        />
+      </>
     );
   }
 }
