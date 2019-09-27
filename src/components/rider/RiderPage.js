@@ -85,6 +85,10 @@ function RiderPage({
           toast.success("Too late");
         }
       });
+
+      socket.on("skheraItemReadyResponse", data => {
+        console.log(data);
+      });
     }
   }, [socket]);
 
@@ -163,6 +167,14 @@ function RiderPage({
     socket.emit("acceptNewAssignment", {
       skheraId: notificationData.skheraId,
       riderId: currentUser._id
+    });
+  }
+
+  function emitSkheraItemReady(itemId, skheraId, isReady) {
+    socket.emit("skheraItemReady", {
+      itemId,
+      skheraId,
+      isReady
     });
   }
 
@@ -248,7 +260,15 @@ function RiderPage({
       </div>
       <div className="main-fragment">
         <Switch>
-          <Route path="/profile/skhera/:skheraId" component={SkheraDetails} />
+          <Route
+            path="/profile/skhera/:skheraId"
+            render={props => (
+              <SkheraDetails
+                {...props}
+                emitSkheraItemReady={emitSkheraItemReady}
+              />
+            )}
+          />
           <Route path="/profile/faq" component={FaqComponent} />
           <Route
             path="/profile/todo"

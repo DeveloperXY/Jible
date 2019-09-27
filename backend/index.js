@@ -11,6 +11,7 @@ const jwt = require("jsonwebtoken");
 const User = mongo.User;
 const Skhera = mongo.Skhera;
 const Address = mongo.Address;
+const ObjectId = mongo.ObjectId;
 const RiderLocation = mongo.RiderLocation;
 const googleMapsClient = require("@google/maps").createClient({
   key: "AIzaSyDd3dI_tqR6Rx-IMpS9r5mWCP5oAEibiE0"
@@ -99,6 +100,32 @@ io.on("connection", client => {
       const skheraId = data.skheraId;
       const riderId = data.riderId;
       acceptSkhera(skheraId, riderId, client);
+    });
+    client.on("skheraItemReady", data => {
+      const itemId = data.itemId;
+      const skheraId = data.skheraId;
+      const isReady = data.isReady;
+      console.log("Item id: " + itemId);
+      console.log("skheraId: " + skheraId);
+      console.log("isReady: " + isReady);
+
+      const query = {
+        _id: skheraId,
+        "items._id": itemId
+      };
+
+      const update = {
+        $set: { "items.$.isReady": isReady }
+      };
+
+      // update the document
+      Skhera.updateOne(query, update, function(error, result) {
+        if (error) {
+          console.log(error);
+        } else {
+          client.emit("skheraItemReadyResponse", result);
+        }
+      });
     });
     client.on("disconnect", () => {
       riderSockets = riderSockets.filter(s => s.userId !== userId);
@@ -403,12 +430,32 @@ function emitSkheraToRiders(sortedResults, skheraId, fromUser) {
   });
 }
 
-app.get("/skhera", (req, res) => {
+app.get("/skheras", (req, res) => {
   const clientId = req.query.clientId;
 
   Skhera.find({ clientId }, (err, skheras) => {
     if (err) return res.send({ status: "error", message: console.error(err) });
     return res.send(skheras);
+  });
+});
+
+app.get("/skhera", (req, res) => {
+  const skheraId = req.query.skheraId;
+
+  Skhera.findOne({ _id: skheraId }, (err, skhera) => {
+    if (err) return res.send({ status: "error", message: console.error(err) });
+    if (skhera) {
+      User.findOne({ _id: skhera.clientId }, (err, client) => {
+        if (err)
+          return res.send({ status: "error", message: console.error(err) });
+        if (client) {
+          return res.send({
+            skhera: skhera,
+            client: client
+          });
+        }
+      });
+    }
   });
 });
 
@@ -467,7 +514,7 @@ app.delete("/address", (req, res) => {
   });
 });
 
-app.get("/skhera/itinerary", (req, res) => {
+app.get("/itinerary", (req, res) => {
   const riderId = req.query.riderId;
 
   // Get the skheras assigned to this rider & that are yet to be delivered or picked up

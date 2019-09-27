@@ -67,7 +67,11 @@ let skheraSchema = new mongoose.Schema({
   riderId: String,
   items: [
     {
-      name: String
+      name: String,
+      isReady: {
+        type: Boolean,
+        default: false
+      }
     }
   ]
 });
@@ -94,5 +98,6 @@ module.exports = {
   User,
   Skhera,
   Address,
-  RiderLocation
+  RiderLocation,
+  ObjectId: mongoose.Types.ObjectId
 };

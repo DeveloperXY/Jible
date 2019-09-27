@@ -108,9 +108,19 @@
 .picked-up-btn {
   font-size: 14px;
   margin-top: 24px;
+  margin-right: unset;
+}
+
+.picked-up-btn:disabled {
+  background-color: #909090;
 }
 
 .delivered-btn {
   font-size: 14px;
   margin-top: 12px;
+  margin-right: unset;
+}
+
+.delivered-btn:disabled {
+  background-color: #909090;
 }
