@@ -178,6 +178,12 @@ function RiderPage({
     });
   }
 
+  function emitSkheraPickedUp(skheraId) {
+    socket.emit("skheraPickedUp", {
+      skheraId
+    });
+  }
+
   function declineSkhera() {
     // TODO: possible optimization here - emit next new assignment event to the next rider immediately
     socket.emit("declineNewAssignment", {
@@ -266,6 +272,7 @@ function RiderPage({
               <SkheraDetails
                 {...props}
                 emitSkheraItemReady={emitSkheraItemReady}
+                emitSkheraPickedUp={emitSkheraPickedUp}
               />
             )}
           />

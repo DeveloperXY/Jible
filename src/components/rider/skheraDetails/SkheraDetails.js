@@ -6,6 +6,7 @@ import ListItemCheckBoxes from "./ListItemCheckBoxes";
 
 function SkheraDetails({
   emitSkheraItemReady,
+  emitSkheraPickedUp,
   match: {
     params: { skheraId }
   }
@@ -79,8 +80,8 @@ function SkheraDetails({
           skhera.deliveryStatus !== "NOT_PICKED_UP_YET" || !areAllItemsChecked
         }
         onClick={() => {
-          // Check if all items are ready beforehand
-          alert("hi");
+          emitSkheraPickedUp(skheraId);
+          setCurrentSkhera({ ...skhera, deliveryStatus: "PICKED_UP" });
         }}
       />
       <input

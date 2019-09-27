@@ -75,10 +75,7 @@ function HomePage(props) {
             </div>
           </div>
           <div className="content-description">
-            <p>
-              An on demand service that picks-up anything you requested through
-              the app and delivers it to your door within one hour.
-            </p>
+            <p>FUCK YOU ?</p>
           </div>
           <div className="signup-section">
             <div className="consumer-btn" onClick={() => openSignupDialog()}>

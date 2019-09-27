@@ -124,6 +124,20 @@ io.on("connection", client => {
         }
       });
     });
+    client.on("skheraPickedUp", data => {
+      const skheraId = data.skheraId;
+      Skhera.updateOne(
+        { _id: skheraId },
+        { $set: { deliveryStatus: "PICKED_UP" } },
+        function(error, result) {
+          if (error) {
+            console.log(error);
+          } else {
+            client.emit("skheraPickedUpSuccess", result);
+          }
+        }
+      );
+    });
     client.on("disconnect", () => {
       riderSockets = riderSockets.filter(s => s.userId !== userId);
       console.log("A rider has disconnected: " + userId);
