@@ -105,9 +105,6 @@ io.on("connection", client => {
       const itemId = data.itemId;
       const skheraId = data.skheraId;
       const isReady = data.isReady;
-      console.log("Item id: " + itemId);
-      console.log("skheraId: " + skheraId);
-      console.log("isReady: " + isReady);
 
       const query = {
         _id: skheraId,

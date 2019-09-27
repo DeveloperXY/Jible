@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./skheraDetails.css";
 import callIcon from "../images/ic_call.svg";
 import { loadSkhera } from "../../../api/skheraApi";
-import ListItemCheckBox from "./ListItemCheckBox";
+import ListItemCheckBoxes from "./ListItemCheckBoxes";
 
 function SkheraDetails({
   emitSkheraItemReady,
@@ -12,6 +12,7 @@ function SkheraDetails({
 }) {
   const [skhera, setCurrentSkhera] = useState({});
   const [client, setSkheraClient] = useState({});
+  const [areAllItemsChecked, setAreAllItemsChecked] = useState(false);
 
   useEffect(() => {
     loadSkhera(skheraId).then(data => {
@@ -21,8 +22,16 @@ function SkheraDetails({
     });
   }, []);
 
-  function handleItemReadinessChange(itemId, newValue) {
+  useEffect(() => {
+    if (Object.keys(skhera).length > 0)
+      setAreAllItemsChecked(skhera.items.every(item => item.isReady));
+  }, [skhera]);
+
+  function handleItemReadinessChange(itemId, newValue, checkboxes) {
     emitSkheraItemReady(itemId, skheraId, newValue);
+    setAreAllItemsChecked(
+      Object.keys(checkboxes).every(key => checkboxes[key].isChecked)
+    );
   }
 
   return (
@@ -47,15 +56,12 @@ function SkheraDetails({
       </div>
       <div className="skhera-description">{skhera.description}</div>
       <div className="skhera-items-checklist">
-        {skhera.items &&
-          skhera.items.map((item, index) => (
-            <div className="skhera-items-checklist-item" key={index}>
-              <ListItemCheckBox
-                item={item}
-                onItemReadinessChanged={handleItemReadinessChange}
-              />
-            </div>
-          ))}
+        {skhera.items && (
+          <ListItemCheckBoxes
+            items={skhera.items}
+            handleItemReadinessChange={handleItemReadinessChange}
+          />
+        )}
       </div>
       <div className="price-container">
         <div className="skhera-price-label">Price</div>
@@ -69,9 +75,12 @@ function SkheraDetails({
         type="button"
         className="green-btn picked-up-btn"
         value="Picked up"
-        disabled={skhera.deliveryStatus !== "NOT_PICKED_UP_YET"}
+        disabled={
+          skhera.deliveryStatus !== "NOT_PICKED_UP_YET" || !areAllItemsChecked
+        }
         onClick={() => {
           // Check if all items are ready beforehand
+          alert("hi");
         }}
       />
       <input

@@ -13,6 +13,7 @@ class ListItemCheckBox extends React.Component {
   handleChecked() {
     this.setState({ isChecked: !this.state.isChecked }, () => {
       this.props.onItemReadinessChanged(
+        this.props.id,
         this.state.item._id,
         this.state.isChecked
       );
