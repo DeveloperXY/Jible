@@ -10,7 +10,7 @@ class SimpleMap extends Component {
 
   static defaultProps = {
     height: "500px",
-    width: "500px",
+    width: "100%",
     center: {
       lat: 33.589886,
       lng: -7.603869

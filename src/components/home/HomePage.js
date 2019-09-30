@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./homePage.css";
 import homeIcon from "../../images/home.svg";
-import rightArrowIcon from "../../images/arrowRight.svg";
+import blackRightArrowIcon from "../../images/arrowRightBlack.svg";
+import whiteRightArrowIcon from "../../images/arrowRightWhite.svg";
 import helmetIcon from "../../images/helmet.svg";
 import appImage from "../../images/app.png";
 import playStoreImage from "../../images/google-play-badge.svg";
@@ -13,6 +14,7 @@ import * as userActions from "../../redux/actions/userActions";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { frontBaseUrl } from "../../api/apiUtils";
+import JibleLogo from "../../images/Logo";
 
 Modal.setAppElement("#root");
 
@@ -59,7 +61,11 @@ function HomePage(props) {
       <div className="hero-content-wrapper">
         <div className="hero-content">
           <div className="header-content">
-            <span className="jible-header">Jible</span>
+            <JibleLogo
+              textColor="#ffffff"
+              boxColor="#ffffff"
+              arcColor="transparent"
+            />
             <div className="buttons-container">
               <input
                 type="button"
@@ -75,13 +81,16 @@ function HomePage(props) {
             </div>
           </div>
           <div className="content-description">
-            <p>FUCK YOU ?</p>
+            <p>
+              An on demand service that picks up anything you requested through
+              the app and delivers it to your doorstep within one hour.
+            </p>
           </div>
           <div className="signup-section">
             <div className="consumer-btn" onClick={() => openSignupDialog()}>
               <img src={homeIcon} className="left-icon" alt="Home" />
               <span className="signup-consumer-text">Signup as a Consumer</span>
-              <img src={rightArrowIcon} className="right-icon" alt="Go" />
+              <img src={whiteRightArrowIcon} className="right-icon" alt="Go" />
             </div>
             <div
               className="rider-btn"
@@ -89,7 +98,7 @@ function HomePage(props) {
             >
               <img src={helmetIcon} className="left-icon" alt="Home" />
               <span className="signup-rider-text">Signup as a Rider</span>
-              <img src={rightArrowIcon} className="right-icon" alt="Go" />
+              <img src={blackRightArrowIcon} className="right-icon" alt="Go" />
             </div>
             <div className="rider-btn" onClick={openLoginDialog}>
               <span className="signup-rider-text">Log in</span>
@@ -142,7 +151,7 @@ function HomePage(props) {
         </div>
       </div>
       <div className="footer-content">
-        <span className="jible-footer-header">Jible</span>
+        <JibleLogo textColor="#000000" boxColor="#419D78" arcColor="#ffffff" />
         <div className="footer-items">
           <a href="#" className="about-item footer-link">
             About

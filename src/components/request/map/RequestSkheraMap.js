@@ -147,6 +147,7 @@ function RequestSkheraMap({ onFromAddrChange, onToAddrChange }) {
         <AutoCompleteInput
           id="fromAddress"
           name="fromAddress"
+          className="from-wrapper"
           placeholder="Where to pick the Skhera from"
           getSuggestions={getAddressSuggestions}
           onSuggestionSelected={onFromAddressSelected}
@@ -160,6 +161,7 @@ function RequestSkheraMap({ onFromAddrChange, onToAddrChange }) {
         <AutoCompleteInput
           id="toAddress"
           name="toAddress"
+          className="to-wrapper"
           placeholder="Where to deliver"
           getSuggestions={getAddressSuggestions}
           onSuggestionSelected={onToAddressSelected}

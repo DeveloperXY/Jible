@@ -4,13 +4,14 @@ import RequestSkhera from "../request/RequestSkhera";
 import ProfileComponent from "./ProfileComponent";
 import { connect } from "react-redux";
 import { Route, Switch, Link } from "react-router-dom";
+import JibleLogo from "../../images/Logo";
 
 function ProfilePage({ currentUser }) {
   return (
     <div className="main-content">
       <div className="header-content">
         <Link to="/" className="jible-link">
-          <span className="jible-header">Jible</span>
+          <JibleLogo />
         </Link>
         <div className="profile-header-section">
           <img className="profile-img" alt="" src={currentUser.image} />

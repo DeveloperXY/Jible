@@ -1,0 +1,18 @@
+.edit-icon {
+  margin-top: 48px;
+}
+
+.request-skhera {
+  border-radius: 4px;
+  padding-bottom: 16px;
+}
+
+.request-shera-text {
+  text-decoration: none;
+}
+
+.bottom-container {
+  display: flex;
+  justify-content: space-between;
+  align-self: stretch;
+}

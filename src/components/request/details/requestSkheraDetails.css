@@ -24,6 +24,7 @@ input,
 textarea {
   font-size: 16px;
   font-family: "Ropa Sans";
+  resize: none;
 }
 
 textarea {
@@ -93,4 +94,30 @@ textarea {
   font-size: 20px;
   width: 1em;
   margin-left: -1em;
+}
+
+.textarea-field-icon {
+  align-self: flex-start;
+  margin-top: 8px !important;
+}
+
+#description {
+  flex-grow: 1;
+  margin-bottom: unset;
+}
+
+.description-wrapper {
+  margin-bottom: 16px;
+}
+
+.time-schedule-wrapper {
+  margin-top: 8px;
+}
+
+.asap-text {
+  margin: 8px 0;
+}
+
+.price-estimation {
+  margin-top: 16px;
 }

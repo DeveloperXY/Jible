@@ -2,6 +2,10 @@ input:focus {
   outline: none;
 }
 
+.jible-header-home {
+  color: white;
+}
+
 .hero {
   margin: 0;
   padding: 0;

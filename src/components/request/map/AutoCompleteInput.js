@@ -5,6 +5,7 @@ import "./autoCompleteInput.css";
 function AutoCompleteInput({
   id,
   name,
+  className,
   inputProps,
   onKeyUp,
   getSuggestions,
@@ -13,7 +14,7 @@ function AutoCompleteInput({
   const [suggestions, setSuggestions] = useState([]);
 
   const renderInputComponent = inputProps => (
-    <div className="input-wrapper">
+    <div className={`input-wrapper ${className}`}>
       <input
         type="text"
         id={id}

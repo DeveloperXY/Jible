@@ -1,0 +1,22 @@
+.input-wrapper > input,
+.input-wrapper > textarea {
+  border: 0;
+}
+
+.input-wrapper {
+  border-color: #e6e6e6;
+  border-radius: 4px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  width: unset;
+}
+
+.field-icon {
+  margin: 0 12px;
+}
+
+.profile-info-sub-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
