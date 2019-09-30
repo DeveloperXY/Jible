@@ -5,6 +5,7 @@ import RequestSkheraMap from "./map/RequestSkheraMap";
 import * as skheraApi from "../../api/skheraApi";
 import { connect } from "react-redux";
 import backArrow from "../../images/arrow_back.svg";
+import { toast } from "react-toastify";
 
 function RequestSkhera({ currentUser, history }) {
   const [fromAddress, setFromAddress] = useState({});
@@ -18,14 +19,21 @@ function RequestSkhera({ currentUser, history }) {
   });
 
   const handleSkheraOrder = (description, skheraItems, price) => {
-    skheraApi.orderSkhera({
-      id: currentUser._id,
-      description,
-      items: skheraItems,
-      price,
-      fromAddress,
-      toAddress
-    });
+    skheraApi
+      .orderSkhera({
+        id: currentUser._id,
+        description,
+        items: skheraItems,
+        price,
+        fromAddress,
+        toAddress
+      })
+      .then(data => {
+        if (data.status === "ok") {
+          toast.success("Skhera created.");
+          history.push("/profile/myskhera");
+        }
+      });
   };
   const handleFromAddressChange = fromAddr => {
     setFromAddress(fromAddr);
