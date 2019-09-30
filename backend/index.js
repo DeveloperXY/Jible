@@ -356,52 +356,59 @@ app.post("/skhera", (req, res) => {
 });
 
 function assignSkheraToRider(skhera) {
-  RiderLocation.find({}, (err, riderLocations) => {
+  User.find({ isAvailable: true }, (err, availableRiders) => {
     if (err) console.log(console.error(err));
-    const locations = riderLocations.map(l => {
-      return {
-        lat: l.lat,
-        lng: l.lng
-      };
-    });
+    const availableRiderIds = availableRiders.map(l => l.riderId);
 
-    googleMapsClient.distanceMatrix(
-      {
-        origins: locations,
-        destinations: [
-          { lat: skhera.fromAddress.lat, lng: skhera.fromAddress.lng }
-        ]
-      },
-      (err, data) => {
-        if (err) {
-          console.log(console.error(err));
-          return;
-        }
-
-        const rows = [...data.json.rows];
-        const results = rows.map((row, index) => {
-          const distance = row.elements[0].distance;
-          const duration = row.elements[0].duration;
-
+    RiderLocation.find({}, (err, riderLocations) => {
+      if (err) console.log(console.error(err));
+      const locations = riderLocations
+        .filter(l => availableRiderIds.includes(l.riderId))
+        .map(l => {
           return {
-            riderId: riderLocations[index].riderId,
-            distanceText: distance.text,
-            distanceValue: distance.value,
-            durationText: duration.text,
-            durationValue: duration.value
+            lat: l.lat,
+            lng: l.lng
           };
         });
 
-        const sortedResults = results.sort(
-          (r1, r2) => r1.distanceValue - r2.distanceValue
-        );
+      googleMapsClient.distanceMatrix(
+        {
+          origins: locations,
+          destinations: [
+            { lat: skhera.fromAddress.lat, lng: skhera.fromAddress.lng }
+          ]
+        },
+        (err, data) => {
+          if (err) {
+            console.log(console.error(err));
+            return;
+          }
 
-        User.findById(skhera.clientId, (err, user) => {
-          if (err) console.log(console.error(err));
-          emitSkheraToRiders(sortedResults, skhera._id, user);
-        });
-      }
-    );
+          const rows = [...data.json.rows];
+          const results = rows.map((row, index) => {
+            const distance = row.elements[0].distance;
+            const duration = row.elements[0].duration;
+
+            return {
+              riderId: riderLocations[index].riderId,
+              distanceText: distance.text,
+              distanceValue: distance.value,
+              durationText: duration.text,
+              durationValue: duration.value
+            };
+          });
+
+          const sortedResults = results.sort(
+            (r1, r2) => r1.distanceValue - r2.distanceValue
+          );
+
+          User.findById(skhera.clientId, (err, user) => {
+            if (err) console.log(console.error(err));
+            emitSkheraToRiders(sortedResults, skhera._id, user);
+          });
+        }
+      );
+    });
   });
 }
 
