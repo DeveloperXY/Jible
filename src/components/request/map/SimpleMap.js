@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import GoogleMapReact from "google-map-react";
 import MapMarker from "./marker/MapMarker";
+import "./simpleMap.css";
 
 class SimpleMap extends Component {
   state = {

@@ -54,12 +54,19 @@ export function fetchRouteSegments(fromPlaceId, toPlaceId) {
         destination: {
           placeId: toPlaceId
         },
-        travelMode: "WALKING"
+        travelMode: "DRIVING"
       },
       (response, status) => {
         if (status === "OK") {
-          const segments = response.routes[0].legs[0].steps;
-          resolve(segments);
+          const leg = response.routes[0].legs[0];
+          const distance = leg.distance;
+          const duration = leg.duration;
+          const segments = leg.steps;
+          resolve({
+            segments,
+            distance,
+            duration
+          });
         } else {
           console.log("Directions request failed: " + status);
           reject(status);

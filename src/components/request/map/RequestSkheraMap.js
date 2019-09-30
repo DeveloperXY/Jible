@@ -12,6 +12,8 @@ function RequestSkheraMap({ onFromAddrChange, onToAddrChange }) {
   const [fromAddress, setFromAddress] = useState({});
   const [toAddress, setToAddress] = useState({});
   const [googleMap, setGoogleMap] = useState({});
+  const [skheraDistance, setSkheraDistance] = useState("");
+  const [skheraDuration, setSkheraDuration] = useState("");
   const [polyline, setPolyline] = useState(undefined);
   const isFirstRun = useRef(true);
   const isFirstRun2 = useRef(true);
@@ -53,7 +55,14 @@ function RequestSkheraMap({ onFromAddrChange, onToAddrChange }) {
 
     placesApi
       .fetchRouteSegments(fromAddress.placeId, toAddress.placeId)
-      .then(segments => {
+      .then(data => {
+        const segments = data.segments;
+        const distance = data.distance.text;
+        const duration = data.duration.text;
+
+        setSkheraDistance(distance);
+        setSkheraDuration(duration);
+
         const steps = segments
           .map(segment => {
             const s = {
@@ -176,6 +185,16 @@ function RequestSkheraMap({ onFromAddrChange, onToAddrChange }) {
         center={latelyChangedAddress}
         zoom={mapZoom}
       />
+      <div className="price-container">
+        <div className="skhera-price-label">Estimated price</div>
+        <div className="skhera-price-value">N/A</div>
+      </div>
+      <div className="skhera-time-distance">
+        <div className="skhera-time-distance-label">
+          Estimated time and distance
+        </div>
+        <div className="skhera-time-distance-value">{`${skheraDistance}/${skheraDuration}`}</div>
+      </div>
     </div>
   );
 }
