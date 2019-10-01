@@ -36,10 +36,6 @@ let skheraSchema = new mongoose.Schema({
     type: String,
     default: "ORDER_RECEIVED"
   },
-  deliveryStatus: {
-    type: String,
-    default: "NOT_PICKED_UP_YET"
-  },
   date: {
     type: String,
     default: new Date().toTimeString()

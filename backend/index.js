@@ -128,7 +128,7 @@ io.on("connection", client => {
       const skheraId = data.skheraId;
       Skhera.updateOne(
         { _id: skheraId },
-        { $set: { deliveryStatus: "PICKED_UP" } },
+        { $set: { status: "ORDER_PICKED_UP" } },
         function(error, result) {
           if (error) {
             console.log(error);
@@ -154,7 +154,7 @@ function acceptSkhera(skheraId, riderId, socket) {
       return;
     }
 
-    if (skhera.status !== "ON_THE_WAY") {
+    if (!["ON_THE_WAY", "ORDER_PICKED_UP"].includes(skhera.status)) {
       RiderLocation.findOne({ riderId }, (err, riderLocation) => {
         Skhera.updateOne(
           { _id: skheraId },
@@ -356,60 +356,67 @@ app.post("/skhera", (req, res) => {
 });
 
 function assignSkheraToRider(skhera) {
-  User.find({ isAvailable: true }, (err, availableRiders) => {
-    if (err) console.log(console.error(err));
-    const availableRiderIds = availableRiders.map(l => l.riderId);
-
-    RiderLocation.find({}, (err, riderLocations) => {
+  User.find(
+    { isAvailable: true, userType: "rider" },
+    (err, availableRiders) => {
       if (err) console.log(console.error(err));
-      const locations = riderLocations
-        .filter(l => availableRiderIds.includes(l.riderId))
-        .map(l => {
-          return {
-            lat: l.lat,
-            lng: l.lng
-          };
-        });
+      const availableRiderIds = availableRiders.map(l => l._id.toString());
 
-      googleMapsClient.distanceMatrix(
-        {
-          origins: locations,
-          destinations: [
-            { lat: skhera.fromAddress.lat, lng: skhera.fromAddress.lng }
-          ]
-        },
-        (err, data) => {
-          if (err) {
-            console.log(console.error(err));
-            return;
-          }
+      function isInArray(value, array) {
+        return array.indexOf(value) > -1;
+      }
 
-          const rows = [...data.json.rows];
-          const results = rows.map((row, index) => {
-            const distance = row.elements[0].distance;
-            const duration = row.elements[0].duration;
-
+      RiderLocation.find({}, (err, riderLocations) => {
+        if (err) console.log(console.error(err));
+        const locations = riderLocations
+          .filter(l => isInArray(l.riderId, availableRiderIds))
+          .map(l => {
             return {
-              riderId: riderLocations[index].riderId,
-              distanceText: distance.text,
-              distanceValue: distance.value,
-              durationText: duration.text,
-              durationValue: duration.value
+              lat: l.lat,
+              lng: l.lng
             };
           });
 
-          const sortedResults = results.sort(
-            (r1, r2) => r1.distanceValue - r2.distanceValue
-          );
+        googleMapsClient.distanceMatrix(
+          {
+            origins: locations,
+            destinations: [
+              { lat: skhera.fromAddress.lat, lng: skhera.fromAddress.lng }
+            ]
+          },
+          (err, data) => {
+            if (err) {
+              console.log(console.error(err));
+              return;
+            }
 
-          User.findById(skhera.clientId, (err, user) => {
-            if (err) console.log(console.error(err));
-            emitSkheraToRiders(sortedResults, skhera._id, user);
-          });
-        }
-      );
-    });
-  });
+            const rows = [...data.json.rows];
+            const results = rows.map((row, index) => {
+              const distance = row.elements[0].distance;
+              const duration = row.elements[0].duration;
+
+              return {
+                riderId: riderLocations[index].riderId,
+                distanceText: distance.text,
+                distanceValue: distance.value,
+                durationText: duration.text,
+                durationValue: duration.value
+              };
+            });
+
+            const sortedResults = results.sort(
+              (r1, r2) => r1.distanceValue - r2.distanceValue
+            );
+
+            User.findById(skhera.clientId, (err, user) => {
+              if (err) console.log(console.error(err));
+              emitSkheraToRiders(sortedResults, skhera._id, user);
+            });
+          }
+        );
+      });
+    }
+  );
 }
 
 function getSocketByRiderId(riderId) {
@@ -425,7 +432,7 @@ function emitSkheraToRiders(sortedResults, skheraId, fromUser) {
       return;
     }
 
-    if (skhera.status !== "ON_THE_WAY") {
+    if (!["ON_THE_WAY", "ORDER_PICKED_UP"].includes(skhera.status)) {
       const riderId = sortedResults.shift().riderId;
       const socket = getSocketByRiderId(riderId);
       if (socket) {
@@ -537,7 +544,7 @@ app.get("/itinerary", (req, res) => {
 
   // Get the skheras assigned to this rider & that are yet to be delivered or picked up
   Skhera.find(
-    { riderId, deliveryStatus: { $ne: "DELIVERED" } },
+    { riderId, status: { $ne: "ORDER_DELIVERED" } },
     (err, skheras) => {
       if (err)
         return res.send({ status: "error", message: console.error(err) });
@@ -555,7 +562,7 @@ app.get("/itinerary", (req, res) => {
                     type: "pick-up",
                     name: skhera.fromAddress.name,
                     isActive:
-                      skhera.deliveryStatus === "NOT_PICKED_UP_YET" &&
+                      skhera.status === "ON_THE_WAY" &&
                       rider.currentSkheraId === skhera._id.toString()
                   },
                   {
@@ -563,7 +570,7 @@ app.get("/itinerary", (req, res) => {
                     type: "drop-off",
                     name: skhera.toAddress.name,
                     isActive:
-                      skhera.deliveryStatus === "PICKED_UP" &&
+                      skhera.status === "ORDER_PICKED_UP" &&
                       rider.currentSkheraId === skhera._id.toString()
                   }
                 ];

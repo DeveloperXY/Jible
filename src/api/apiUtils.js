@@ -1,6 +1,6 @@
 export const apiKey = "AIzaSyDd3dI_tqR6Rx-IMpS9r5mWCP5oAEibiE0";
-export const baseUrl = "https://adopto.serveo.net";
-export const frontBaseUrl = "https://cca4d36a.ngrok.io";
+export const baseUrl = "https://queo.serveo.net";
+export const frontBaseUrl = "https://29089eb3.ngrok.io";
 
 export async function handleResponse(response) {
   if (response.ok) return response.json();

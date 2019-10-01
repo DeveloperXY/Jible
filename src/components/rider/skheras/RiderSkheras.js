@@ -1,12 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import GoogleMapReact from "google-map-react";
 import currentLocationIndicator from "../images/current_location.png";
 import "./riderSkheras.css";
 import { connect } from "react-redux";
+import { loadRiderItinerary } from "../../../redux/actions/skheraActions";
 
 function RiderSkheras(props) {
   const [googleMap, setGoogleMap] = useState(undefined);
-  const { height, width, history, location, riderItinerary } = props;
+  const {
+    height,
+    width,
+    history,
+    location,
+    riderItinerary,
+    currentUser,
+    loadRiderItinerary
+  } = props;
+
+  useEffect(() => {
+    setInterval(() => {
+      loadRiderItinerary(currentUser._id);
+    }, 5000);
+  }, []);
 
   function onSkheraSelected(skheraId) {
     history.push(`/profile/skhera/${skheraId}`);
@@ -83,8 +98,16 @@ RiderSkheras.defaultProps = {
   zoom: 11
 };
 
-const mapStateToProps = ({ riderItinerary }) => ({
-  riderItinerary
+const mapStateToProps = ({ riderItinerary, currentUser }) => ({
+  riderItinerary,
+  currentUser
 });
 
-export default connect(mapStateToProps)(RiderSkheras);
+const mapDispatchToProps = {
+  loadRiderItinerary
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RiderSkheras);

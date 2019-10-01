@@ -3,13 +3,17 @@ import "./skheraDetails.css";
 import callIcon from "../images/ic_call.svg";
 import { loadSkhera } from "../../../api/skheraApi";
 import ListItemCheckBoxes from "./ListItemCheckBoxes";
+import { loadRiderItinerary } from "../../../redux/actions/skheraActions";
+import { connect } from "react-redux";
 
 function SkheraDetails({
+  loadRiderItinerary,
   emitSkheraItemReady,
   emitSkheraPickedUp,
   match: {
     params: { skheraId }
-  }
+  },
+  currentUser
 }) {
   const [skhera, setCurrentSkhera] = useState({});
   const [client, setSkheraClient] = useState({});
@@ -17,7 +21,6 @@ function SkheraDetails({
 
   useEffect(() => {
     loadSkhera(skheraId).then(data => {
-      console.table(data.skhera.items);
       setCurrentSkhera(data.skhera);
       setSkheraClient(data.client);
     });
@@ -76,22 +79,32 @@ function SkheraDetails({
         type="button"
         className="green-btn picked-up-btn"
         value="Picked up"
-        disabled={
-          skhera.deliveryStatus !== "NOT_PICKED_UP_YET" || !areAllItemsChecked
-        }
+        disabled={skhera.status !== "ON_THE_WAY" || !areAllItemsChecked}
         onClick={() => {
           emitSkheraPickedUp(skheraId);
-          setCurrentSkhera({ ...skhera, deliveryStatus: "PICKED_UP" });
+          setCurrentSkhera({ ...skhera, status: "ORDER_PICKED_UP" });
+          loadRiderItinerary(currentUser._id);
         }}
       />
       <input
         type="button"
         className="green-btn delivered-btn"
         value="Delivered"
-        disabled={skhera.deliveryStatus === "NOT_PICKED_UP_YET"}
+        disabled={skhera.status === "ON_THE_WAY"}
       />
     </div>
   );
 }
 
-export default SkheraDetails;
+const mapStateToProps = ({ currentUser }) => ({
+  currentUser
+});
+
+const mapDispatchToProps = {
+  loadRiderItinerary
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SkheraDetails);
