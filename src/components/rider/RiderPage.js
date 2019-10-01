@@ -36,6 +36,8 @@ function RiderPage({
   const isFirstSocketCheck = useRef(true);
   const isFirstAvailabilityCheck = useRef(true);
   const [currentPage, setCurrentPage] = useState("details");
+  const pickupColor = "#419D78";
+  const dropOffColor = "#4A90E2";
 
   useEffect(() => {
     if (notificationData !== undefined) setNotificationData(undefined);
@@ -73,7 +75,6 @@ function RiderPage({
 
       socket.on("newAssignment", data => {
         setNotificationDotVisibility(true);
-        console.log(data);
         setNotificationData(data);
       });
 
@@ -165,7 +166,7 @@ function RiderPage({
 
   function acceptSkhera() {
     socket.emit("acceptNewAssignment", {
-      skheraId: notificationData.skheraId,
+      skheraId: notificationData.skhera._id,
       riderId: currentUser._id
     });
   }
@@ -187,7 +188,7 @@ function RiderPage({
   function declineSkhera() {
     // TODO: possible optimization here - emit next new assignment event to the next rider immediately
     socket.emit("declineNewAssignment", {
-      skheraId: notificationData.skheraId,
+      skheraId: notificationData.skhera._id,
       riderId: currentUser._id
     });
   }
@@ -220,28 +221,52 @@ function RiderPage({
         {notificationData !== undefined &&
           notificationData.type === "NEW_ASSIGNMENT" && (
             <>
-              <div className="notification-header">
-                <div>New assignment from {notificationData.fromUserName}</div>
+              <div className="notification-header">New assignment</div>
+              <div className="notif-details">
+                <div className="notif-addresses">
+                  <div className="notif-from-addr from-addr">
+                    <div
+                      className="location-dot"
+                      style={{ backgroundColor: pickupColor }}
+                    ></div>
+                    <div className="address-data">
+                      Avenue Abtal, Rabat, Morocco
+                    </div>
+                  </div>
+                  <div className="notif-from-addr to-addr">
+                    <div
+                      className="location-dot"
+                      style={{ backgroundColor: dropOffColor }}
+                    ></div>
+                    <div className="address-data">Hay Riad, Rabat, Morocco</div>
+                  </div>
+                </div>
+                <div className="estimated-price-notif-wrapper">
+                  Estimated price:{" "}
+                  <div className="estimated-price-notif">300 dh</div>
+                </div>
               </div>
-              <input
-                type="button"
-                className="green-btn accept-btn"
-                value="Accept"
-                onClick={() => {
-                  setNotificationVisibility(false);
-                  navigateToSkherasTodo();
-                  acceptSkhera();
-                }}
-              />
-              <input
-                type="button"
-                className="white-btn decline-btn"
-                value="Decline"
-                onClick={() => {
-                  setNotificationVisibility(false);
-                  declineSkhera();
-                }}
-              />
+              <div className="action-buttons-wrapper">
+                <input
+                  type="button"
+                  className="green-btn accept-btn accept-skhera-btn"
+                  value="Accept"
+                  onClick={() => {
+                    setNotificationVisibility(false);
+                    navigateToSkherasTodo();
+                    acceptSkhera();
+                  }}
+                />
+                <input
+                  type="button"
+                  className="white-btn decline-btn decline-skhera-btn"
+                  value="Decline"
+                  onClick={() => {
+                    setNotificationVisibility(false);
+                    declineSkhera();
+                  }}
+                />
+              </div>
             </>
           )}
         {notificationData !== undefined &&

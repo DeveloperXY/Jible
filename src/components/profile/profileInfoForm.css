@@ -1,6 +1,7 @@
 .input-wrapper > input,
 .input-wrapper > textarea {
   border: 0;
+  flex-grow: 1;
 }
 
 .input-wrapper {

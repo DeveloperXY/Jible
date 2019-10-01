@@ -54,7 +54,7 @@ function RequestSkheraMap({ onFromAddrChange, onToAddrChange }) {
     if (fromAddress == {} || toAddress == {}) return;
 
     placesApi
-      .fetchRouteSegments(fromAddress.placeId, toAddress.placeId)
+      .fetchRouteSegmentsByPlaceIds(fromAddress.placeId, toAddress.placeId)
       .then(data => {
         const segments = data.segments;
         const distance = data.distance.text;
@@ -64,16 +64,12 @@ function RequestSkheraMap({ onFromAddrChange, onToAddrChange }) {
         setSkheraDuration(duration);
 
         const steps = segments
-          .map(segment => {
-            const s = {
-              startLat: segment.start_location.lat(),
-              endLat: segment.end_location.lat(),
-              startLng: segment.start_location.lng(),
-              endLng: segment.end_location.lng()
-            };
-            console.log(s);
-            return s;
-          })
+          .map(segment => ({
+            startLat: segment.start_location.lat(),
+            endLat: segment.end_location.lat(),
+            startLng: segment.start_location.lng(),
+            endLng: segment.end_location.lng()
+          }))
           .reduce(
             (acc, s) => [
               ...acc,

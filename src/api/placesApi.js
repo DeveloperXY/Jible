@@ -41,9 +41,7 @@ export function fetchPlaceGeometry(placeId, map) {
   });
 }
 
-export function fetchRouteSegments(fromPlaceId, toPlaceId) {
-  console.log("from place id: " + fromPlaceId);
-  console.log("to place id: " + toPlaceId);
+export function fetchRouteSegmentsByPlaceIds(fromPlaceId, toPlaceId) {
   let service = new window.google.maps.DirectionsService();
   return new Promise((resolve, reject) => {
     return service.route(
@@ -54,6 +52,41 @@ export function fetchRouteSegments(fromPlaceId, toPlaceId) {
         destination: {
           placeId: toPlaceId
         },
+        travelMode: "DRIVING"
+      },
+      (response, status) => {
+        if (status === "OK") {
+          const leg = response.routes[0].legs[0];
+          const distance = leg.distance;
+          const duration = leg.duration;
+          const segments = leg.steps;
+          resolve({
+            segments,
+            distance,
+            duration
+          });
+        } else {
+          console.log("Directions request failed: " + status);
+          reject(status);
+        }
+      }
+    );
+  });
+}
+
+export function fetchRouteSegmentsByCoords(fromPlace, toPlace) {
+  let service = new window.google.maps.DirectionsService();
+  return new Promise((resolve, reject) => {
+    return service.route(
+      {
+        origin: new window.google.maps.LatLng(
+          parseFloat(fromPlace.lat),
+          parseFloat(fromPlace.lng)
+        ),
+        destination: new window.google.maps.LatLng(
+          parseFloat(toPlace.lat),
+          parseFloat(toPlace.lng)
+        ),
         travelMode: "DRIVING"
       },
       (response, status) => {

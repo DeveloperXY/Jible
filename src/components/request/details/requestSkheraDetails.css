@@ -67,10 +67,6 @@ textarea {
   margin-top: 24px;
 }
 
-#price {
-  flex-grow: 0;
-}
-
 .skhera-item {
   background-color: #4a90e2;
   color: white;
@@ -120,4 +116,8 @@ textarea {
 
 .price-estimation {
   margin-top: 16px;
+}
+
+.input-wrapper > input {
+  flex-grow: 1;
 }

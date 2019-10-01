@@ -4,9 +4,10 @@ import currentLocationIndicator from "../images/current_location.png";
 import "./riderSkheras.css";
 import { connect } from "react-redux";
 import { loadRiderItinerary } from "../../../redux/actions/skheraActions";
+import { fetchRouteSegmentsByCoords } from "../../../api/placesApi";
+import MapLocationIndicator from "../../MapLocationIndicator";
 
 function RiderSkheras(props) {
-  const [googleMap, setGoogleMap] = useState(undefined);
   const {
     height,
     width,
@@ -16,12 +17,85 @@ function RiderSkheras(props) {
     currentUser,
     loadRiderItinerary
   } = props;
+  const pickupColor = "#419D78";
+  const dropOffColor = "#4A90E2";
+
+  const [googleMap, setGoogleMap] = useState(undefined);
+  const [polylines, setPolylines] = useState([]);
+  const [itineraryCheckpoints, setItineraryCheckpoints] = useState([]);
 
   useEffect(() => {
     setInterval(() => {
       loadRiderItinerary(currentUser._id);
     }, 5000);
   }, []);
+
+  useEffect(() => {
+    const mapData = riderItinerary.mapData;
+    if (mapData.length > 0) {
+      // Hide any previously displayed polylines
+      polylines.forEach(p => p.setMap(null));
+
+      for (var i = 0; i < mapData.length && i + 1 < mapData.length; i++) {
+        const index = i;
+        const segmentStart = mapData[index];
+        const segmentEnd = mapData[index + 1];
+        fetchRouteSegmentsByCoords(segmentStart, segmentEnd).then(data => {
+          const endType = segmentEnd.type;
+          const polyColor =
+            endType === "PICK_UP_POINT" ? pickupColor : dropOffColor;
+          processSegments(data, index, polyColor);
+        });
+      }
+
+      setItineraryCheckpoints(
+        mapData
+          .filter(e => e.type !== "STARTING_POINT")
+          .map((e, index) => (
+            <MapLocationIndicator
+              type={e.type}
+              first={index < 2}
+              lat={e.lat}
+              lng={e.lng}
+            />
+          ))
+      );
+    }
+  }, [riderItinerary]);
+
+  useEffect(() => {}, [polylines]);
+
+  function processSegments(data, index, polyColor) {
+    console.log("processing index: " + index);
+    const segments = data.segments;
+
+    const steps = segments
+      .map(segment => ({
+        startLat: segment.start_location.lat(),
+        endLat: segment.end_location.lat(),
+        startLng: segment.start_location.lng(),
+        endLng: segment.end_location.lng()
+      }))
+      .reduce(
+        (acc, s) => [
+          ...acc,
+          { lat: s.startLat, lng: s.startLng },
+          { lat: s.endLat, lng: s.endLng }
+        ],
+        []
+      );
+
+    const polyline = new window.google.maps.Polyline({
+      path: steps,
+      geodesic: true,
+      strokeColor: polyColor,
+      strokeOpacity: 1.0,
+      strokeWeight: 2,
+      map: googleMap
+    });
+
+    setPolylines([...polylines, polyline]);
+  }
 
   function onSkheraSelected(skheraId) {
     history.push(`/profile/skhera/${skheraId}`);
@@ -82,6 +156,7 @@ function RiderSkheras(props) {
               alt=""
             />
           )}
+          {itineraryCheckpoints}
         </GoogleMapReact>
       </div>
     </div>

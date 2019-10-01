@@ -438,7 +438,7 @@ function emitSkheraToRiders(sortedResults, skheraId, fromUser) {
       if (socket) {
         socket.emit("newAssignment", {
           type: "NEW_ASSIGNMENT",
-          skheraId: skhera._id,
+          skhera: skhera._doc,
           fromUserName: fromUser.name
         });
         setTimeout(() => {
