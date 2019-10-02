@@ -179,7 +179,7 @@ function acceptSkhera(skheraId, riderId, socket) {
       return;
     }
 
-    if (!["ON_THE_WAY", "ORDER_PICKED_UP"].includes(skhera.status)) {
+    if (skhera.status === "ORDER_RECEIVED") {
       RiderLocation.findOne({ riderId }, (err, riderLocation) => {
         Skhera.updateOne(
           { _id: skheraId },

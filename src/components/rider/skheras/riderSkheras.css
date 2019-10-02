@@ -61,6 +61,7 @@
   padding: 4px;
   border-radius: unset;
   font-size: 12px;
+  align-items: center;
 }
 
 .pickup-address-text.current-skhera {
@@ -80,6 +81,7 @@
   padding: 4px;
   flex-grow: 1;
   border-radius: unset;
+  align-items: center;
 }
 
 .drop-off-address-text.current-skhera {
@@ -138,4 +140,5 @@
 
 .estimation-container {
   text-align: end;
+  font-size: 12px;
 }

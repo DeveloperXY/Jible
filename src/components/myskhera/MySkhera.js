@@ -44,7 +44,10 @@ function MySkhera({ currentUser }) {
               <div
                 className={
                   "status-item " +
-                  (skhera.status === "ON_THE_WAY" ? "status-item-selected" : "")
+                  (skhera.status === "ON_THE_WAY" ||
+                  skhera.status === "ORDER_PICKED_UP"
+                    ? "status-item-selected"
+                    : "")
                 }
               >
                 On the way
@@ -52,7 +55,8 @@ function MySkhera({ currentUser }) {
                 <span
                   className={
                     "mini-status " +
-                    (skhera.status === "ON_THE_WAY"
+                    (skhera.status === "ON_THE_WAY" ||
+                    skhera.status === "ORDER_PICKED_UP"
                       ? "mini-status-selected"
                       : "")
                   }
@@ -63,7 +67,9 @@ function MySkhera({ currentUser }) {
               <div
                 className={
                   "status-item " +
-                  (skhera.status === "DELIVERED" ? "status-item-selected" : "")
+                  (skhera.status === "ORDER_DELIVERED"
+                    ? "status-item-selected"
+                    : "")
                 }
               >
                 Delivered
@@ -71,7 +77,7 @@ function MySkhera({ currentUser }) {
                 <span
                   className={
                     "mini-status " +
-                    (skhera.status === "DELIVERED"
+                    (skhera.status === "ORDER_DELIVERED"
                       ? "mini-status-selected"
                       : "")
                   }

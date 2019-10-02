@@ -62,7 +62,10 @@ function RiderSkheras(props) {
     });
 
     const mapData = riderItinerary.mapData;
-    if (mapData.length === 0) setItineraryCheckpoints([]);
+    if (mapData.length === 0) {
+      setItineraryCheckpoints([]);
+      setPolylines([]);
+    }
     if (mapData.length > 0) {
       // Hide any previously displayed polylines
       polylines.forEach(p => p.setMap(null));
