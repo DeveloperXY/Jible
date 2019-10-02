@@ -97,8 +97,6 @@ function RiderSkheras(props) {
     }
   }, [riderItinerary]);
 
-  useEffect(() => {}, [polylines]);
-
   function processSegments(data, index, polyColor) {
     const segments = data.segments;
 

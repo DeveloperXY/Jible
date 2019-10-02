@@ -355,6 +355,7 @@ app.post("/skhera", (req, res) => {
   let price = req.body.price;
   let fromAddress = req.body.fromAddress;
   let toAddress = req.body.toAddress;
+  let timeAndDistance = req.body.timeAndDistance;
 
   new Skhera({
     clientId: id,
@@ -362,6 +363,7 @@ app.post("/skhera", (req, res) => {
     fromAddress,
     toAddress,
     description,
+    timeAndDistance,
     items
   }).save((err, skhera) => {
     if (err) return res.send({ status: "error", message: console.error(err) });

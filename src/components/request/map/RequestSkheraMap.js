@@ -4,7 +4,11 @@ import SimpleMap from "./SimpleMap";
 import AutoCompleteInput from "./AutoCompleteInput";
 import * as placesApi from "../../../api/placesApi";
 
-function RequestSkheraMap({ onFromAddrChange, onToAddrChange }) {
+function RequestSkheraMap({
+  onFromAddrChange,
+  onToAddrChange,
+  setTimeAndDistance
+}) {
   const [fromAddressText, setFromAddressText] = useState("");
   const [toAddressText, setToAddressText] = useState("");
   const [mapZoom, setMapZoom] = useState(6);
@@ -59,6 +63,7 @@ function RequestSkheraMap({ onFromAddrChange, onToAddrChange }) {
         const segments = data.segments;
         const distance = data.distance.text;
         const duration = data.duration.text;
+        setTimeAndDistance(`${distance} / ${duration}`);
 
         setSkheraDistance(distance);
         setSkheraDuration(duration);

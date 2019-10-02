@@ -117,7 +117,9 @@ function MySkhera({ currentUser }) {
               </div>
               <div className="estimated-values">
                 <div className="estimated-price-value">N/A</div>
-                <div className="estimated-time-distance-value">Unknown</div>
+                <div className="estimated-time-distance-value">
+                  {skhera.timeAndDistance}
+                </div>
               </div>
             </div>
           </div>

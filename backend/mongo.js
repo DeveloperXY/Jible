@@ -51,6 +51,7 @@ let skheraSchema = new mongoose.Schema({
     lat: String,
     lng: String
   },
+  timeAndDistance: String,
   initialRiderLocation: {
     lat: String,
     lng: String

@@ -81,7 +81,9 @@ function SkheraDetails({
         </div>
         <div className="skhera-time-distance">
           <div className="skhera-time-distance-label">Time and Distance</div>
-          <div className="skhera-time-distance-value">Unknown</div>
+          <div className="skhera-time-distance-value">
+            {skhera.timeAndDistance}
+          </div>
         </div>
         <input
           type="button"

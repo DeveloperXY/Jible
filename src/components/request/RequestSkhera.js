@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 function RequestSkhera({ currentUser, history }) {
   const [fromAddress, setFromAddress] = useState({});
   const [toAddress, setToAddress] = useState({});
+  const [timeAndDistance, setTimeAndDistance] = useState("");
 
   useEffect(() => {
     window.fbq("track", "viewContent", {
@@ -26,7 +27,8 @@ function RequestSkhera({ currentUser, history }) {
         items: skheraItems,
         price,
         fromAddress,
-        toAddress
+        toAddress,
+        timeAndDistance
       })
       .then(data => {
         if (data.status === "ok") {
@@ -57,6 +59,7 @@ function RequestSkhera({ currentUser, history }) {
         <RequestSkheraMap
           onFromAddrChange={handleFromAddressChange}
           onToAddrChange={handleToAddressChange}
+          setTimeAndDistance={setTimeAndDistance}
         />
       </div>
     </div>
