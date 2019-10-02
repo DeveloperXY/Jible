@@ -60,7 +60,10 @@ let skheraSchema = new mongoose.Schema({
     lng: String
   },
   description: String,
-  riderId: String,
+  riderId: {
+    type: String,
+    default: null
+  },
   items: [
     {
       name: String,

@@ -10,6 +10,7 @@ function SkheraDetails({
   loadRiderItinerary,
   emitSkheraItemReady,
   emitSkheraPickedUp,
+  emitSkheraDelivered,
   match: {
     params: { skheraId }
   },
@@ -90,7 +91,12 @@ function SkheraDetails({
         type="button"
         className="green-btn delivered-btn"
         value="Delivered"
-        disabled={skhera.status === "ON_THE_WAY"}
+        disabled={
+          skhera.status === "ON_THE_WAY" || skhera.status === "ORDER_DELIVERED"
+        }
+        onClick={() => {
+          emitSkheraDelivered(skheraId, currentUser._id);
+        }}
       />
     </div>
   );

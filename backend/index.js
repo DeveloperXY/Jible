@@ -138,6 +138,31 @@ io.on("connection", client => {
         }
       );
     });
+    client.on("skheraDelivered", data => {
+      const skheraId = data.skheraId;
+      const riderId = data.riderId;
+      Skhera.updateOne(
+        { _id: skheraId },
+        { $set: { status: "ORDER_DELIVERED", riderId: null } },
+        function(error, result) {
+          if (error) {
+            console.log(error);
+          } else {
+            User.updateOne(
+              { _id: riderId },
+              { $set: { currentSkheraId: null } },
+              function(error, result) {
+                if (error) {
+                  console.log(error);
+                } else {
+                  client.emit("skheraDeliveredSuccess", result);
+                }
+              }
+            );
+          }
+        }
+      );
+    });
     client.on("disconnect", () => {
       riderSockets = riderSockets.filter(s => s.userId !== userId);
       console.log("A rider has disconnected: " + userId);

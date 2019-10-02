@@ -89,6 +89,10 @@ function RiderPage({
       socket.on("skheraItemReadyResponse", data => {
         console.log(data);
       });
+
+      socket.on("skheraDeliveredSuccess", () => {
+        navigateToSkherasTodo();
+      });
     }
   }, [socket]);
 
@@ -181,6 +185,13 @@ function RiderPage({
   function emitSkheraPickedUp(skheraId) {
     socket.emit("skheraPickedUp", {
       skheraId
+    });
+  }
+
+  function emitSkheraDelivered(skheraId, riderId) {
+    socket.emit("skheraDelivered", {
+      skheraId,
+      riderId
     });
   }
 
@@ -301,6 +312,7 @@ function RiderPage({
                 {...props}
                 emitSkheraItemReady={emitSkheraItemReady}
                 emitSkheraPickedUp={emitSkheraPickedUp}
+                emitSkheraDelivered={emitSkheraDelivered}
               />
             )}
           />
