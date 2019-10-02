@@ -23,6 +23,14 @@ function RiderSkheras(props) {
   const [googleMap, setGoogleMap] = useState(undefined);
   const [polylines, setPolylines] = useState([]);
   const [itineraryCheckpoints, setItineraryCheckpoints] = useState([]);
+  const [
+    distanceToCurrentDestination,
+    setDistanceToCurrentDestination
+  ] = useState("");
+  const [
+    durationToCurrentDestination,
+    setDurationToCurrentDestination
+  ] = useState("");
 
   useEffect(() => {
     setInterval(() => {
@@ -31,6 +39,28 @@ function RiderSkheras(props) {
   }, []);
 
   useEffect(() => {
+    const currentLocation = riderItinerary.riderLocation;
+    const points = riderItinerary.points;
+    points.forEach(p => {
+      if (p.isActive) {
+        fetchRouteSegmentsByCoords(
+          {
+            lat: currentLocation.lat,
+            lng: currentLocation.lng
+          },
+          {
+            lat: p.lat,
+            lng: p.lng
+          }
+        ).then(data => {
+          const distance = data.distance.text;
+          const duration = data.duration.text;
+          setDistanceToCurrentDestination(distance);
+          setDurationToCurrentDestination(duration);
+        });
+      }
+    });
+
     const mapData = riderItinerary.mapData;
     if (mapData.length > 0) {
       // Hide any previously displayed polylines
@@ -66,7 +96,6 @@ function RiderSkheras(props) {
   useEffect(() => {}, [polylines]);
 
   function processSegments(data, index, polyColor) {
-    console.log("processing index: " + index);
     const segments = data.segments;
 
     const steps = segments
@@ -115,6 +144,7 @@ function RiderSkheras(props) {
           const shapeNumber = point.type === "pick-up" ? 1 : 2;
           const pointType = point.type === "pick-up" ? "pickup" : "drop-off";
           const isActive = point.isActive;
+
           return (
             <div className="stop-address">
               <div className="stop-address-shape-wrapper">
@@ -130,7 +160,13 @@ function RiderSkheras(props) {
                 }`}
                 onClick={() => onSkheraSelected(skheraId)}
               >
-                {point.name}
+                <div>{point.name}</div>
+                {isActive && distanceToCurrentDestination && (
+                  <div className="estimation-container">
+                    {distanceToCurrentDestination} /{" "}
+                    {durationToCurrentDestination}
+                  </div>
+                )}
               </div>
             </div>
           );

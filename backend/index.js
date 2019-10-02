@@ -552,56 +552,64 @@ app.get("/itinerary", (req, res) => {
         User.findOne({ _id: riderId }, (err, rider) => {
           if (err)
             return res.send({ status: "error", message: console.error(err) });
-          return res.send({
-            points: [].concat.apply(
-              [],
-              skheras.map(skhera => {
-                return [
-                  {
-                    skheraId: skhera._id.toString(),
-                    type: "pick-up",
-                    name: skhera.fromAddress.name,
-                    isActive:
-                      skhera.status === "ON_THE_WAY" &&
-                      rider.currentSkheraId === skhera._id.toString()
-                  },
-                  {
-                    skheraId: skhera._id.toString(),
-                    type: "drop-off",
-                    name: skhera.toAddress.name,
-                    isActive:
-                      skhera.status === "ORDER_PICKED_UP" &&
-                      rider.currentSkheraId === skhera._id.toString()
-                  }
-                ];
-              })
-            ),
-            mapData: (skheras.length > 0
-              ? [
-                  {
-                    type: "STARTING_POINT",
-                    lat: skheras[0].initialRiderLocation.lat,
-                    lng: skheras[0].initialRiderLocation.lng
-                  }
-                ]
-              : []
-            ).concat(
-              [].concat.apply(
+
+          RiderLocation.findOne({ riderId }, (err, riderLocation) => {
+            return res.send({
+              riderLocation,
+              points: [].concat.apply(
                 [],
-                skheras.map(skhera => [
-                  {
-                    type: "PICK_UP_POINT",
-                    lat: skhera.fromAddress.lat,
-                    lng: skhera.fromAddress.lng
-                  },
-                  {
-                    type: "DROP_OFF_POINT",
-                    lat: skhera.toAddress.lat,
-                    lng: skhera.toAddress.lng
-                  }
-                ])
+                skheras.map(skhera => {
+                  return [
+                    {
+                      skheraId: skhera._id.toString(),
+                      type: "pick-up",
+                      name: skhera.fromAddress.name,
+                      lat: skhera.fromAddress.lat,
+                      lng: skhera.fromAddress.lng,
+                      isActive:
+                        skhera.status === "ON_THE_WAY" &&
+                        rider.currentSkheraId === skhera._id.toString()
+                    },
+                    {
+                      skheraId: skhera._id.toString(),
+                      type: "drop-off",
+                      name: skhera.toAddress.name,
+                      lat: skhera.toAddress.lat,
+                      lng: skhera.toAddress.lng,
+                      isActive:
+                        skhera.status === "ORDER_PICKED_UP" &&
+                        rider.currentSkheraId === skhera._id.toString()
+                    }
+                  ];
+                })
+              ),
+              mapData: (skheras.length > 0
+                ? [
+                    {
+                      type: "STARTING_POINT",
+                      lat: skheras[0].initialRiderLocation.lat,
+                      lng: skheras[0].initialRiderLocation.lng
+                    }
+                  ]
+                : []
+              ).concat(
+                [].concat.apply(
+                  [],
+                  skheras.map(skhera => [
+                    {
+                      type: "PICK_UP_POINT",
+                      lat: skhera.fromAddress.lat,
+                      lng: skhera.fromAddress.lng
+                    },
+                    {
+                      type: "DROP_OFF_POINT",
+                      lat: skhera.toAddress.lat,
+                      lng: skhera.toAddress.lng
+                    }
+                  ])
+                )
               )
-            )
+            });
           });
         });
       } else return res.send([]);

@@ -56,7 +56,6 @@ function RiderPage({
         placesApi
           .fetchCurrentLocation(window.navigator)
           .then(location => {
-            console.log("Riderpage update");
             setRiderLocation(location);
           })
           .catch(error => {
@@ -230,7 +229,7 @@ function RiderPage({
                       style={{ backgroundColor: pickupColor }}
                     ></div>
                     <div className="address-data">
-                      Avenue Abtal, Rabat, Morocco
+                      {notificationData.skhera.fromAddress.name}
                     </div>
                   </div>
                   <div className="notif-from-addr to-addr">
@@ -238,12 +237,16 @@ function RiderPage({
                       className="location-dot"
                       style={{ backgroundColor: dropOffColor }}
                     ></div>
-                    <div className="address-data">Hay Riad, Rabat, Morocco</div>
+                    <div className="address-data">
+                      {notificationData.skhera.toAddress.name}
+                    </div>
                   </div>
                 </div>
                 <div className="estimated-price-notif-wrapper">
                   Estimated price:{" "}
-                  <div className="estimated-price-notif">300 dh</div>
+                  <div className="estimated-price-notif">
+                    {notificationData.skhera.price}
+                  </div>
                 </div>
               </div>
               <div className="action-buttons-wrapper">

@@ -54,6 +54,7 @@
 }
 
 .pickup-address-text {
+  display: flex;
   color: #909090;
   background-color: transparent;
   flex-grow: 1;
@@ -63,6 +64,7 @@
 }
 
 .pickup-address-text.current-skhera {
+  justify-content: space-between;
   color: white;
   background-color: #419d78;
   padding: 12px;
@@ -71,6 +73,7 @@
 }
 
 .drop-off-address-text {
+  display: flex;
   color: #909090;
   background-color: transparent;
   font-size: 12px;
@@ -80,6 +83,7 @@
 }
 
 .drop-off-address-text.current-skhera {
+  justify-content: space-between;
   color: white;
   background-color: #4a90e2;
   font-size: 14px;
@@ -130,4 +134,8 @@
   height: 100%;
   margin-left: 11px;
   z-index: -1;
+}
+
+.estimation-container {
+  text-align: end;
 }
