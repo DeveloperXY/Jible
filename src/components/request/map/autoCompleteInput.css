@@ -1,7 +1,6 @@
 .nested-input {
   border: 0;
   width: 100%;
-  padding: 0;
 }
 
 .input-wrapper {
@@ -11,4 +10,12 @@
   border-width: 1px;
   border-color: #909090;
   padding: 12px 12px 12px 12px;
+}
+
+.react-autosuggest__container {
+  flex-grow: 1;
+}
+
+.autocomplete-suggestion {
+  font-size: 18px;
 }

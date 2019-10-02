@@ -22,6 +22,8 @@
   text-align: center;
   align-self: center;
   margin-left: 12px;
+  text-decoration: none;
+  color: black;
 }
 
 .profile-img {

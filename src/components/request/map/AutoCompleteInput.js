@@ -29,7 +29,9 @@ function AutoCompleteInput({
 
   const getSuggestionValue = suggestion => suggestion.name;
 
-  const renderSuggestion = suggestion => <div>{suggestion.name}</div>;
+  const renderSuggestion = suggestion => (
+    <div className="autocomplete-suggestion">{suggestion.name}</div>
+  );
 
   const onSuggestionsFetchRequested = ({ value }) => {
     getSuggestions(value, setSuggestions);
@@ -37,6 +39,10 @@ function AutoCompleteInput({
 
   const onSuggestionsClearRequested = () => {
     setSuggestions([]);
+  };
+
+  const renderSuggestionsContainer = ({ containerProps, children, query }) => {
+    return <div {...containerProps}>{children}</div>;
   };
 
   return (
@@ -48,6 +54,7 @@ function AutoCompleteInput({
       getSuggestionValue={getSuggestionValue}
       renderSuggestion={renderSuggestion}
       renderInputComponent={renderInputComponent}
+      renderSuggestionsContainer={renderSuggestionsContainer}
       inputProps={inputProps}
     />
   );

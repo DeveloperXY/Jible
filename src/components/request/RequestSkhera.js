@@ -51,7 +51,6 @@ function RequestSkhera({ currentUser, history }) {
   return (
     <div className="request-skhera-body">
       <div className="request-skhera-header">
-        <img src={backArrow} alt="" className="back-arrow" onClick={goBack} />
         <h1 className="request-skhera-header-text">Request a Skhera</h1>
       </div>
       <div className="request-content">

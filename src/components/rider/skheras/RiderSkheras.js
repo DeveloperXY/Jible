@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { loadRiderItinerary } from "../../../redux/actions/skheraActions";
 import { fetchRouteSegmentsByCoords } from "../../../api/placesApi";
 import MapLocationIndicator from "../../MapLocationIndicator";
+import ScooterImg from "../../../images/ic_scooter.svg";
 
 function RiderSkheras(props) {
   const {
@@ -15,7 +16,8 @@ function RiderSkheras(props) {
     location,
     riderItinerary,
     currentUser,
-    loadRiderItinerary
+    loadRiderItinerary,
+    unselectCurrent
   } = props;
   const pickupColor = "#419D78";
   const dropOffColor = "#4A90E2";
@@ -160,7 +162,10 @@ function RiderSkheras(props) {
                 className={`${pointType}-address-text ${
                   isActive ? "current-skhera" : ""
                 }`}
-                onClick={() => onSkheraSelected(skheraId)}
+                onClick={() => {
+                  onSkheraSelected(skheraId);
+                  unselectCurrent();
+                }}
               >
                 <div>{point.name}</div>
                 {isActive && distanceToCurrentDestination && (
@@ -184,13 +189,15 @@ function RiderSkheras(props) {
           onGoogleApiLoaded={({ map, _ }) => {
             setGoogleMap(map);
           }}
+          options={{
+            gestureHandling: "greedy"
+          }}
         >
           {location !== undefined && (
             <img
               lat={location.lat}
               lng={location.lng}
-              className="current-location-indicator"
-              src={currentLocationIndicator}
+              src={ScooterImg}
               alt=""
             />
           )}

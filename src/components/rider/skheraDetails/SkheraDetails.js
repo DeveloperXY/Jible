@@ -13,6 +13,7 @@ function SkheraDetails({
   emitSkheraItemReady,
   emitSkheraPickedUp,
   emitSkheraDelivered,
+  navigateToSkherasTodo,
   match: {
     params: { skheraId }
   },
@@ -43,10 +44,10 @@ function SkheraDetails({
 
   return (
     <>
-      <Link to="/profile/todo" className="back-link back-container">
+      <div className="back-link back-container" onClick={navigateToSkherasTodo}>
         <img src={greenArrow} alt="" />
         <div>All skheras</div>
-      </Link>
+      </div>
       <div className="skhera-details-container">
         <div className="skhera-details-header">
           <div className="skhera-counter">Skhera 1</div>

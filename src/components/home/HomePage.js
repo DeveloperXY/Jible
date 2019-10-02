@@ -15,6 +15,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { frontBaseUrl } from "../../api/apiUtils";
 import JibleLogo from "../../images/Logo";
+import WhiteJibleLogo from "../../images/logo_white.svg";
 
 Modal.setAppElement("#root");
 
@@ -61,11 +62,7 @@ function HomePage(props) {
       <div className="hero-content-wrapper">
         <div className="hero-content">
           <div className="header-content">
-            <JibleLogo
-              textColor="#ffffff"
-              boxColor="#ffffff"
-              arcColor="transparent"
-            />
+            <img src={WhiteJibleLogo} alt="" />
             <div className="buttons-container">
               <input
                 type="button"

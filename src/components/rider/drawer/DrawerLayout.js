@@ -1,6 +1,6 @@
 import React from "react";
 import "./drawerLayout.css";
-import closeIcon from "../images/ic_close.svg";
+import closeIcon from "../images/ic_close_white.svg";
 import { connect } from "react-redux";
 
 const DrawerLayout = ({
@@ -25,20 +25,23 @@ const DrawerLayout = ({
       </div>
       <div className="drawer-menu-items">
         <ul className="menu-items-list">
-          {routes.map(route => (
-            <li
-              className={
-                "drawer-menu-item" +
-                (currentPage === route.value
-                  ? " drawer-menu-item-selected"
-                  : "")
-              }
-              onClick={route.action}
-              key={route.value}
-            >
-              {route.name}
-            </li>
-          ))}
+          {routes.map(
+            route =>
+              route.value !== "none" && (
+                <li
+                  className={
+                    "drawer-menu-item" +
+                    (currentPage === route.value
+                      ? " drawer-menu-item-selected"
+                      : "")
+                  }
+                  onClick={route.action}
+                  key={route.value}
+                >
+                  {route.name}
+                </li>
+              )
+          )}
         </ul>
       </div>
       {children}

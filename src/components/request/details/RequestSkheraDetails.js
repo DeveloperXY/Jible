@@ -112,7 +112,7 @@ function RequestSkheraDetails({ onOrderNow }) {
           <div className="input-wrapper time-schedule-wrapper">
             <img className="icSchedule field-icon" src={icSchedule} alt="" />
             <div className="asap-text">Schedule</div>
-            <img className="icCheck field-icon" src={icCheck} alt="" />
+            {/* <img className="icCheck field-icon" src={icCheck} alt="" /> */}
           </div>
         </div>
       </div>

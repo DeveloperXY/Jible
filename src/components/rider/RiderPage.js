@@ -15,6 +15,7 @@ import * as placesApi from "../../api/placesApi";
 import * as skheraApi from "../../api/skheraApi";
 import ToggleButton from "react-toggle-button";
 import SkheraDetails from "./skheraDetails/SkheraDetails";
+import JibleLogo from "../../images/Logo";
 
 function RiderPage({
   currentUser,
@@ -167,6 +168,10 @@ function RiderPage({
     history.push("/profile/faq");
   }
 
+  function unselectCurrent() {
+    setCurrentPage("none");
+  }
+
   function acceptSkhera() {
     socket.emit("acceptNewAssignment", {
       skheraId: notificationData.skhera._id,
@@ -206,7 +211,7 @@ function RiderPage({
   return (
     <div className="profile-wrapper">
       <div className="app-header">
-        <div className="app-header-text">Jible</div>
+        <JibleLogo textColor="#000000" boxColor="#419D78" arcColor="#ffffff" />
         <div className="header-icons">
           <div className="notification-wrapper">
             <img
@@ -313,6 +318,7 @@ function RiderPage({
                 emitSkheraItemReady={emitSkheraItemReady}
                 emitSkheraPickedUp={emitSkheraPickedUp}
                 emitSkheraDelivered={emitSkheraDelivered}
+                navigateToSkherasTodo={navigateToSkherasTodo}
               />
             )}
           />
@@ -320,7 +326,11 @@ function RiderPage({
           <Route
             path="/profile/todo"
             render={() => (
-              <RiderSkheras history={history} location={currentLocation} />
+              <RiderSkheras
+                history={history}
+                location={currentLocation}
+                unselectCurrent={unselectCurrent}
+              />
             )}
           />
           <Route
@@ -340,6 +350,9 @@ function RiderPage({
         currentPage={currentPage}
         isOpen={isDrawerOpen}
         routes={[
+          {
+            value: "none"
+          },
           {
             value: "todo",
             name: "Skheras TODO",
@@ -362,6 +375,7 @@ function RiderPage({
         navigateToStatistics={navigateToStatistics}
         navigateToMyProfile={navigateToMyProfile}
         navigateToSkherasTodo={navigateToSkherasTodo}
+        unselectCurrent={unselectCurrent}
         availability={availability}
         setAvailability={setAvailability}
       >

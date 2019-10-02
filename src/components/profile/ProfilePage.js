@@ -15,7 +15,9 @@ function ProfilePage({ currentUser }) {
         </Link>
         <div className="profile-header-section">
           <img className="profile-img" alt="" src={currentUser.image} />
-          <div className="current-username">{currentUser.name}</div>
+          <Link to="/profile/details" className="current-username">
+            <div>{currentUser.name}</div>
+          </Link>
         </div>
       </div>
       <div className="body-content">
