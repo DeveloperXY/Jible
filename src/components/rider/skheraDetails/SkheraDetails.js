@@ -5,6 +5,8 @@ import { loadSkhera } from "../../../api/skheraApi";
 import ListItemCheckBoxes from "./ListItemCheckBoxes";
 import { loadRiderItinerary } from "../../../redux/actions/skheraActions";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import greenArrow from "../images/green_arrow_back.svg";
 
 function SkheraDetails({
   loadRiderItinerary,
@@ -40,65 +42,72 @@ function SkheraDetails({
   }
 
   return (
-    <div className="skhera-details-container">
-      <div className="skhera-details-header">
-        <div className="skhera-counter">Skhera 1</div>
-        <div className="skhera-info">
-          {skhera.date}
-          <br />
-          Price: {skhera.price}
-        </div>
-      </div>
-      <div className="client-contact-details">
-        <div className="client-personal-info">
-          <img className="client-profile-img" alt="" src={client.image} />
-          <div className="client-textual-info">
-            <div className="client-name">{client.name}</div>
-            <div className="client-phone-number">{client.phone}</div>
+    <>
+      <Link to="/profile/todo" className="back-link back-container">
+        <img src={greenArrow} alt="" />
+        <div>All skheras</div>
+      </Link>
+      <div className="skhera-details-container">
+        <div className="skhera-details-header">
+          <div className="skhera-counter">Skhera 1</div>
+          <div className="skhera-info">
+            {skhera.date}
+            <br />
+            Price: {skhera.price}
           </div>
         </div>
-        <img src={callIcon} alt="" />
+        <div className="client-contact-details">
+          <div className="client-personal-info">
+            <img className="client-profile-img" alt="" src={client.image} />
+            <div className="client-textual-info">
+              <div className="client-name">{client.name}</div>
+              <div className="client-phone-number">{client.phone}</div>
+            </div>
+          </div>
+          <img src={callIcon} alt="" />
+        </div>
+        <div className="skhera-description">{skhera.description}</div>
+        <div className="skhera-items-checklist">
+          {skhera.items && (
+            <ListItemCheckBoxes
+              items={skhera.items}
+              handleItemReadinessChange={handleItemReadinessChange}
+            />
+          )}
+        </div>
+        <div className="price-container">
+          <div className="skhera-price-label">Price</div>
+          <div className="skhera-price-value">N/A</div>
+        </div>
+        <div className="skhera-time-distance">
+          <div className="skhera-time-distance-label">Time and Distance</div>
+          <div className="skhera-time-distance-value">Unknown</div>
+        </div>
+        <input
+          type="button"
+          className="green-btn picked-up-btn"
+          value="Picked up"
+          disabled={skhera.status !== "ON_THE_WAY" || !areAllItemsChecked}
+          onClick={() => {
+            emitSkheraPickedUp(skheraId);
+            setCurrentSkhera({ ...skhera, status: "ORDER_PICKED_UP" });
+            loadRiderItinerary(currentUser._id);
+          }}
+        />
+        <input
+          type="button"
+          className="green-btn delivered-btn"
+          value="Delivered"
+          disabled={
+            skhera.status === "ON_THE_WAY" ||
+            skhera.status === "ORDER_DELIVERED"
+          }
+          onClick={() => {
+            emitSkheraDelivered(skheraId, currentUser._id);
+          }}
+        />
       </div>
-      <div className="skhera-description">{skhera.description}</div>
-      <div className="skhera-items-checklist">
-        {skhera.items && (
-          <ListItemCheckBoxes
-            items={skhera.items}
-            handleItemReadinessChange={handleItemReadinessChange}
-          />
-        )}
-      </div>
-      <div className="price-container">
-        <div className="skhera-price-label">Price</div>
-        <div className="skhera-price-value">N/A</div>
-      </div>
-      <div className="skhera-time-distance">
-        <div className="skhera-time-distance-label">Time and Distance</div>
-        <div className="skhera-time-distance-value">Unknown</div>
-      </div>
-      <input
-        type="button"
-        className="green-btn picked-up-btn"
-        value="Picked up"
-        disabled={skhera.status !== "ON_THE_WAY" || !areAllItemsChecked}
-        onClick={() => {
-          emitSkheraPickedUp(skheraId);
-          setCurrentSkhera({ ...skhera, status: "ORDER_PICKED_UP" });
-          loadRiderItinerary(currentUser._id);
-        }}
-      />
-      <input
-        type="button"
-        className="green-btn delivered-btn"
-        value="Delivered"
-        disabled={
-          skhera.status === "ON_THE_WAY" || skhera.status === "ORDER_DELIVERED"
-        }
-        onClick={() => {
-          emitSkheraDelivered(skheraId, currentUser._id);
-        }}
-      />
-    </div>
+    </>
   );
 }
 

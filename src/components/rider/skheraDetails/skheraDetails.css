@@ -128,3 +128,14 @@
 .list-item-name-checked {
   text-decoration: line-through;
 }
+
+.back-link {
+  text-decoration: none;
+  color: #419d78;
+}
+
+.back-container {
+  display: flex;
+  margin-left: 16px;
+  align-items: center;
+}
