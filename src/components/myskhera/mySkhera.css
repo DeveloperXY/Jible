@@ -86,6 +86,8 @@
 
 .my-skhera-address {
   margin-top: 24px;
+  display: flex;
+  align-items: center;
 }
 
 .my-skhera-description {
@@ -149,4 +151,27 @@
 
 .client-map {
   margin-top: 48px;
+}
+
+.my-skhera-wrapper {
+  display: flex;
+}
+
+.my-skhera-wrapper-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.rider-profile-img {
+  width: 48px;
+  height: 48px;
+  margin-right: 8px;
+}
+
+.my-skhera-rider-details {
+  display: flex;
+  align-self: start;
+  justify-content: space-between;
+  background-color: #f1f1f1;
+  padding: 8px;
 }

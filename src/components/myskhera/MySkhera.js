@@ -7,6 +7,8 @@ import icPickUp from "../../images/ic_pickup.svg";
 import icDropOff from "../../images/ic_drop_off.svg";
 import ScooterImg from "../../images/ic_scooter.svg";
 import { fetchRouteSegmentsByCoords } from "../../api/placesApi";
+import mapPin from "../../images/map_pin.svg";
+import icPhone from "../../images/ic_phone.svg";
 
 function MySkhera({ currentUser }) {
   const [skheras, setSkheras] = useState([]);
@@ -201,7 +203,10 @@ function MySkhera({ currentUser }) {
                   Price: {skhera.price}
                 </div>
                 <div className="my-skhera-address carved">
-                  {skhera.toAddress.name}
+                  <img src={mapPin} alt="" />
+                  <div style={{ marginLeft: "8px" }}>
+                    {skhera.toAddress.name}
+                  </div>
                 </div>
                 <div className="my-skhera-description">
                   {skhera.description}
@@ -212,7 +217,32 @@ function MySkhera({ currentUser }) {
                   ))}
                 </ul>
               </div>
-              <div className="my-skhera-rider-details"></div>
+              <div className="my-skhera-rider-details">
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <img
+                    src={skhera.riderId.image}
+                    alt=""
+                    className="rider-profile-img"
+                  />
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ fontWeight: "bold", fontSize: "16px" }}>
+                      {skhera.riderId.name}
+                    </div>
+                    <div style={{ color: "#909090", fontSize: "16px" }}>
+                      {skhera.riderId.phone}
+                    </div>
+                  </div>
+                </div>
+                <img
+                  src={icPhone}
+                  alt=""
+                  style={{
+                    minWidth: "24px",
+                    minHeight: "24px",
+                    marginRight: "8px"
+                  }}
+                />
+              </div>
             </div>
             <div className="my-skhera-price-est">
               <div className="estimated-price-labels">

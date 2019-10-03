@@ -527,10 +527,13 @@ app.delete("/notifications", (req, res) => {
 app.get("/skheras", (req, res) => {
   const clientId = req.query.clientId;
 
-  Skhera.find({ clientId }, (err, skheras) => {
-    if (err) return res.send({ status: "error", message: console.error(err) });
-    return res.send(skheras);
-  });
+  Skhera.find({ clientId })
+    .populate("riderId")
+    .exec((err, skheras) => {
+      if (err)
+        return res.send({ status: "error", message: console.error(err) });
+      return res.send(skheras);
+    });
 });
 
 app.get("/skhera", (req, res) => {
