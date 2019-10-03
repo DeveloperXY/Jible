@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import menuIcon from "./images/ic_menu.svg";
-import notificationIcon from "./images/ic_notifications.svg";
+import notificationIcon from "../../images/bell_unselected.svg";
+import selectedNotificationIcon from "../../images/bell.svg";
 import { saveUserRemotely } from "../../redux/actions/userActions";
 import { loadRiderItinerary } from "../../redux/actions/skheraActions";
 import { loadRiderNotifications } from "../../redux/actions/notificationsActions";
@@ -37,6 +38,7 @@ function RiderPage({
   const isFirstSocketCheck = useRef(true);
   const isFirstAvailabilityCheck = useRef(true);
   const [currentPage, setCurrentPage] = useState("details");
+  const [previousPage, setPreviousPage] = useState("");
 
   useEffect(() => {
     loadRiderItinerary(currentUser._id);
@@ -128,10 +130,9 @@ function RiderPage({
     });
   }
 
-  function hideNotifications() {}
-
-  function showPage(page) {
-    console.log(location);
+  function hideNotifications() {
+    setCurrentPage(previousPage);
+    history.push(`/profile/${previousPage}`);
   }
 
   function toggleDrawerOpenState() {
@@ -163,6 +164,7 @@ function RiderPage({
   }
 
   function showNotifications() {
+    setPreviousPage(currentPage);
     setCurrentPage("notifications");
     history.push("/profile/notifications");
   }
@@ -218,8 +220,21 @@ function RiderPage({
       <div className="app-header">
         <JibleLogo textColor="#000000" boxColor="#419D78" arcColor="#ffffff" />
         <div className="header-icons">
-          <div className="notification-wrapper" onClick={showNotifications}>
-            <img src={notificationIcon} alt="" className="notification-icon" />
+          <div
+            className="notification-wrapper"
+            onClick={() => {
+              if (currentPage !== "notifications") showNotifications();
+            }}
+          >
+            <img
+              src={
+                currentPage === "notifications"
+                  ? selectedNotificationIcon
+                  : notificationIcon
+              }
+              alt=""
+              className="notification-icon"
+            />
             <div
               className="dot"
               style={{ display: notifications.length !== 0 ? "unset" : "none" }}
@@ -255,6 +270,7 @@ function RiderPage({
                 acceptSkhera={acceptSkhera}
                 declineSkhera={declineSkhera}
                 deleteNotification={deleteNotification}
+                goBack={hideNotifications}
               />
             )}
           />

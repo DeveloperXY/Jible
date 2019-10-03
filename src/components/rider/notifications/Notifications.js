@@ -1,16 +1,16 @@
 import React from "react";
 import "./notifications.css";
 import { connect } from "react-redux";
-import icClose from "../images/ic_close.svg";
+import icBack from "../../../images/arrow_back.svg";
 
 function Notifications({
-  riderId,
   notifications,
   hideNotifications,
   navigateToSkherasTodo,
   acceptSkhera,
   declineSkhera,
-  deleteNotification
+  deleteNotification,
+  goBack
 }) {
   const pickupColor = "#419D78";
   const dropOffColor = "#4A90E2";
@@ -22,11 +22,16 @@ function Notifications({
   return (
     <div className="notification-body">
       <div className="notification-header">
-        <div>
+        <img
+          src={icBack}
+          alt=""
+          style={{ marginLeft: "-4px" }}
+          onClick={goBack}
+        />
+        <div className="notifications-header-text">
           Notifications{" "}
           {notifications.length === 0 ? "" : `( ${notifications.length} )`}
         </div>
-        <img src={icClose} alt="" />
       </div>
       {notifications.length === 0 && <div>No new assignments.</div>}
       {notifications.length !== 0 && (
