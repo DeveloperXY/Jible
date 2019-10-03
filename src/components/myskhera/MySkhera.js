@@ -16,7 +16,7 @@ function MySkhera({ currentUser }) {
         <div className="my-skheras">
           <div className="my-skheras-header">
             <div className="skhera-count">Skhera #{index + 1}</div>
-            <div className="shared-skhera">Shared shkera</div>
+            {/* <div className="shared-skhera">Shared shkera</div> */}
           </div>
           <div className="status-tracker">
             <div className="textual-status">
@@ -40,6 +40,14 @@ function MySkhera({ currentUser }) {
                 >
                   Message/Call
                 </span>
+                <div
+                  className={
+                    "dot status-dot " +
+                    (skhera.status === "ORDER_RECEIVED"
+                      ? "status-dot-selected"
+                      : "")
+                  }
+                ></div>
               </div>
               <div
                 className={
@@ -63,6 +71,15 @@ function MySkhera({ currentUser }) {
                 >
                   tracking
                 </span>
+                <div
+                  className={
+                    "dot status-dot " +
+                    (skhera.status === "ORDER_PICKED_UP" ||
+                    skhera.status === "ON_THE_WAY"
+                      ? "status-dot-selected"
+                      : "")
+                  }
+                ></div>
               </div>
               <div
                 className={
@@ -84,9 +101,17 @@ function MySkhera({ currentUser }) {
                 >
                   Rate
                 </span>
+                <div
+                  className={
+                    "dot status-dot " +
+                    (skhera.status === "ORDER_DELIVERED"
+                      ? "status-dot-selected"
+                      : "")
+                  }
+                ></div>
               </div>
             </div>
-            <div className="drawn-status"></div>
+            <div className="status-dots-connector"></div>
             <SimpleMap className="skhera-tracker-map" zoom={15} />
             <div className="my-skhera-details">
               <div className="my-skhera-text-details">
