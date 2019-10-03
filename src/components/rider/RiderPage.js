@@ -219,13 +219,8 @@ function RiderPage({
       <div className="app-header">
         <JibleLogo textColor="#000000" boxColor="#419D78" arcColor="#ffffff" />
         <div className="header-icons">
-          <div className="notification-wrapper">
-            <img
-              src={notificationIcon}
-              alt=""
-              className="notification-icon"
-              onClick={showNotifications}
-            />
+          <div className="notification-wrapper" onClick={showNotifications}>
+            <img src={notificationIcon} alt="" className="notification-icon" />
             <div
               className="dot"
               style={{ display: isNotificationDotVisible ? "unset" : "none" }}
@@ -255,6 +250,7 @@ function RiderPage({
             render={props => (
               <Notifications
                 {...props}
+                riderId={currentUser._id}
                 hideNotifications={hideNotifications}
                 navigateToSkherasTodo={navigateToSkherasTodo}
                 acceptSkhera={acceptSkhera}

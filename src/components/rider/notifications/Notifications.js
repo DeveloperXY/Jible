@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./notifications.css";
+import * as notificationsApi from "../../../api/notificationsApi";
 
 function Notifications({
+  riderId,
   hideNotifications,
   navigateToSkherasTodo,
   acceptSkhera,
@@ -9,14 +11,21 @@ function Notifications({
 }) {
   const pickupColor = "#419D78";
   const dropOffColor = "#4A90E2";
-  const notifications = [];
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    notificationsApi.fetchRiderNotifications(riderId).then(data => {
+      console.log(data);
+      setNotifications(data);
+    });
+  }, []);
 
   return (
     <div className="notification-body">
       {notifications.length === 0 && <div>No new assignments.</div>}
       {notifications.length !== 0 &&
         notifications.map(notification => (
-          <>
+          <div key={notification._id}>
             <div className="notification-header">New assignment</div>
             <div className="notif-details">
               <div className="notif-addresses">
@@ -67,7 +76,7 @@ function Notifications({
                 }}
               />
             </div>
-          </>
+          </div>
         ))}
     </div>
   );
