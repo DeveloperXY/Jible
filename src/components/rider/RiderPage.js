@@ -237,7 +237,12 @@ function RiderPage({
             />
             <div
               className="dot"
-              style={{ display: notifications.length !== 0 ? "unset" : "none" }}
+              style={{
+                display:
+                  notifications.length !== 0 && currentPage !== "notifications"
+                    ? "unset"
+                    : "none"
+              }}
             ></div>
           </div>
           <img src={menuIcon} alt="" onClick={toggleDrawerOpenState} />
