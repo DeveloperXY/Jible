@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import GoogleMapReact from "google-map-react";
-import currentLocationIndicator from "../images/current_location.png";
 import "./riderSkheras.css";
 import { connect } from "react-redux";
 import { loadRiderItinerary } from "../../../redux/actions/skheraActions";

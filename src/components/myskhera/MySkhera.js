@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./mySkhera.css";
-import SimpleMap from "../request/map/SimpleMap";
 import { fetchSkheras } from "../../api/skheraApi";
 import { connect } from "react-redux";
+import GoogleMapReact from "google-map-react";
+import icPickUp from "../../images/ic_pickup.svg";
+import icDropOff from "../../images/ic_drop_off.svg";
+import ScooterImg from "../../images/ic_scooter.svg";
+import { fetchRouteSegmentsByCoords } from "../../api/placesApi";
 
 function MySkhera({ currentUser }) {
   const [skheras, setSkheras] = useState([]);
@@ -112,7 +116,84 @@ function MySkhera({ currentUser }) {
               </div>
             </div>
             <div className="status-dots-connector"></div>
-            <SimpleMap className="skhera-tracker-map" zoom={15} />
+            <div
+              className="client-map"
+              style={{ height: "400px", width: "100%" }}
+            >
+              <GoogleMapReact
+                bootstrapURLKeys={{
+                  key: "AIzaSyDd3dI_tqR6Rx-IMpS9r5mWCP5oAEibiE0"
+                }}
+                defaultCenter={{
+                  lat: 33.589886,
+                  lng: -7.603869
+                }}
+                defaultZoom={10}
+                zoom={15}
+                onGoogleApiLoaded={({ map, maps }) => {
+                  const bounds = new window.google.maps.LatLngBounds();
+                  const from = {
+                    lat: parseFloat(skhera.fromAddress.lat),
+                    lng: parseFloat(skhera.fromAddress.lng)
+                  };
+                  const to = {
+                    lat: parseFloat(skhera.toAddress.lat),
+                    lng: parseFloat(skhera.toAddress.lng)
+                  };
+                  bounds.extend(from);
+                  bounds.extend(to);
+                  map.fitBounds(bounds);
+
+                  fetchRouteSegmentsByCoords(from, to).then(data => {
+                    const segments = data.segments;
+
+                    const steps = segments
+                      .map(segment => ({
+                        startLat: segment.start_location.lat(),
+                        endLat: segment.end_location.lat(),
+                        startLng: segment.start_location.lng(),
+                        endLng: segment.end_location.lng()
+                      }))
+                      .reduce(
+                        (acc, s) => [
+                          ...acc,
+                          { lat: s.startLat, lng: s.startLng },
+                          { lat: s.endLat, lng: s.endLng }
+                        ],
+                        []
+                      );
+
+                    new window.google.maps.Polyline({
+                      path: steps,
+                      geodesic: true,
+                      strokeColor: "#000000",
+                      strokeOpacity: 1.0,
+                      strokeWeight: 2,
+                      map
+                    });
+                  });
+                }}
+              >
+                <img
+                  src={icPickUp}
+                  alt=""
+                  lat={skhera.fromAddress.lat}
+                  lng={skhera.fromAddress.lng}
+                />
+                <img
+                  src={icDropOff}
+                  alt=""
+                  lat={skhera.toAddress.lat}
+                  lng={skhera.toAddress.lng}
+                />
+                <img
+                  src={ScooterImg}
+                  alt=""
+                  lat={skhera.currentRiderLocation.lat}
+                  lng={skhera.currentRiderLocation.lng}
+                />
+              </GoogleMapReact>
+            </div>
             <div className="my-skhera-details">
               <div className="my-skhera-text-details">
                 <div className="my-skhera-date carved">{skhera.date}</div>

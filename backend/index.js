@@ -82,14 +82,30 @@ io.on("connection", client => {
           upsert: true,
           setDefaultsOnInsert: true
         },
-        (err, location) => {
+        (err, result) => {
           if (err) {
-            console.log("Failed to save rider location: " + err);
+            console.log("Failed to save rider result: " + err);
             return;
           }
 
-          if (location) {
-            console.log("Rider location saved");
+          if (result) {
+            Skhera.update(
+              { riderId: userId },
+              {
+                $set: {
+                  currentRiderLocation: {
+                    lat: location.lat,
+                    lng: location.lng
+                  }
+                }
+              },
+              (err, skhera) => {
+                if (err) {
+                  console.log("Failed to save rider location: " + err);
+                  return;
+                }
+              }
+            );
           } else {
             console.log("Unknown error while trying to save rider location");
           }
