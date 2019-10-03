@@ -93,11 +93,21 @@ let locationSchema = new mongoose.Schema({
 });
 let RiderLocation = mongoose.model("RiderLocation", locationSchema);
 
+let riderNotificationSchema = new mongoose.Schema({
+  riderId: String,
+  skhera: skheraSchema
+});
+let RiderNotification = mongoose.model(
+  "RiderNotification",
+  riderNotificationSchema
+);
+
 module.exports = {
   db,
   User,
   Skhera,
   Address,
   RiderLocation,
+  RiderNotification,
   ObjectId: mongoose.Types.ObjectId
 };

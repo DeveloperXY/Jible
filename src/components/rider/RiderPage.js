@@ -16,16 +16,17 @@ import * as skheraApi from "../../api/skheraApi";
 import ToggleButton from "react-toggle-button";
 import SkheraDetails from "./skheraDetails/SkheraDetails";
 import JibleLogo from "../../images/Logo";
+import Notifications from "./notifications/Notifications";
 
 function RiderPage({
   currentUser,
   saveUserRemotely,
   loadRiderItinerary,
   history,
-  socket
+  socket,
+  location
 }) {
   const [user, setUser] = useState({ ...currentUser });
-  const [notificationData, setNotificationData] = useState(undefined);
   const [isNotificationVisible, setNotificationVisibility] = useState(false);
   const [isNotificationDotVisible, setNotificationDotVisibility] = useState(
     false
@@ -37,11 +38,8 @@ function RiderPage({
   const isFirstSocketCheck = useRef(true);
   const isFirstAvailabilityCheck = useRef(true);
   const [currentPage, setCurrentPage] = useState("details");
-  const pickupColor = "#419D78";
-  const dropOffColor = "#4A90E2";
 
   useEffect(() => {
-    if (notificationData !== undefined) setNotificationData(undefined);
     loadRiderItinerary(currentUser._id);
   }, []);
 
@@ -73,9 +71,8 @@ function RiderPage({
         console.log("Availability update error.");
       });
 
-      socket.on("newAssignment", data => {
+      socket.on("newNotification", () => {
         setNotificationDotVisibility(true);
-        setNotificationData(data);
       });
 
       socket.on("acceptSkheraResponse", data => {
@@ -135,9 +132,12 @@ function RiderPage({
     });
   }
 
-  function toggleNotificationsVisibility() {
-    if (isNotificationVisible) setNotificationData(undefined);
-    setNotificationVisibility(!isNotificationVisible);
+  function hideNotifications() {
+    setNotificationVisibility(false);
+  }
+
+  function showPage(page) {
+    console.log(location);
   }
 
   function toggleDrawerOpenState() {
@@ -168,13 +168,19 @@ function RiderPage({
     history.push("/profile/faq");
   }
 
+  function showNotifications() {
+    setNotificationVisibility(true);
+    setCurrentPage("notifications");
+    history.push("/profile/notifications");
+  }
+
   function unselectCurrent() {
     setCurrentPage("none");
   }
 
-  function acceptSkhera() {
+  function acceptSkhera(notification) {
     socket.emit("acceptNewAssignment", {
-      skheraId: notificationData.skhera._id,
+      skheraId: notification.skhera._id,
       riderId: currentUser._id
     });
   }
@@ -200,10 +206,10 @@ function RiderPage({
     });
   }
 
-  function declineSkhera() {
+  function declineSkhera(notification) {
     // TODO: possible optimization here - emit next new assignment event to the next rider immediately
     socket.emit("declineNewAssignment", {
-      skheraId: notificationData.skhera._id,
+      skheraId: notification.skhera._id,
       riderId: currentUser._id
     });
   }
@@ -218,7 +224,7 @@ function RiderPage({
               src={notificationIcon}
               alt=""
               className="notification-icon"
-              onClick={toggleNotificationsVisibility}
+              onClick={showNotifications}
             />
             <div
               className="dot"
@@ -228,86 +234,7 @@ function RiderPage({
           <img src={menuIcon} alt="" onClick={toggleDrawerOpenState} />
         </div>
       </div>
-      <div
-        className="notification-body"
-        style={{ display: isNotificationVisible ? "flex" : "none" }}
-      >
-        {notificationData === undefined && <div>No new assignments.</div>}
-        {notificationData !== undefined &&
-          notificationData.type === "NEW_ASSIGNMENT" && (
-            <>
-              <div className="notification-header">New assignment</div>
-              <div className="notif-details">
-                <div className="notif-addresses">
-                  <div className="notif-from-addr from-addr">
-                    <div
-                      className="location-dot"
-                      style={{ backgroundColor: pickupColor }}
-                    ></div>
-                    <div className="address-data">
-                      {notificationData.skhera.fromAddress.name}
-                    </div>
-                  </div>
-                  <div className="notif-from-addr to-addr">
-                    <div
-                      className="location-dot"
-                      style={{ backgroundColor: dropOffColor }}
-                    ></div>
-                    <div className="address-data">
-                      {notificationData.skhera.toAddress.name}
-                    </div>
-                  </div>
-                </div>
-                <div className="estimated-price-notif-wrapper">
-                  Estimated price:{" "}
-                  <div className="estimated-price-notif">
-                    {notificationData.skhera.price}
-                  </div>
-                </div>
-              </div>
-              <div className="action-buttons-wrapper">
-                <input
-                  type="button"
-                  className="green-btn accept-btn accept-skhera-btn"
-                  value="Accept"
-                  onClick={() => {
-                    setNotificationVisibility(false);
-                    navigateToSkherasTodo();
-                    acceptSkhera();
-                  }}
-                />
-                <input
-                  type="button"
-                  className="white-btn decline-btn decline-skhera-btn"
-                  value="Decline"
-                  onClick={() => {
-                    setNotificationVisibility(false);
-                    declineSkhera();
-                  }}
-                />
-              </div>
-            </>
-          )}
-        {notificationData !== undefined &&
-          notificationData.type === "ADDITIONAL_ASSIGNMENT" && (
-            <>
-              <div className="notification-header">
-                <div>New assignment</div>
-                <div>2:45 min</div>
-              </div>
-              <input
-                type="button"
-                className="green-btn accept-btn"
-                value="Accept"
-              />
-              <input
-                type="button"
-                className="green-btn grey-btn"
-                value="Decline"
-              />
-            </>
-          )}
-      </div>
+
       <div className="main-fragment">
         <Switch>
           <Route
@@ -323,6 +250,18 @@ function RiderPage({
             )}
           />
           <Route path="/profile/faq" component={FaqComponent} />
+          <Route
+            path="/profile/notifications"
+            render={props => (
+              <Notifications
+                {...props}
+                hideNotifications={hideNotifications}
+                navigateToSkherasTodo={navigateToSkherasTodo}
+                acceptSkhera={acceptSkhera}
+                declineSkhera={declineSkhera}
+              />
+            )}
+          />
           <Route
             path="/profile/todo"
             render={() => (

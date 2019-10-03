@@ -11,7 +11,7 @@ const jwt = require("jsonwebtoken");
 const User = mongo.User;
 const Skhera = mongo.Skhera;
 const Address = mongo.Address;
-const ObjectId = mongo.ObjectId;
+const RiderNotification = mongo.RiderNotification;
 const RiderLocation = mongo.RiderLocation;
 const googleMapsClient = require("@google/maps").createClient({
   key: "AIzaSyDd3dI_tqR6Rx-IMpS9r5mWCP5oAEibiE0"
@@ -463,16 +463,24 @@ function emitSkheraToRiders(sortedResults, skheraId, fromUser) {
       const riderId = sortedResults.shift().riderId;
       const socket = getSocketByRiderId(riderId);
       if (socket) {
-        socket.emit("newAssignment", {
-          type: "NEW_ASSIGNMENT",
-          skhera: skhera._doc,
-          fromUserName: fromUser.name
+        new RiderNotification({ riderId, skhera }).save((err, result) => {
+          if (err) {
+            console.log(console.error(err));
+            return;
+          }
+
+          if (result) {
+            socket.emit("newNotification", {
+              type: "NEW_ASSIGNMENT",
+              skhera: skhera._doc
+            });
+            setTimeout(() => {
+              // If there are still riders to notify, proceed
+              if (sortedResults.length > 0)
+                emitSkheraToRiders(sortedResults, skhera, fromUser);
+            }, 5000);
+          }
         });
-        setTimeout(() => {
-          // If there are still riders to notify, proceed
-          if (sortedResults.length > 0)
-            emitSkheraToRiders(sortedResults, skhera, fromUser);
-        }, 5000);
       } else {
         // If there are still riders to notify, proceed without a timeout
         if (sortedResults.length > 0)
@@ -481,6 +489,15 @@ function emitSkheraToRiders(sortedResults, skheraId, fromUser) {
     }
   });
 }
+
+app.get("/riderNotifications", (req, res) => {
+  const riderId = req.query.riderId;
+
+  RiderNotification.find({ riderId }, (err, notifications) => {
+    if (err) return res.send({ status: "error", message: console.error(err) });
+    return res.send(notifications);
+  });
+});
 
 app.get("/skheras", (req, res) => {
   const clientId = req.query.clientId;

@@ -51,7 +51,9 @@ function RequestSkhera({ currentUser, history }) {
   return (
     <div className="request-skhera-body">
       <div className="request-skhera-header">
-        <h1 className="request-skhera-header-text">Request a Skhera</h1>
+        <h1 className="request-skhera-header-text">
+          Request a Skhera (TODO: show total riders)
+        </h1>
       </div>
       <div className="request-content">
         <RequestSkheraDetails onOrderNow={handleSkheraOrder} />
