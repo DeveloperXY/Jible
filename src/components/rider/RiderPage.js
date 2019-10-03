@@ -3,6 +3,7 @@ import menuIcon from "./images/ic_menu.svg";
 import notificationIcon from "./images/ic_notifications.svg";
 import { saveUserRemotely } from "../../redux/actions/userActions";
 import { loadRiderItinerary } from "../../redux/actions/skheraActions";
+import { loadRiderNotifications } from "../../redux/actions/notificationsActions";
 import * as notificationsApi from "../../api/notificationsApi";
 import "./riderPage.css";
 import { connect } from "react-redux";
@@ -13,7 +14,6 @@ import DrawerLayout from "./drawer/DrawerLayout";
 import FaqComponent from "../faq/FaqComponent";
 import RiderSkheras from "./skheras/RiderSkheras";
 import * as placesApi from "../../api/placesApi";
-import * as skheraApi from "../../api/skheraApi";
 import ToggleButton from "react-toggle-button";
 import SkheraDetails from "./skheraDetails/SkheraDetails";
 import JibleLogo from "../../images/Logo";
@@ -23,15 +23,13 @@ function RiderPage({
   currentUser,
   saveUserRemotely,
   loadRiderItinerary,
+  loadNotifications,
+  notifications,
   history,
   socket,
   location
 }) {
   const [user, setUser] = useState({ ...currentUser });
-  const [isNotificationVisible, setNotificationVisibility] = useState(false);
-  const [isNotificationDotVisible, setNotificationDotVisibility] = useState(
-    false
-  );
   const [isDrawerOpen, setDrawerOpenState] = useState(false);
   const [availability, setAvailability] = useState(user.isAvailable);
   const [currentLocation, setRiderLocation] = useState(undefined);
@@ -42,11 +40,8 @@ function RiderPage({
 
   useEffect(() => {
     loadRiderItinerary(currentUser._id);
+    loadNotifications(currentUser._id);
   }, []);
-
-  useEffect(() => {
-    if (isNotificationVisible) setNotificationDotVisibility(false);
-  }, [isNotificationVisible]);
 
   useEffect(() => {
     if (isFirstSocketCheck.current && socket !== undefined) {
@@ -73,7 +68,7 @@ function RiderPage({
       });
 
       socket.on("newNotification", () => {
-        setNotificationDotVisibility(true);
+        loadNotifications(currentUser._id);
       });
 
       socket.on("acceptSkheraResponse", data => {
@@ -133,9 +128,7 @@ function RiderPage({
     });
   }
 
-  function hideNotifications() {
-    setNotificationVisibility(false);
-  }
+  function hideNotifications() {}
 
   function showPage(page) {
     console.log(location);
@@ -170,7 +163,6 @@ function RiderPage({
   }
 
   function showNotifications() {
-    setNotificationVisibility(true);
     setCurrentPage("notifications");
     history.push("/profile/notifications");
   }
@@ -217,7 +209,7 @@ function RiderPage({
 
   function deleteNotification(notificationId) {
     notificationsApi.deleteNotification(notificationId).then(data => {
-      console.log(data);
+      if (data.status === "ok") loadNotifications(currentUser._id);
     });
   }
 
@@ -230,7 +222,7 @@ function RiderPage({
             <img src={notificationIcon} alt="" className="notification-icon" />
             <div
               className="dot"
-              style={{ display: isNotificationDotVisible ? "unset" : "none" }}
+              style={{ display: notifications.length !== 0 ? "unset" : "none" }}
             ></div>
           </div>
           <img src={menuIcon} alt="" onClick={toggleDrawerOpenState} />
@@ -336,12 +328,15 @@ function RiderPage({
   );
 }
 
+const mapStateToProps = ({ notifications }) => ({ notifications });
+
 const mapDispatchToProps = {
   saveUserRemotely,
-  loadRiderItinerary
+  loadRiderItinerary,
+  loadNotifications: loadRiderNotifications
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(RiderPage);
