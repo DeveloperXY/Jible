@@ -7,7 +7,8 @@ function Notifications({
   hideNotifications,
   navigateToSkherasTodo,
   acceptSkhera,
-  declineSkhera
+  declineSkhera,
+  deleteNotification
 }) {
   const pickupColor = "#419D78";
   const dropOffColor = "#4A90E2";
@@ -20,13 +21,26 @@ function Notifications({
     });
   }, []);
 
+  function hideNotification(notificationId) {
+      setNotifications(notifications.filter(n => n._id !== notificationId))
+      deleteNotification(notificationId);
+  }
+
   return (
     <div className="notification-body">
+      {notifications.length !== 0 && (
+        <div className="notification-header">
+          {notifications.length === 0 ? "No" : notifications.length} new
+          assignments
+        </div>
+      )}
       {notifications.length === 0 && <div>No new assignments.</div>}
       {notifications.length !== 0 &&
-        notifications.map(notification => (
-          <div key={notification._id}>
-            <div className="notification-header">New assignment</div>
+        notifications.map((notification, index) => (
+          <div
+            key={notification._id}
+            style={{ marginTop: index !== 0 ? "24px" : "unset" }}
+          >
             <div className="notif-details">
               <div className="notif-addresses">
                 <div className="notif-from-addr from-addr">
@@ -64,6 +78,7 @@ function Notifications({
                   hideNotifications();
                   navigateToSkherasTodo();
                   acceptSkhera(notification);
+                  hideNotification(notification._id);
                 }}
               />
               <input
@@ -73,6 +88,7 @@ function Notifications({
                 onClick={() => {
                   hideNotifications();
                   declineSkhera(notification);
+                  hideNotification(notification._id);
                 }}
               />
             </div>

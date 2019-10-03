@@ -499,6 +499,15 @@ app.get("/riderNotifications", (req, res) => {
   });
 });
 
+app.delete("/notifications", (req, res) => {
+  const notificationId = req.body.notificationId;
+
+  RiderNotification.remove({ _id: notificationId }, (err, result) => {
+    if (err) return res.send({ status: "error", message: console.error(err) });
+    return res.send({ status: "ok", data: result });
+  });
+});
+
 app.get("/skheras", (req, res) => {
   const clientId = req.query.clientId;
 

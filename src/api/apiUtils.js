@@ -1,5 +1,5 @@
 export const apiKey = "AIzaSyDd3dI_tqR6Rx-IMpS9r5mWCP5oAEibiE0";
-export const baseUrl = "https://abbatia.serveo.net";
+export const baseUrl = "https://obieci.serveo.net";
 export const frontBaseUrl = "https://9214b05a.ngrok.io";
 
 export async function handleResponse(response) {

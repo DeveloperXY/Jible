@@ -3,6 +3,7 @@ import menuIcon from "./images/ic_menu.svg";
 import notificationIcon from "./images/ic_notifications.svg";
 import { saveUserRemotely } from "../../redux/actions/userActions";
 import { loadRiderItinerary } from "../../redux/actions/skheraActions";
+import * as notificationsApi from "../../api/notificationsApi";
 import "./riderPage.css";
 import { connect } from "react-redux";
 import { toast } from "react-toastify";
@@ -214,6 +215,12 @@ function RiderPage({
     });
   }
 
+  function deleteNotification(notificationId) {
+    notificationsApi.deleteNotification(notificationId).then(data => {
+      console.log(data);
+    });
+  }
+
   return (
     <div className="profile-wrapper">
       <div className="app-header">
@@ -255,6 +262,7 @@ function RiderPage({
                 navigateToSkherasTodo={navigateToSkherasTodo}
                 acceptSkhera={acceptSkhera}
                 declineSkhera={declineSkhera}
+                deleteNotification={deleteNotification}
               />
             )}
           />

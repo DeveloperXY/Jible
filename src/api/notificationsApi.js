@@ -8,3 +8,13 @@ export function fetchRiderNotifications(riderId) {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export function deleteNotification(notificationId) {
+  return fetch(`${baseUrl}/notifications/`, {
+    method: "DELETE",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ notificationId })
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}
