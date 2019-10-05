@@ -94,14 +94,15 @@ function RiderPage({
 
   useEffect(() => {
     if (currentLocation !== undefined) {
-      if (
-        lastEmittedLocation === undefined ||
-        (currentLocation.lat !== lastEmittedLocation.lat &&
-          currentLocation.lng !== lastEmittedLocation.lng)
-      ) {
-        setEmittedLocation(currentLocation);
-        socket.emit("currentLocationUpdate", currentLocation);
-      }
+      // if (
+      //   lastEmittedLocation === undefined ||
+      //   (currentLocation.lat !== lastEmittedLocation.lat &&
+      //     currentLocation.lng !== lastEmittedLocation.lng)
+      // ) {
+      //   setEmittedLocation(currentLocation);
+      //   socket.emit("currentLocationUpdate", currentLocation);
+      // }
+      socket.emit("currentLocationUpdate", currentLocation);
     }
   }, [currentLocation]);
 

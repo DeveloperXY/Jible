@@ -159,7 +159,7 @@ io.on("connection", client => {
       const riderId = data.riderId;
       Skhera.updateOne(
         { _id: skheraId },
-        { $set: { status: "ORDER_DELIVERED", riderId: null } },
+        { $set: { status: "ORDER_DELIVERED" } },
         function(error, result) {
           if (error) {
             console.log(error);

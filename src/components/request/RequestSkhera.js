@@ -4,7 +4,6 @@ import RequestSkheraDetails from "./details/RequestSkheraDetails";
 import RequestSkheraMap from "./map/RequestSkheraMap";
 import * as skheraApi from "../../api/skheraApi";
 import { connect } from "react-redux";
-import backArrow from "../../images/arrow_back.svg";
 import { toast } from "react-toastify";
 
 function RequestSkhera({ currentUser, history }) {
@@ -51,9 +50,7 @@ function RequestSkhera({ currentUser, history }) {
   return (
     <div className="request-skhera-body">
       <div className="request-skhera-header">
-        <h1 className="request-skhera-header-text">
-          Request a Skhera (TODO: show total riders)
-        </h1>
+        <h1 className="request-skhera-header-text">Request a Skhera</h1>
       </div>
       <div className="request-content">
         <RequestSkheraDetails onOrderNow={handleSkheraOrder} />

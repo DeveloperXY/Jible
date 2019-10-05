@@ -3,6 +3,9 @@ import GoogleMapReact from "google-map-react";
 import MapMarker from "./marker/MapMarker";
 import "./simpleMap.css";
 
+import icPickUp from "../../../images/ic_pickup.svg";
+import icDropOff from "../../../images/ic_drop_off.svg";
+
 class SimpleMap extends Component {
   state = {
     fromAddress: this.props.fromAddress,
@@ -45,12 +48,26 @@ class SimpleMap extends Component {
           }}
         >
           {centerMarker}
-          {fromAddress !== undefined && (
-            <MapMarker lat={fromAddress.lat} lng={fromAddress.lng} text="A" />
-          )}
-          {toAddress !== undefined && (
-            <MapMarker lat={toAddress.lat} lng={toAddress.lng} text="B" />
-          )}
+          {fromAddress !== undefined &&
+            fromAddress.lat !== undefined &&
+            fromAddress.lng !== undefined && (
+              <img
+                src={icPickUp}
+                lat={fromAddress.lat}
+                lng={fromAddress.lng}
+                alt=""
+              />
+            )}
+          {toAddress !== undefined &&
+            toAddress.lat !== undefined &&
+            toAddress.lng !== undefined && (
+              <img
+                src={icDropOff}
+                lat={toAddress.lat}
+                lng={toAddress.lng}
+                alt=""
+              />
+            )}
         </GoogleMapReact>
       </div>
     );

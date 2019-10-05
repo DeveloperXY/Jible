@@ -54,6 +54,7 @@ function RiderSkheras(props) {
             lng: p.lng
           }
         ).then(data => {
+          console.log(data);
           const distance = data.distance.text;
           const duration = data.duration.text;
           setDistanceToCurrentDestination(distance);

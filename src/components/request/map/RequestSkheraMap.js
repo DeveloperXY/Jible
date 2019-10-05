@@ -91,9 +91,9 @@ function RequestSkheraMap({
           new window.google.maps.Polyline({
             path: steps,
             geodesic: true,
-            strokeColor: "#FF0000",
+            strokeColor: "#000000",
             strokeOpacity: 1.0,
-            strokeWeight: 1
+            strokeWeight: 2
           })
         );
       });

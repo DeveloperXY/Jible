@@ -93,6 +93,7 @@ input:focus {
   max-width: 860px;
   margin: 0 auto;
   padding: 0 12px;
+  margin-bottom: 200px;
 }
 
 .consumer-btn {
