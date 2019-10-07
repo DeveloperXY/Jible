@@ -19,7 +19,6 @@ const MySkheraMap = ({
     zoom={zoom}
     onGoogleApiLoaded={({ map, maps }) =>
       onGoogleApiLoaded(map, steps => {
-        console.log("drawing polyline");
         new window.google.maps.Polyline({
           path: steps,
           geodesic: true,

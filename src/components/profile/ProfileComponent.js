@@ -5,8 +5,8 @@ import { saveUserRemotely } from "../../redux/actions/userActions";
 import { Route, Switch } from "react-router-dom";
 import EditProfileComponent from "./edit/EditProfileComponent";
 import FaqComponent from "../faq/FaqComponent";
-import MySkheras from "../myskheras/MySkherasContainer";
 import MyAddresses from "../myaddress/MyAddresses";
+import { ListWithSkheras } from "../helpers/skheraHelpers";
 
 function ProfileComponent({ currentUser, saveUserRemotely, history }) {
   const [user, setUser] = useState({ ...currentUser });
@@ -104,7 +104,12 @@ function ProfileComponent({ currentUser, saveUserRemotely, history }) {
       </div>
       <Switch>
         <Route path="/profile/faq" component={FaqComponent} />
-        <Route path="/profile/myskhera" component={MySkheras} />
+        <Route
+          path="/profile/myskhera"
+          render={props => (
+            <ListWithSkheras {...props} userId={currentUser._id} />
+          )}
+        />
         <Route path="/profile/myaddress" component={MyAddresses} />
         <Route
           render={props => (

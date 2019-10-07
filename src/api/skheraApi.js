@@ -10,15 +10,6 @@ export function orderSkhera(skhera) {
     .catch(handleError);
 }
 
-export function fetchSkheras(clientId) {
-  return fetch(`${baseUrl}/skheras?clientId=${clientId}`, {
-    method: "GET",
-    headers: { "content-type": "application/json" }
-  })
-    .then(handleResponse)
-    .catch(handleError);
-}
-
 export function fetchSkherasItinerary(riderId) {
   return fetch(`${baseUrl}/itinerary?riderId=${riderId}`, {
     method: "GET",
