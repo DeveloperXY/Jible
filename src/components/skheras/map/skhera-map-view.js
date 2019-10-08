@@ -1,10 +1,10 @@
 import React from "react";
 import GoogleMapReact from "google-map-react";
-import icPickUp from "../../images/ic_pickup.svg";
-import icDropOff from "../../images/ic_drop_off.svg";
-import ScooterImg from "../../images/ic_scooter.svg";
+import icPickUp from "../../../images/ic_pickup.svg";
+import icDropOff from "../../../images/ic_drop_off.svg";
+import ScooterImg from "../../../images/ic_scooter.svg";
 
-const MySkheraMap = ({
+const SkheraMap = ({
   skhera,
   onGoogleApiLoaded,
   bootstrapURLKeys,
@@ -53,4 +53,4 @@ const MySkheraMap = ({
   </GoogleMapReact>
 );
 
-export default MySkheraMap;
+export default SkheraMap;

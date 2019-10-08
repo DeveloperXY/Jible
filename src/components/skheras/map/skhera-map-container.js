@@ -1,8 +1,8 @@
 import React from "react";
-import { fetchRouteSegmentsByCoords } from "../../api/placesApi";
-import MySkheraMap from "./MySkheraMap";
+import { fetchRouteSegmentsByCoords } from "../../../api/placesApi";
+import SkheraMap from "./skhera-map-view";
 
-export default class MySkheraMapContainer extends React.Component {
+export default class SkheraMapContainer extends React.Component {
   constructor(props) {
     super(props);
     this.onGoogleApiLoaded = this.onGoogleApiLoaded.bind(this);
@@ -10,7 +10,7 @@ export default class MySkheraMapContainer extends React.Component {
 
   render() {
     return (
-      <MySkheraMap
+      <SkheraMap
         skhera={this.props.skhera}
         onGoogleApiLoaded={this.onGoogleApiLoaded}
         bootstrapURLKeys={{

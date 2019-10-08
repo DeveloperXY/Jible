@@ -1,6 +1,6 @@
 export const apiKey = "AIzaSyDd3dI_tqR6Rx-IMpS9r5mWCP5oAEibiE0";
-export const baseUrl = "https://delecto.serveo.net";
-export const frontBaseUrl = "https://42f68cd1.ngrok.io";
+export const baseUrl = "https://cogito.serveo.net";
+export const frontBaseUrl = "https://9ca4c870.ngrok.io";
 
 export async function handleResponse(response) {
   if (response.ok) return response.json();

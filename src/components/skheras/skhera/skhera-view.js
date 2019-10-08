@@ -1,12 +1,18 @@
 import React from "react";
-import MySkheraMapContainer from "./MySkheraMapContainer";
-import mapPin from "../../images/map_pin.svg";
-import icPhone from "../../images/ic_phone.svg";
+import MySkheraMapContainer from "../map/skhera-map-container";
+import mapPin from "../../../images/map_pin.svg";
+import icPhone from "../../../images/ic_phone.svg";
+import { Motion, spring } from "react-motion";
+import { SkheraContainer } from "./style";
 
-const ClientSkhera = ({ skhera, index }) => (
-  <div className="my-skheras" key={skhera._id}>
+const Skhera = ({ skhera, index }) => (
+  <SkheraContainer key={skhera._id}>
     <div className="my-skheras-header">
-      <div className="skhera-count">Skhera #{index + 1}</div>
+      <Motion defaultStyle={{ opacity: 0.01 }} style={{ opacity: spring(1) }}>
+        {interpolatingStyle => (
+          <div className="skhera-count">Skhera #{index + 1}</div>
+        )}
+      </Motion>
     </div>
     <div className="status-tracker">
       <div className="textual-status">
@@ -154,7 +160,7 @@ const ClientSkhera = ({ skhera, index }) => (
         </div>
       </div>
     </div>
-  </div>
+  </SkheraContainer>
 );
 
-export default ClientSkhera;
+export default Skhera;
