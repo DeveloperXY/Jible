@@ -99,7 +99,9 @@ const Skhera = ({ skhera, index }) => (
       <div className="my-skhera-details">
         <div className="my-skhera-text-details">
           <div className="my-skhera-date carved">{skhera.date}</div>
-          <div className="my-skhera-price carved">Price: {skhera.price}</div>
+          <div className="my-skhera-price carved">
+            Estimated price: {skhera.price}
+          </div>
           <div className="my-skhera-address carved">
             <img src={mapPin} alt="" />
             <div style={{ marginLeft: "8px" }}>{skhera.toAddress.name}</div>
@@ -140,18 +142,32 @@ const Skhera = ({ skhera, index }) => (
           </div>
         )}
       </div>
-      <div className="my-skhera-price-est">
-        <div className="estimated-price-labels">
-          <div className="estimated-price">Estimated Price</div>
-          <div className="estimated-time-distance">
-            Estimated time and distance
-          </div>
+      <div className="price-container">
+        <div className="skhera-price-label rider-attr">Price</div>
+        <div className="skhera-price-value rider-attr">
+          {skhera.actualPrice === 0 ? "N/A" : `${skhera.actualPrice} dh`}
         </div>
-        <div className="estimated-values">
-          <div className="estimated-price-value">N/A</div>
-          <div className="estimated-time-distance-value">
-            {skhera.timeAndDistance}
+      </div>
+      <div className="service-container">
+        <div className="service-label">Service fees (5dh / 1km)</div>
+        {skhera.distanceValue && (
+          <div className="service-value">
+            {(skhera.distanceValue / 1000) * 5} dh
           </div>
+        )}
+      </div>
+      <div className="service-container">
+        <div className="total-label">Total</div>
+        {skhera.distanceValue && (
+          <div className="total-value">
+            {(skhera.distanceValue / 1000) * 5 + skhera.actualPrice} dh
+          </div>
+        )}
+      </div>
+      <div className="skhera-time-distance rider-attr">
+        <div className="skhera-time-distance-label">Time and Distance</div>
+        <div className="skhera-time-distance-value">
+          {skhera.timeAndDistance}
         </div>
       </div>
     </div>
