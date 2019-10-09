@@ -89,6 +89,7 @@
 
 .skhera-price-label {
   color: black;
+  font-size: 24px;
 }
 
 .total-label {
@@ -102,6 +103,7 @@
 
 .skhera-price-value {
   color: #419d78;
+  font-size: 24px;
 }
 
 .total-value {
@@ -113,10 +115,17 @@
   color: #419d78;
 }
 
+.rider-attr {
+  font-size: unset;
+}
+
+.skhera-time-distance.rider-attr {
+  margin-top: 16px;
+}
+
 .skhera-time-distance {
   display: flex;
   justify-content: space-between;
-  margin-top: 16px;
 }
 
 .skhera-time-distance-label {

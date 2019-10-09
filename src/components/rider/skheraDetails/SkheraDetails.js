@@ -126,8 +126,8 @@ function SkheraDetails({
           )}
         </div>
         <div className="price-container">
-          <div className="skhera-price-label">Price</div>
-          <div className="skhera-price-value">
+          <div className="skhera-price-label rider-attr">Price</div>
+          <div className="skhera-price-value rider-attr">
             {skhera.actualPrice === 0 ? "N/A" : `${skhera.actualPrice} dh`}
           </div>
         </div>
@@ -145,7 +145,7 @@ function SkheraDetails({
             </div>
           )}
         </div>
-        <div className="skhera-time-distance">
+        <div className="skhera-time-distance rider-attr">
           <div className="skhera-time-distance-label">Time and Distance</div>
           <div className="skhera-time-distance-value">
             {skhera.timeAndDistance}
