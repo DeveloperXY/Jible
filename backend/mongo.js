@@ -41,6 +41,7 @@ let skheraSchema = new mongoose.Schema({
     default: new Date().toTimeString()
   },
   price: String,
+  distanceValue: Number,
   actualPrice: {
     type: Number,
     default: 0

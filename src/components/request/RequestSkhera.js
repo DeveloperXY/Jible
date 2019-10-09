@@ -10,6 +10,7 @@ function RequestSkhera({ currentUser, history }) {
   const [fromAddress, setFromAddress] = useState({});
   const [toAddress, setToAddress] = useState({});
   const [timeAndDistance, setTimeAndDistance] = useState("");
+  const [distanceValue, setDistanceValue] = useState(0);
 
   useEffect(() => {
     window.fbq("track", "viewContent", {
@@ -27,7 +28,8 @@ function RequestSkhera({ currentUser, history }) {
         price,
         fromAddress,
         toAddress,
-        timeAndDistance
+        timeAndDistance,
+        distanceValue
       })
       .then(data => {
         if (data.status === "ok") {
@@ -58,6 +60,7 @@ function RequestSkhera({ currentUser, history }) {
           onFromAddrChange={handleFromAddressChange}
           onToAddrChange={handleToAddressChange}
           setTimeAndDistance={setTimeAndDistance}
+          setDistanceValue={setDistanceValue}
         />
       </div>
     </div>

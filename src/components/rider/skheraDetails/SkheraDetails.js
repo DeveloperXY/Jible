@@ -89,6 +89,8 @@ function SkheraDetails({
     setOpenItemPriceDialog(false);
   }
 
+  const serviceCost = (skhera.distanceValue / 1000) * 5;
+
   return (
     <>
       <div className="back-link back-container" onClick={navigateToSkherasTodo}>
@@ -128,6 +130,20 @@ function SkheraDetails({
           <div className="skhera-price-value">
             {skhera.actualPrice === 0 ? "N/A" : `${skhera.actualPrice} dh`}
           </div>
+        </div>
+        <div className="service-container">
+          <div className="service-label">Service fees (5dh / 1km)</div>
+          {skhera.distanceValue && (
+            <div className="service-value">{serviceCost} dh</div>
+          )}
+        </div>
+        <div className="service-container">
+          <div className="total-label">Total</div>
+          {skhera.distanceValue && (
+            <div className="total-value">
+              {serviceCost + skhera.actualPrice} dh
+            </div>
+          )}
         </div>
         <div className="skhera-time-distance">
           <div className="skhera-time-distance-label">Time and Distance</div>

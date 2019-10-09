@@ -1,5 +1,5 @@
 export const apiKey = "AIzaSyDd3dI_tqR6Rx-IMpS9r5mWCP5oAEibiE0";
-export const baseUrl = "https://pudeo.serveo.net";
+export const baseUrl = "https://dicto.serveo.net";
 export const frontBaseUrl = "https://bdb5e2e9.ngrok.io";
 
 export async function handleResponse(response) {

@@ -7,7 +7,8 @@ import * as placesApi from "../../../api/placesApi";
 function RequestSkheraMap({
   onFromAddrChange,
   onToAddrChange,
-  setTimeAndDistance
+  setTimeAndDistance,
+  setDistanceValue
 }) {
   const [fromAddressText, setFromAddressText] = useState("");
   const [toAddressText, setToAddressText] = useState("");
@@ -61,12 +62,15 @@ function RequestSkheraMap({
       .fetchRouteSegmentsByPlaceIds(fromAddress.placeId, toAddress.placeId)
       .then(data => {
         const segments = data.segments;
-        const distance = data.distance.text;
-        const duration = data.duration.text;
-        setTimeAndDistance(`${distance} / ${duration}`);
+        const distance = data.distance;
+        const duration = data.duration;
+        setDistanceValue(distance.value);
+        setTimeAndDistance(`${distance.text} / ${duration.text}`);
 
-        setSkheraDistance(distance);
-        setSkheraDuration(duration);
+        console.log(distance);
+
+        setSkheraDistance(distance.text);
+        setSkheraDuration(duration.text);
 
         const steps = segments
           .map(segment => ({

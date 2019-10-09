@@ -82,19 +82,41 @@
   margin-top: 24px;
 }
 
+.service-container {
+  display: flex;
+  justify-content: space-between;
+}
+
 .skhera-price-label {
+  color: black;
+}
+
+.total-label {
   color: black;
   font-size: 24px;
 }
 
+.service-label {
+  color: black;
+}
+
 .skhera-price-value {
   color: #419d78;
+}
+
+.total-value {
+  color: #419d78;
   font-size: 24px;
+}
+
+.service-value {
+  color: #419d78;
 }
 
 .skhera-time-distance {
   display: flex;
   justify-content: space-between;
+  margin-top: 16px;
 }
 
 .skhera-time-distance-label {
