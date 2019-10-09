@@ -67,8 +67,8 @@ let skheraSchema = new mongoose.Schema({
   },
   description: String,
   riderId: {
-    type: String,
-    default: null
+    type: mongoose.Types.ObjectId,
+    ref: "User"
   },
   items: [
     {

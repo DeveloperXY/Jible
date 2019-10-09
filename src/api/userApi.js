@@ -1,8 +1,7 @@
-import { handleResponse, handleError } from "./apiUtils";
-const baseUrl = "http://localhost:9000/user";
+import { handleResponse, handleError, baseUrl } from "./apiUtils";
 
 export function saveUser(user) {
-  return fetch(baseUrl, {
+  return fetch(`${baseUrl}/user`, {
     method: "PUT",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(user)
