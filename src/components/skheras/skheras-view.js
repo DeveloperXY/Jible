@@ -1,19 +1,10 @@
 import React from "react";
 import Skhera from "./skhera/skhera-view";
-import {
-  SkherasContainer,
-  LoadingContainer,
-  ColoredCircularProgress
-} from "./style";
+import { SkherasContainer } from "./style";
+import Loading from "../Loading";
 
 const Skheras = ({ skheras }) => {
-  if (skheras.pending)
-    return (
-      <LoadingContainer>
-        <ColoredCircularProgress size={120} />
-        <div className="loading-label">Loading...</div>
-      </LoadingContainer>
-    );
+  if (skheras.pending) return <Loading size={120} text="Loading..." />;
   else if (skheras.fulfilled)
     return (
       <SkherasContainer>
