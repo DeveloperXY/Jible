@@ -121,6 +121,7 @@ io.on("connection", client => {
       const itemId = data.itemId;
       const skheraId = data.skheraId;
       const isReady = data.isReady;
+      const price = data.price;
 
       const query = {
         _id: skheraId,
@@ -128,7 +129,11 @@ io.on("connection", client => {
       };
 
       const update = {
-        $set: { "items.$.isReady": isReady }
+        $set: {
+          "items.$.isReady": isReady,
+          "items.$.price": price
+        },
+        $inc: { actualPrice: price }
       };
 
       // update the document

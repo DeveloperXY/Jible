@@ -41,6 +41,10 @@ let skheraSchema = new mongoose.Schema({
     default: new Date().toTimeString()
   },
   price: String,
+  actualPrice: {
+    type: Number,
+    default: 0
+  },
   fromAddress: {
     name: String,
     lat: String,
@@ -71,7 +75,8 @@ let skheraSchema = new mongoose.Schema({
       isReady: {
         type: Boolean,
         default: false
-      }
+      },
+      price: Number
     }
   ]
 });

@@ -82,10 +82,6 @@ function RiderPage({
         }
       });
 
-      socket.on("skheraItemReadyResponse", data => {
-        console.log(data);
-      });
-
       socket.on("skheraDeliveredSuccess", () => {
         navigateToSkherasTodo();
       });
@@ -181,11 +177,12 @@ function RiderPage({
     });
   }
 
-  function emitSkheraItemReady(itemId, skheraId, isReady) {
+  function emitSkheraItemReady(itemId, skheraId, isReady, price) {
     socket.emit("skheraItemReady", {
       itemId,
       skheraId,
-      isReady
+      isReady,
+      price
     });
   }
 
@@ -257,6 +254,7 @@ function RiderPage({
             render={props => (
               <SkheraDetails
                 {...props}
+                socket={socket}
                 emitSkheraItemReady={emitSkheraItemReady}
                 emitSkheraPickedUp={emitSkheraPickedUp}
                 emitSkheraDelivered={emitSkheraDelivered}

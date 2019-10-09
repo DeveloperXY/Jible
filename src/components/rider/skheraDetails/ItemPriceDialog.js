@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -7,7 +7,13 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-const FormDialog = ({ open, handleClose }) => {
+const FormDialog = ({ open, handleClose, handleConfirm, payload }) => {
+  const [value, setValue] = useState("");
+
+  function handleChange(e) {
+    setValue(e.target.value);
+  }
+
   return (
     <div>
       <Dialog
@@ -15,16 +21,20 @@ const FormDialog = ({ open, handleClose }) => {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+        <DialogTitle id="form-dialog-title">{payload.itemName}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please specify the price of this item:
+            Please specify the price of this item in dirhams:
           </DialogContentText>
           <TextField
             autoFocus
+            autoComplete="off"
             margin="dense"
             id="price"
+            type="number"
             label="Item price"
+            onChange={handleChange}
+            value={value}
             fullWidth
           />
         </DialogContent>
@@ -32,8 +42,13 @@ const FormDialog = ({ open, handleClose }) => {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
-            Subscribe
+          <Button
+            onClick={() => {
+              handleConfirm(value.length === 0 ? 0 : parseFloat(value));
+            }}
+            color="primary"
+          >
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>

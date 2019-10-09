@@ -2,17 +2,12 @@ import React from "react";
 import MySkheraMapContainer from "../map/skhera-map-container";
 import mapPin from "../../../images/map_pin.svg";
 import icPhone from "../../../images/ic_phone.svg";
-import { Motion, spring } from "react-motion";
 import { SkheraContainer } from "./style";
 
 const Skhera = ({ skhera, index }) => (
   <SkheraContainer key={skhera._id}>
     <div className="my-skheras-header">
-      <Motion defaultStyle={{ opacity: 0.01 }} style={{ opacity: spring(1) }}>
-        {interpolatingStyle => (
-          <div className="skhera-count">Skhera #{index + 1}</div>
-        )}
-      </Motion>
+      <div className="skhera-count">Skhera #{index + 1}</div>
     </div>
     <div className="status-tracker">
       <div className="textual-status">

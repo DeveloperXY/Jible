@@ -16,7 +16,15 @@ class ListItemCheckBoxes extends React.Component {
     this.onCheckBoxValueChanged = this.onCheckBoxValueChanged.bind(this);
   }
 
-  onCheckBoxValueChanged(checkBoxId, itemId, newValue) {
+  onCheckBoxValueChanged(
+    checkBoxId,
+    itemName,
+    itemId,
+    newValue,
+    check,
+    uncheck,
+    setNewItemPrice
+  ) {
     this.setState(
       {
         checkboxes: {
@@ -29,8 +37,12 @@ class ListItemCheckBoxes extends React.Component {
       () => {
         this.props.handleItemReadinessChange(
           itemId,
+          itemName,
           newValue,
-          this.state.checkboxes
+          this.state.checkboxes,
+          check,
+          uncheck,
+          setNewItemPrice
         );
       }
     );

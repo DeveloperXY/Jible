@@ -5,8 +5,8 @@ import { loadSkhera } from "../../../api/skheraApi";
 import ListItemCheckBoxes from "./ListItemCheckBoxes";
 import { loadRiderItinerary } from "../../../redux/actions/skheraActions";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import greenArrow from "../images/green_arrow_back.svg";
+import ItemPriceDialog from "./ItemPriceDialog";
 
 function SkheraDetails({
   loadRiderItinerary,
@@ -17,16 +17,27 @@ function SkheraDetails({
   match: {
     params: { skheraId }
   },
-  currentUser
+  currentUser,
+  socket
 }) {
   const [skhera, setCurrentSkhera] = useState({});
   const [client, setSkheraClient] = useState({});
   const [areAllItemsChecked, setAreAllItemsChecked] = useState(false);
+  const [openItemPriceDialog, setOpenItemPriceDialog] = useState(false);
+  const [payload, setPayload] = useState({});
 
-  useEffect(() => {
+  function loadSkheraDetails() {
     loadSkhera(skheraId).then(data => {
       setCurrentSkhera(data.skhera);
       setSkheraClient(data.client);
+    });
+  }
+
+  useEffect(() => {
+    loadSkheraDetails();
+
+    socket.on("skheraItemReadyResponse", data => {
+      loadSkheraDetails();
     });
   }, []);
 
@@ -35,11 +46,47 @@ function SkheraDetails({
       setAreAllItemsChecked(skhera.items.every(item => item.isReady));
   }, [skhera]);
 
-  function handleItemReadinessChange(itemId, newValue, checkboxes) {
-    emitSkheraItemReady(itemId, skheraId, newValue);
+  function handleItemReadinessChange(
+    itemId,
+    itemName,
+    newValue,
+    checkboxes,
+    checkCurrent,
+    uncheckCurrent,
+    setNewItemPrice
+  ) {
+    setPayload({
+      itemId,
+      itemName,
+      newValue,
+      checkboxes,
+      checkCurrent,
+      uncheckCurrent,
+      setNewItemPrice
+    });
+    setOpenItemPriceDialog(true);
+  }
+
+  function handlePriceDialogClose() {
+    setOpenItemPriceDialog(false);
+    payload.uncheckCurrent();
+  }
+
+  function handleConfirm(price) {
+    if (price === 0) {
+      handlePriceDialogClose();
+      return;
+    }
+
+    payload.setNewItemPrice(price);
+
+    emitSkheraItemReady(payload.itemId, skheraId, payload.newValue, price);
     setAreAllItemsChecked(
-      Object.keys(checkboxes).every(key => checkboxes[key].isChecked)
+      Object.keys(payload.checkboxes).every(
+        key => payload.checkboxes[key].isChecked
+      )
     );
+    setOpenItemPriceDialog(false);
   }
 
   return (
@@ -78,7 +125,9 @@ function SkheraDetails({
         </div>
         <div className="price-container">
           <div className="skhera-price-label">Price</div>
-          <div className="skhera-price-value">N/A</div>
+          <div className="skhera-price-value">
+            {skhera.actualPrice === 0 ? "N/A" : `${skhera.actualPrice} dh`}
+          </div>
         </div>
         <div className="skhera-time-distance">
           <div className="skhera-time-distance-label">Time and Distance</div>
@@ -110,6 +159,15 @@ function SkheraDetails({
           }}
         />
       </div>
+
+      {openItemPriceDialog && (
+        <ItemPriceDialog
+          open={openItemPriceDialog}
+          handleClose={handlePriceDialogClose}
+          handleConfirm={handleConfirm}
+          payload={payload}
+        />
+      )}
     </>
   );
 }
