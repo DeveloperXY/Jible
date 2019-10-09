@@ -109,7 +109,9 @@ const Skhera = ({ skhera, index }) => (
           <div className="my-skhera-description">{skhera.description}</div>
           <ul>
             {skhera.items.map(item => (
-              <li>{item.name}</li>
+              <li className={item.isReady ? "selected-item" : ""}>
+                {item.name} {item.isReady ? `(${item.price} dh)` : ""}
+              </li>
             ))}
           </ul>
         </div>

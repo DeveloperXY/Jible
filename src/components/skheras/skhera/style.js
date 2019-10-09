@@ -151,4 +151,8 @@ export const SkheraContainer = styled.div`
     background-color: #f1f1f1;
     padding: 8px;
   }
+
+  .selected-item {
+    color: #419d78;
+  }
 `;
