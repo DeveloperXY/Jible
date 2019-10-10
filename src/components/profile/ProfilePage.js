@@ -9,19 +9,25 @@ import notificationIcon from "../../images/bell_unselected.svg";
 import Popover from "@material-ui/core/Popover";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import { loadClientNotifications } from "../../redux/actions/notificationsActions";
+import ClientNotifications from "./clientnotifications/ClientNotifications";
 
-function ProfilePage({ currentUser, socket }) {
+function ProfilePage({ currentUser, socket, loadNotifications }) {
   const isFirstSocketCheck = useRef(true);
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const id = open ? "simple-popover" : undefined;
 
   useEffect(() => {
+    loadNotifications(currentUser._id);
+  }, []);
+
+  useEffect(() => {
     if (isFirstSocketCheck.current && socket !== undefined) {
       isFirstSocketCheck.current = false;
 
       socket.on("newNotification", data => {
-        alert("a");
+        loadNotifications(currentUser._id);
       });
     }
   }, [socket]);
@@ -84,7 +90,9 @@ function ProfilePage({ currentUser, socket }) {
           horizontal: "center"
         }}
       >
-        <Typography className={classes.typography}></Typography>
+        <Typography className={classes.typography}>
+          <ClientNotifications />
+        </Typography>
       </Popover>
     </div>
   );
@@ -97,4 +105,11 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(ProfilePage);
+const mapDispatchToProps = {
+  loadNotifications: loadClientNotifications
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProfilePage);

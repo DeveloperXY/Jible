@@ -4,7 +4,7 @@ import { SkherasContainer } from "./style";
 import Loading from "../Loading";
 
 const Skheras = ({ skheras }) => {
-  if (skheras.pending) return <Loading size={120} text="Loading..." />;
+  if (skheras.pending) return <Loading />;
   else if (skheras.fulfilled)
     return (
       <SkherasContainer>

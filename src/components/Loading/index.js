@@ -10,11 +10,17 @@ export const ColoredCircularProgress = withStyles({
   }
 })(CircularProgress);
 
-const Loading = ({ text, size }) => (
+const Loading = ({ disableText, text, size }) => (
   <LoadingContainer>
     <ColoredCircularProgress size={size} />
-    <div className="loading-label">{text}</div>
+    {!disableText && <div className="loading-label">{text}</div>}
   </LoadingContainer>
 );
+
+Loading.defaultProps = {
+  disableText: false,
+  text: "Loading...",
+  size: 120
+};
 
 export default Loading;

@@ -5,7 +5,6 @@ export const LoadingContainer = styled.div`
   flex-direction: column;
   align-items: center;
   font-size: 24px;
-  margin-top: 100px;
 
   .loading-label {
     margin-top: 16px;
