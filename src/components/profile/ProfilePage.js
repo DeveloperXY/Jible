@@ -82,12 +82,12 @@ function ProfilePage({ currentUser, socket, loadNotifications }) {
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center"
+          vertical: "top",
+          horizontal: "left"
         }}
         transformOrigin={{
           vertical: "top",
-          horizontal: "center"
+          horizontal: "right"
         }}
       >
         <Typography className={classes.typography}>

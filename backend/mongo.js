@@ -111,7 +111,11 @@ let RiderNotification = mongoose.model(
 let clientNotificationSchema = new mongoose.Schema({
   userId: String,
   type: String,
-  rider: userSchema
+  rider: userSchema,
+  date: {
+    type: Date,
+    default: Date.now
+  }
 });
 let ClientNotification = mongoose.model(
   "ClientNotification",
