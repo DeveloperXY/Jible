@@ -1,6 +1,6 @@
 export const apiKey = "AIzaSyDd3dI_tqR6Rx-IMpS9r5mWCP5oAEibiE0";
-export const baseUrl = "https://dicto.serveo.net";
-export const frontBaseUrl = "https://bdb5e2e9.ngrok.io";
+export const baseUrl = "https://degero.serveo.net";
+export const frontBaseUrl = "https://34b0920b.ngrok.io";
 
 export async function handleResponse(response) {
   if (response.ok) return response.json();

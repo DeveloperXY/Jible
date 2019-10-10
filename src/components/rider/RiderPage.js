@@ -193,6 +193,7 @@ function RiderPage({
   }
 
   function emitSkheraDelivered(skheraId, riderId) {
+    console.log("delivered: " + skheraId);
     socket.emit("skheraDelivered", {
       skheraId,
       riderId

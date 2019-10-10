@@ -67,7 +67,7 @@ let skheraSchema = new mongoose.Schema({
   },
   description: String,
   riderId: {
-    type: mongoose.Types.ObjectId,
+    type: String,
     ref: "User"
   },
   items: [
@@ -108,6 +108,16 @@ let RiderNotification = mongoose.model(
   riderNotificationSchema
 );
 
+let clientNotificationSchema = new mongoose.Schema({
+  userId: String,
+  type: String,
+  rider: userSchema
+});
+let ClientNotification = mongoose.model(
+  "ClientNotification",
+  clientNotificationSchema
+);
+
 module.exports = {
   db,
   User,
@@ -115,5 +125,6 @@ module.exports = {
   Address,
   RiderLocation,
   RiderNotification,
+  ClientNotification,
   ObjectId: mongoose.Types.ObjectId
 };

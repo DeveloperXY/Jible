@@ -1,12 +1,48 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./profilePage.css";
 import RequestSkhera from "../request/RequestSkhera";
 import ProfileComponent from "./ProfileComponent";
 import { connect } from "react-redux";
 import { Route, Switch, Link } from "react-router-dom";
 import JibleLogo from "../../images/Logo";
+import notificationIcon from "../../images/bell_unselected.svg";
+import Popover from "@material-ui/core/Popover";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
 
-function ProfilePage({ currentUser }) {
+function ProfilePage({ currentUser, socket }) {
+  const isFirstSocketCheck = useRef(true);
+  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const id = open ? "simple-popover" : undefined;
+
+  useEffect(() => {
+    if (isFirstSocketCheck.current && socket !== undefined) {
+      isFirstSocketCheck.current = false;
+
+      socket.on("newNotification", data => {
+        alert("a");
+      });
+    }
+  }, [socket]);
+
+  const useStyles = makeStyles(theme => ({
+    typography: {
+      padding: theme.spacing(2)
+    }
+  }));
+  const classes = useStyles();
+
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setOpen(false);
+  };
+
   return (
     <div className="main-content">
       <div className="header-content">
@@ -14,6 +50,12 @@ function ProfilePage({ currentUser }) {
           <JibleLogo />
         </Link>
         <div className="profile-header-section">
+          <img
+            className="notif-icon"
+            alt=""
+            src={notificationIcon}
+            onClick={handleClick}
+          />
           <img className="profile-img" alt="" src={currentUser.image} />
           <Link to="/profile/details" className="current-username">
             <div>{currentUser.name}</div>
@@ -27,6 +69,23 @@ function ProfilePage({ currentUser }) {
           <Route component={ProfileComponent} />
         </Switch>
       </div>
+
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center"
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center"
+        }}
+      >
+        <Typography className={classes.typography}></Typography>
+      </Popover>
     </div>
   );
 }

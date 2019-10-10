@@ -12,6 +12,7 @@ const User = mongo.User;
 const Skhera = mongo.Skhera;
 const Address = mongo.Address;
 const RiderNotification = mongo.RiderNotification;
+const ClientNotification = mongo.ClientNotification;
 const RiderLocation = mongo.RiderLocation;
 const googleMapsClient = require("@google/maps").createClient({
   key: "AIzaSyDd3dI_tqR6Rx-IMpS9r5mWCP5oAEibiE0"
@@ -32,9 +33,9 @@ const port = 9000;
 io.on("connection", client => {
   var userId = client.request._query["userId"];
   var userType = client.request._query["userType"];
+  console.log(`New connection - type: ${userType}`);
 
   if (userType === "rider") {
-    console.log("A rider has connected: " + userId);
     const index = riderSockets.findIndex(rs => rs.userId === userId);
     if (index !== -1) {
       riderSockets[index] = {
@@ -48,7 +49,6 @@ io.on("connection", client => {
       });
     }
     client.on("toggleAvailability", data => {
-      console.log("toggle availability request: " + data.availability);
       User.findByIdAndUpdate(
         userId,
         { isAvailable: data.availability },
@@ -68,7 +68,6 @@ io.on("connection", client => {
       );
     });
     client.on("currentLocationUpdate", location => {
-      console.log(`Rider ${userId} is at (${location.lat}, ${location.lng})`);
       RiderLocation.updateOne(
         { riderId: userId },
         {
@@ -177,6 +176,38 @@ io.on("connection", client => {
                   console.log(error);
                 } else {
                   client.emit("skheraDeliveredSuccess", result);
+
+                  Skhera.findOne({ _id: skheraId }, (err, skhera) => {
+                    if (err) {
+                      console.log(console.error(err));
+                      return;
+                    }
+                    if (skhera) {
+                      const clientId = skhera.clientId;
+                      const socket = getSocketByClientId(clientId);
+
+                      new ClientNotification({
+                        userId: clientId,
+                        type: "ORDER_DELIVERED",
+                        rider: result
+                      }).save((err, result) => {
+                        if (err) {
+                          console.log(console.error(err));
+                          return;
+                        }
+
+                        if (result) {
+                          if (socket) {
+                            socket.emit("newNotification", {
+                              type: "ORDER_DELIVERED",
+                              skheraId,
+                              rider: result
+                            });
+                          }
+                        }
+                      });
+                    }
+                  });
                 }
               }
             );
@@ -186,10 +217,21 @@ io.on("connection", client => {
     });
     client.on("disconnect", () => {
       riderSockets = riderSockets.filter(s => s.userId !== userId);
-      console.log("A rider has disconnected: " + userId);
     });
   } else if (userType === "consumer") {
     console.log("A consumer has connected: " + userId);
+    const index = consumerSockets.findIndex(cs => cs.userId === userId);
+    if (index !== -1) {
+      consumerSockets[index] = {
+        userId,
+        socket: client
+      };
+    } else {
+      consumerSockets.push({
+        userId,
+        socket: client
+      });
+    }
   }
 });
 
@@ -348,7 +390,6 @@ app.post("/verify", auth, async (req, res) => {
 
 app.put("/user", (req, res) => {
   let _id = req.body._id;
-  console.log("ID: " + _id);
 
   User.findByIdAndUpdate(_id, req.body, { new: true }, (error, user) => {
     if (error) {
@@ -391,7 +432,6 @@ app.post("/skhera", (req, res) => {
   }).save((err, skhera) => {
     if (err) return res.send({ status: "error", message: console.error(err) });
     if (skhera) {
-      console.log(skhera);
       setTimeout(() => {
         assignSkheraToRider(skhera);
       }, 5000);
@@ -475,6 +515,12 @@ function getSocketByRiderId(riderId) {
   return undefined;
 }
 
+function getSocketByClientId(clientId) {
+  const socket = consumerSockets.find(cs => cs.userId === clientId);
+  if (socket) return socket.socket;
+  return undefined;
+}
+
 function emitSkheraToRiders(sortedResults, skheraId, fromUser) {
   Skhera.findById(skheraId, (err, skhera) => {
     if (err) {
@@ -485,14 +531,15 @@ function emitSkheraToRiders(sortedResults, skheraId, fromUser) {
     if (!["ON_THE_WAY", "ORDER_PICKED_UP"].includes(skhera.status)) {
       const riderId = sortedResults.shift().riderId;
       const socket = getSocketByRiderId(riderId);
-      if (socket) {
-        new RiderNotification({ riderId, skhera }).save((err, result) => {
-          if (err) {
-            console.log(console.error(err));
-            return;
-          }
 
-          if (result) {
+      new RiderNotification({ riderId, skhera }).save((err, result) => {
+        if (err) {
+          console.log(console.error(err));
+          return;
+        }
+
+        if (result) {
+          if (socket) {
             socket.emit("newNotification", {
               type: "NEW_ASSIGNMENT",
               skhera: skhera._doc
@@ -502,13 +549,13 @@ function emitSkheraToRiders(sortedResults, skheraId, fromUser) {
               if (sortedResults.length > 0)
                 emitSkheraToRiders(sortedResults, skhera, fromUser);
             }, 5000);
+          } else {
+            // If there are still riders to notify, proceed without a timeout
+            if (sortedResults.length > 0)
+              emitSkheraToRiders(sortedResults, skhera, fromUser);
           }
-        });
-      } else {
-        // If there are still riders to notify, proceed without a timeout
-        if (sortedResults.length > 0)
-          emitSkheraToRiders(sortedResults, skhera, fromUser);
-      }
+        }
+      });
     }
   });
 }
@@ -517,6 +564,15 @@ app.get("/riderNotifications", (req, res) => {
   const riderId = req.query.riderId;
 
   RiderNotification.find({ riderId }, (err, notifications) => {
+    if (err) return res.send({ status: "error", message: console.error(err) });
+    return res.send(notifications);
+  });
+});
+
+app.get("/clientNotifications", (req, res) => {
+  const clientId = req.query.clientId;
+
+  ClientNotification.find({ userId: clientId }, (err, notifications) => {
     if (err) return res.send({ status: "error", message: console.error(err) });
     return res.send(notifications);
   });
@@ -600,7 +656,6 @@ app.get("/address", (req, res) => {
 
 app.delete("/address", (req, res) => {
   let _id = req.body._id;
-  console.log("ID: " + _id);
 
   Address.findOneAndDelete(_id, (error, address) => {
     if (error) {

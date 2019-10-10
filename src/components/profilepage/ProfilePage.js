@@ -8,7 +8,7 @@ import * as userActions from "../../redux/actions/userActions";
 import { baseUrl } from "../../api/apiUtils";
 
 function ProfilePage({ currentUser, saveUser, history }) {
-  const [riderSocket, setRiderSocket] = useState(undefined);
+  const [userSocket, setUserSocket] = useState(undefined);
 
   useEffect(() => {
     console.log(Object.keys(currentUser).length);
@@ -32,7 +32,7 @@ function ProfilePage({ currentUser, saveUser, history }) {
   }, []);
 
   function openNewSocket() {
-    setRiderSocket(
+    setUserSocket(
       openSocket(baseUrl, {
         query: `userId=${currentUser._id}&userType=${currentUser.userType}`,
         secure: true
@@ -41,13 +41,14 @@ function ProfilePage({ currentUser, saveUser, history }) {
   }
 
   if (currentUser.userType === "consumer") {
-    return <ConsumerProfilePage history={history} />;
+    if (userSocket === undefined) openNewSocket();
+    return <ConsumerProfilePage history={history} socket={userSocket} />;
   } else if (currentUser.userType === "rider") {
-    if (riderSocket === undefined) openNewSocket();
+    if (userSocket === undefined) openNewSocket();
     return (
       <RiderPage
         history={history}
-        socket={riderSocket}
+        socket={userSocket}
         currentUser={currentUser}
       />
     );
