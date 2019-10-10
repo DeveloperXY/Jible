@@ -8,7 +8,8 @@ function RequestSkheraMap({
   onFromAddrChange,
   onToAddrChange,
   setTimeAndDistance,
-  setDistanceValue
+  setDistanceValue,
+  estimatedPrice
 }) {
   const [fromAddressText, setFromAddressText] = useState("");
   const [toAddressText, setToAddressText] = useState("");
@@ -192,7 +193,9 @@ function RequestSkheraMap({
       />
       <div className="price-container">
         <div className="skhera-price-label">Estimated price</div>
-        <div className="skhera-price-value">N/A</div>
+        <div className="skhera-price-value">
+          {estimatedPrice.length === 0 ? "N/A" : estimatedPrice}
+        </div>
       </div>
       <div className="skhera-time-distance">
         <div className="skhera-time-distance-label">

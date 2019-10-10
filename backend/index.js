@@ -168,7 +168,7 @@ io.on("connection", client => {
           if (error) {
             console.log(error);
           } else {
-            User.updateOne(
+            User.findOneAndUpdate(
               { _id: riderId },
               { $set: { currentSkheraId: null } },
               function(error, result) {
@@ -187,6 +187,7 @@ io.on("connection", client => {
                       const socket = getSocketByClientId(clientId);
 
                       new ClientNotification({
+                        skheraId,
                         userId: clientId,
                         type: "ORDER_DELIVERED",
                         rider: result
@@ -404,6 +405,26 @@ app.put("/user", (req, res) => {
       });
     } else {
       return res.send({ status: "no_such_user" });
+    }
+  });
+});
+
+app.put("/rating", (req, res) => {
+  let _id = req.body.skheraId;
+  let rating = req.body.rating;
+
+  Skhera.findByIdAndUpdate(_id, { rating }, (error, skhera) => {
+    if (error) {
+      return res.json({ status: "error", message: console.error(error) });
+    }
+
+    if (skhera) {
+      return res.json({
+        status: "ok",
+        skhera
+      });
+    } else {
+      return res.send({ status: "update_failed" });
     }
   });
 });

@@ -19,3 +19,8 @@
 .notifications-header-text {
   margin-left: 12px;
 }
+
+.notification-timing {
+  color: #9e9e9e;
+  align-self: end;
+}

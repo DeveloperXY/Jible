@@ -27,3 +27,16 @@ export function loadSkhera(skheraId) {
     .then(handleResponse)
     .catch(handleError);
 }
+
+export function updateSkheraRating(skheraId, rating) {
+  return fetch(`${baseUrl}/rating`, {
+    method: "PUT",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      skheraId,
+      rating
+    })
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}

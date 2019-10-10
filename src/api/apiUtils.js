@@ -1,5 +1,5 @@
 export const apiKey = "AIzaSyDd3dI_tqR6Rx-IMpS9r5mWCP5oAEibiE0";
-export const baseUrl = "https://degero.serveo.net";
+export const baseUrl = "https://peragro.serveo.net";
 export const frontBaseUrl = "https://34b0920b.ngrok.io";
 
 export async function handleResponse(response) {

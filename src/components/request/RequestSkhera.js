@@ -11,6 +11,7 @@ function RequestSkhera({ currentUser, history }) {
   const [toAddress, setToAddress] = useState({});
   const [timeAndDistance, setTimeAndDistance] = useState("");
   const [distanceValue, setDistanceValue] = useState(0);
+  const [estimatedPrice, setEstimatedPrice] = useState("");
 
   useEffect(() => {
     window.fbq("track", "viewContent", {
@@ -55,12 +56,17 @@ function RequestSkhera({ currentUser, history }) {
         <h1 className="request-skhera-header-text">Request a Skhera</h1>
       </div>
       <div className="request-content">
-        <RequestSkheraDetails onOrderNow={handleSkheraOrder} />
+        <RequestSkheraDetails
+          onOrderNow={handleSkheraOrder}
+          estimatedPrice={estimatedPrice}
+          setEstimatedPrice={setEstimatedPrice}
+        />
         <RequestSkheraMap
           onFromAddrChange={handleFromAddressChange}
           onToAddrChange={handleToAddressChange}
           setTimeAndDistance={setTimeAndDistance}
           setDistanceValue={setDistanceValue}
+          estimatedPrice={estimatedPrice}
         />
       </div>
     </div>

@@ -70,6 +70,10 @@ let skheraSchema = new mongoose.Schema({
     type: String,
     ref: "User"
   },
+  rating: {
+    type: Number,
+    default: 0
+  },
   items: [
     {
       name: String,
@@ -101,7 +105,11 @@ let RiderLocation = mongoose.model("RiderLocation", locationSchema);
 
 let riderNotificationSchema = new mongoose.Schema({
   riderId: String,
-  skhera: skheraSchema
+  skhera: skheraSchema,
+  date: {
+    type: Date,
+    default: Date.now
+  }
 });
 let RiderNotification = mongoose.model(
   "RiderNotification",
@@ -110,6 +118,7 @@ let RiderNotification = mongoose.model(
 
 let clientNotificationSchema = new mongoose.Schema({
   userId: String,
+  skheraId: String,
   type: String,
   rider: userSchema,
   date: {

@@ -10,10 +10,4 @@ export const NotificationContainer = styled.div`
     align-self: flex-end;
     font-size: 12px;
   }
-
-  .rate-text {
-    cursor: pointer;
-    color: #419d78;
-    font-weight: bold;
-  }
 `;

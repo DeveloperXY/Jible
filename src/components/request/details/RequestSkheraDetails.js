@@ -8,11 +8,14 @@ import icSchedule from "../../../images/ic_calendar.svg";
 import icDollar from "../../../images/ic_dollar.svg";
 import fileTextIcon from "../../../images/ic_file_text.svg";
 
-function RequestSkheraDetails({ onOrderNow }) {
+function RequestSkheraDetails({
+  onOrderNow,
+  estimatedPrice,
+  setEstimatedPrice
+}) {
   const [skheraItems, setSkheraItems] = useState([]);
   const [skheraItem, setSkheraItem] = useState("");
   const [description, setDescription] = useState(undefined);
-  const [price, setPrice] = useState(undefined);
 
   const handleChange = event => {
     setSkheraItem(event.target.value);
@@ -23,7 +26,7 @@ function RequestSkheraDetails({ onOrderNow }) {
   };
 
   const handlePriceChange = event => {
-    setPrice(event.target.value);
+    setEstimatedPrice(event.target.value);
   };
 
   const addSkheraItem = () => {
@@ -47,7 +50,7 @@ function RequestSkheraDetails({ onOrderNow }) {
   };
 
   const orderSkhera = () => {
-    onOrderNow(description, skheraItems, price);
+    onOrderNow(description, skheraItems, estimatedPrice);
   };
 
   return (
@@ -128,7 +131,7 @@ function RequestSkheraDetails({ onOrderNow }) {
           className="itemInput"
           type="text"
           onChange={handlePriceChange}
-          value={price}
+          value={estimatedPrice}
           placeholder="Price goes here"
         />
       </div>

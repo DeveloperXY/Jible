@@ -2,6 +2,7 @@ import React from "react";
 import "./notifications.css";
 import { connect } from "react-redux";
 import icBack from "../../../images/arrow_back.svg";
+import TimeAgo from "react-timeago";
 
 function Notifications({
   notifications,
@@ -39,8 +40,13 @@ function Notifications({
           {notifications.map((notification, index) => (
             <div
               key={notification._id}
-              style={{ marginTop: index !== 0 ? "24px" : "unset" }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                marginTop: index !== 0 ? "24px" : "unset"
+              }}
             >
+              <TimeAgo className="notification-timing" date={notification.date} />
               <div className="notif-details">
                 <div className="notif-addresses">
                   <div className="notif-from-addr from-addr">
